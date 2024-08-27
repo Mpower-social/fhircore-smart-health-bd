@@ -238,9 +238,9 @@ class RegisterFragment : Fragment(), OnSyncListener {
           val progressPercentage = appMainViewModel.calculatePercentageProgress(inProgressSyncJob)
           lifecycleScope.launch {
             appMainViewModel.updateAppDrawerUIState(
-              isSyncUpload,
-              syncJobStatus,
-              progressPercentage,
+              isSyncUpload = isSyncUpload,
+              currentSyncJobStatus = syncJobStatus,
+              percentageProgress = progressPercentage,
             )
           }
         }
@@ -251,9 +251,9 @@ class RegisterFragment : Fragment(), OnSyncListener {
       }
       is CurrentSyncJobStatus.Failed -> {
         refreshRegisterData()
-        appMainViewModel.updateAppDrawerUIState(false, syncJobStatus, 0)
+        appMainViewModel.updateAppDrawerUIState(currentSyncJobStatus = syncJobStatus)
       }
-      else -> appMainViewModel.updateAppDrawerUIState(false, syncJobStatus, 0)
+      else -> appMainViewModel.updateAppDrawerUIState(currentSyncJobStatus = syncJobStatus)
     }
   }
 
