@@ -74,10 +74,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import org.smartregister.fhircore.engine.R
 import org.smartregister.fhircore.engine.ui.theme.DividerColor
 import org.smartregister.fhircore.engine.ui.theme.LoginDarkColor
-import org.smartregister.fhircore.quest.ui.pin.CIRCULAR_PROGRESS_INDICATOR
 
 const val USER_INSIGHT_TOP_APP_BAR = "userInsightToAppBar"
 const val INSIGHT_UNSYNCED_DATA = "insightUnsyncedData"
+const val CIRCULAR_PROGRESS_INDICATOR = "progressIndicator"
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
