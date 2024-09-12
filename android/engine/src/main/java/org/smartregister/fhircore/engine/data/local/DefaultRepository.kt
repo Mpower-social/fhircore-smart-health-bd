@@ -799,7 +799,7 @@ constructor(
    */
   suspend fun updateResourcesRecursively(
     resourceConfig: ResourceConfig,
-    subject: Resource,
+    subject: Resource? = null,
     eventWorkflow: EventWorkflow,
   ) {
     withContext(dispatcherProvider.io()) {
