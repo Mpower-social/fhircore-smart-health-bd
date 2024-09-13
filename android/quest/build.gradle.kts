@@ -379,6 +379,13 @@ android {
       versionNameSuffix = "-contigo"
       manifestPlaceholders["appLabel"] = "Contigo"
     }
+
+    create("minsaEir") {
+      dimension = "apps"
+      applicationIdSuffix = ".minsaEir"
+      versionNameSuffix = "-minsaEir"
+      manifestPlaceholders["appLabel"] = "Minsa EIR"
+    }
   }
 
   applicationVariants.all {
