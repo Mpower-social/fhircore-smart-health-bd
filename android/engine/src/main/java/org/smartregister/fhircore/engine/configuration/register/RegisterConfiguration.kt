@@ -49,7 +49,8 @@ data class RegisterConfiguration(
   val registerFilter: RegisterFilterConfig? = null,
   val filterDataByRelatedEntityLocation: Boolean = false,
   val topScreenSection: TopScreenSectionConfig? = null,
-  val onSearchByQrSingleResultActions: List<ActionConfig>? = null,  
+  val onSearchByQrSingleResultActions: List<ActionConfig>? = null,
+  val infiniteScroll: Boolean = false,
   val registerNotification: List<ActionConfig>? = null,
 ) : Configuration() {
   val onSearchByQrSingleResultValidActions =

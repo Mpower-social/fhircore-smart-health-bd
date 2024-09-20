@@ -248,7 +248,9 @@ open class AppMainActivity :
             ),
           ),
         )
-      } else Timber.e("QuestionnaireConfig & QuestionnaireResponse are both null")
+      } else {
+        Timber.e("QuestionnaireConfig & QuestionnaireResponse are both null")
+      }
     }
   }
 

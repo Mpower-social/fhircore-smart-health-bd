@@ -362,7 +362,9 @@ private fun DefaultSyncStatus(
       Modifier.background(
           if (allDataSynced) {
             SideMenuBottomItemDarkColor
-          } else WarningColor.copy(alpha = TRANSPARENCY),
+          } else {
+            WarningColor.copy(alpha = TRANSPARENCY)
+          },
         )
         .padding(vertical = 16.dp),
   ) {
@@ -373,7 +375,9 @@ private fun DefaultSyncStatus(
         stringResource(
           if (allDataSynced) {
             org.smartregister.fhircore.engine.R.string.manual_sync
-          } else org.smartregister.fhircore.engine.R.string.sync,
+          } else {
+            org.smartregister.fhircore.engine.R.string.sync
+          },
         ),
       subTitle =
         if (allDataSynced) {

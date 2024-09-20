@@ -29,6 +29,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
 import androidx.compose.material.Icon
@@ -58,6 +60,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -109,7 +113,8 @@ fun TopScreenSection(
   unreadNotificationsCount: Long? = null,
   searchPlaceholder: String? = null,
   toolBarHomeNavigation: ToolBarHomeNavigation = ToolBarHomeNavigation.OPEN_DRAWER,
-  onSearchTextChanged: (SearchQuery) -> Unit = {},
+  onSearchTextChanged: (SearchQuery, Boolean) -> Unit = { _, _ -> },
+  performSearchOnValueChanged: Boolean = true,
   isFilterIconEnabled: Boolean = false,
   isNotificationIconEnabled: Boolean = false,
   topScreenSection: TopScreenSectionConfig? = null,
@@ -120,7 +125,7 @@ fun TopScreenSection(
   // Trigger search automatically on launch if text is not empty
   LaunchedEffect(Unit) {
     if (!searchQuery.isBlank()) {
-      onSearchTextChanged(searchQuery)
+      onSearchTextChanged(searchQuery, true)
     }
   }
 
@@ -222,7 +227,23 @@ fun TopScreenSection(
       OutlinedTextField(
         colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.DarkGray),
         value = searchQuery.query,
-        onValueChange = { onSearchTextChanged(SearchQuery(it, mode = SearchMode.KeyboardInput)) },
+        onValueChange = {
+          onSearchTextChanged(
+            SearchQuery(it, mode = SearchMode.KeyboardInput),
+            performSearchOnValueChanged,
+          )
+        },
+        keyboardOptions =
+          KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Search),
+        keyboardActions =
+          KeyboardActions(
+            onSearch = {
+              onSearchTextChanged(
+                SearchQuery(searchQuery.query, mode = SearchMode.KeyboardInput),
+                true,
+              )
+            },
+          ),
         maxLines = 1,
         singleLine = true,
         placeholder = {
@@ -251,12 +272,14 @@ fun TopScreenSection(
             when {
               !searchQuery.isBlank() -> {
                 IconButton(
-                  onClick = { onSearchTextChanged(SearchQuery.emptyText) },
+                  onClick = {
+                    onSearchTextChanged(SearchQuery.emptyText, performSearchOnValueChanged)
+                  },
                   modifier = modifier.testTag(TRAILING_ICON_BUTTON_TEST_TAG),
                 ) {
                   Icon(
                     imageVector = Icons.Filled.Clear,
-                    CLEAR,
+                    contentDescription = CLEAR,
                     tint = Color.Gray,
                     modifier = modifier.testTag(TRAILING_ICON_TEST_TAG),
                   )
@@ -269,6 +292,7 @@ fun TopScreenSection(
                       QrCodeScanUtils.scanQrCode(it) { code ->
                         onSearchTextChanged(
                           SearchQuery(code ?: "", mode = SearchMode.QrCodeScan),
+                          performSearchOnValueChanged,
                         )
                       }
                     }
@@ -354,7 +378,7 @@ fun TopScreenSectionWithFilterItemOverNinetyNinePreview() {
     title = "All Clients",
     searchQuery = SearchQuery("Eddy"),
     filteredRecordsCount = 120,
-    onSearchTextChanged = {},
+    onSearchTextChanged = { _, _ -> },
     toolBarHomeNavigation = ToolBarHomeNavigation.NAVIGATE_BACK,
     isFilterIconEnabled = true,
     onClick = {},
@@ -382,7 +406,7 @@ fun TopScreenSectionWithFilterCountNinetyNinePreview() {
     title = "All Clients",
     searchQuery = SearchQuery("Eddy"),
     filteredRecordsCount = 99,
-    onSearchTextChanged = {},
+    onSearchTextChanged = { _, _ -> },
     toolBarHomeNavigation = ToolBarHomeNavigation.NAVIGATE_BACK,
     isFilterIconEnabled = true,
     onClick = {},
@@ -397,7 +421,7 @@ fun TopScreenSectionNoFilterIconPreview() {
   TopScreenSection(
     title = "All Clients",
     searchQuery = SearchQuery("Eddy"),
-    onSearchTextChanged = {},
+    onSearchTextChanged = { _, _ -> },
     toolBarHomeNavigation = ToolBarHomeNavigation.NAVIGATE_BACK,
     isFilterIconEnabled = false,
     onClick = {},
@@ -422,7 +446,7 @@ fun TopScreenSectionWithFilterIconAndToggleIconPreview() {
     title = "All Clients",
     searchQuery = SearchQuery("Eddy"),
     filteredRecordsCount = 120,
-    onSearchTextChanged = {},
+    onSearchTextChanged = { _, _ -> },
     toolBarHomeNavigation = ToolBarHomeNavigation.NAVIGATE_BACK,
     isFilterIconEnabled = true,
     onClick = {},
@@ -447,7 +471,7 @@ fun TopScreenSectionWithToggleIconPreview() {
     title = "All Clients",
     searchQuery = SearchQuery("Eddy"),
     filteredRecordsCount = 120,
-    onSearchTextChanged = {},
+    onSearchTextChanged = { _, _ -> },
     toolBarHomeNavigation = ToolBarHomeNavigation.NAVIGATE_BACK,
     isFilterIconEnabled = false,
     onClick = {},

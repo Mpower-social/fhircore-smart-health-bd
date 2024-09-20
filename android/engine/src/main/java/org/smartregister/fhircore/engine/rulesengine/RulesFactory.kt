@@ -141,7 +141,9 @@ constructor(
     if (BuildConfig.DEBUG) {
       val timeToFireRules = measureTimeMillis { rulesEngine.fire(rules, facts) }
       Timber.d("Rule executed in $timeToFireRules millisecond(s)")
-    } else rulesEngine.fire(rules, facts)
+    } else {
+      rulesEngine.fire(rules, facts)
+    }
     return facts.get(DATA) as Map<String, Any>
   }
 
@@ -210,13 +212,14 @@ constructor(
 
       return if (referenceFhirPathExpression.isNullOrEmpty()) {
         value
-      } else
+      } else {
         value.filter {
           resource.logicalId ==
             fhirPathDataExtractor
               .extractValue(it, referenceFhirPathExpression)
               .extractLogicalIdUuid()
         }
+      }
     }
 
     /**
@@ -729,7 +732,9 @@ constructor(
         }
         if (createLocalChangeEntitiesAfterPurge) {
           defaultRepository.addOrUpdate(resource = updatedResource as Resource)
-        } else defaultRepository.createRemote(resource = arrayOf(updatedResource as Resource))
+        } else {
+          defaultRepository.createRemote(resource = arrayOf(updatedResource as Resource))
+        }
       }
     }
 

@@ -68,9 +68,9 @@ import org.smartregister.fhircore.quest.R
 import org.smartregister.fhircore.quest.ui.profile.bottomSheet.ProfileBottomSheetFragment
 import org.smartregister.fhircore.quest.ui.profile.model.EligibleManagingEntity
 import org.smartregister.fhircore.quest.ui.report.measure.models.ReportRangeSelectionData
-import org.smartregister.fhircore.quest.util.extensions.decodeBinaryResourcesToBitmap
+import org.smartregister.fhircore.quest.util.extensions.decodeImageResourcesToBitmap
 import org.smartregister.fhircore.quest.util.extensions.handleClickEvent
-import org.smartregister.fhircore.quest.util.extensions.loadRemoteImagesBitmaps
+import org.smartregister.fhircore.quest.util.extensions.resourceReferenceToBitMap
 import org.smartregister.fhircore.quest.util.extensions.toParamDataMap
 import timber.log.Timber
 
@@ -105,19 +105,22 @@ constructor(
    * then transformed into bitmap for use in an Image Composable (returns null if the referenced
    * resource doesn't exist)
    */
-  fun decodeBinaryResourceIconsToBitmap(profileId: String) {
+  suspend fun decodeBinaryResourceIconsToBitmap(profileId: String) {
     val profileConfig =
       configurationRegistry.retrieveConfiguration<ProfileConfiguration>(
         configId = profileId,
         configType = ConfigType.Profile,
       )
-    profileConfig.overFlowMenuItems
-      .filter { it.icon != null && !it.icon!!.reference.isNullOrEmpty() }
-      .decodeBinaryResourcesToBitmap(
-        viewModelScope,
-        registerRepository,
-        configurationRegistry.decodedImageMap,
-      )
+    withContext(dispatcherProvider.io()) {
+      profileConfig.overFlowMenuItems
+        .asSequence()
+        .filter { it.icon != null && !it.icon?.reference.isNullOrBlank() }
+        .mapNotNull { it.icon!!.reference }
+        .resourceReferenceToBitMap(
+          fhirEngine = registerRepository.fhirEngine,
+          decodedImageMap = configurationRegistry.decodedImageMap,
+        )
+    }
   }
 
   suspend fun retrieveProfileUiState(
@@ -184,19 +187,13 @@ constructor(
           computedValuesMap = resourceData.computedValuesMap.plus(paramsMap),
           listResourceDataStateMap = listResourceDataStateMap,
         )
-        if (
-          listResourceDataStateMap[listProperties.id] != null &&
-            listResourceDataStateMap[listProperties.id]?.size!! > 0
-        ) {
-          listResourceDataStateMap[listProperties.id]?.forEach { resourceData ->
-            loadRemoteImagesBitmaps(
-              profileConfiguration.views,
-              registerRepository,
-              resourceData.computedValuesMap,
-              configurationRegistry.decodedImageMap,
-            )
-          }
-        }
+      }
+
+      withContext(dispatcherProvider.io()) {
+        profileConfigs.views.decodeImageResourcesToBitmap(
+          fhirEngine = registerRepository.fhirEngine,
+          decodedImageMap = configurationRegistry.decodedImageMap,
+        )
       }
 
       profileConfigs.tabBar?.tabContents?.map { it.contents }?.flatten()?.retrieveListProperties()?.forEach { listProperties ->
