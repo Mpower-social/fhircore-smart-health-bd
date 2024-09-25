@@ -463,6 +463,7 @@ tasks.withType<Test> {
 configurations { all { exclude(group = "xpp3") } }
 
 dependencies {
+  implementation(libs.gms.play.services.location)
   coreLibraryDesugaring(libs.core.desugar)
 
   // Application dependencies
@@ -477,7 +478,6 @@ dependencies {
   implementation(libs.hilt.work)
   implementation(platform(libs.firebase.bom))
   implementation(libs.firebase.messaging.ktx)
-  implementation(libs.gms.play.services.location)
   implementation(libs.mlkit.barcode.scanning)
   implementation(libs.material3)
 
