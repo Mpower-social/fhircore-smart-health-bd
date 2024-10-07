@@ -106,7 +106,7 @@ class UserSettingInsightScreenTest {
     val unsyncedResources = emptyList<Pair<String, Int>>()
     initComposable(
       unsyncedResourcesFlow = MutableStateFlow(unsyncedResources),
-      showProgressIndicator = true
+      showProgressIndicator = true,
     )
     composeRule.onNodeWithTag(CIRCULAR_PROGRESS_INDICATOR).assertExists().assertIsDisplayed()
   }
