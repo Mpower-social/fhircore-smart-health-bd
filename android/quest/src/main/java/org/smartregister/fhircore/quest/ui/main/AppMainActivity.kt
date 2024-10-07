@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -53,6 +54,8 @@ import org.smartregister.fhircore.engine.domain.model.LauncherType
 import org.smartregister.fhircore.engine.rulesengine.services.LocationCoordinate
 import org.smartregister.fhircore.engine.sync.OnSyncListener
 import org.smartregister.fhircore.engine.sync.SyncListenerManager
+import org.smartregister.fhircore.engine.ui.base.AlertDialogue
+import org.smartregister.fhircore.engine.ui.base.AlertIntent
 import org.smartregister.fhircore.engine.ui.base.BaseMultiLanguageActivity
 import org.smartregister.fhircore.engine.util.DispatcherProvider
 import org.smartregister.fhircore.engine.util.extension.parcelable
@@ -188,6 +191,7 @@ open class AppMainActivity :
       }
 
       setupLocationServices()
+      overrideOnBackPressListener()
 
       findViewById<View>(R.id.mainScreenProgressBar).apply { visibility = View.GONE }
       findViewById<View>(R.id.mainScreenProgressBarText).apply { visibility = View.GONE }
@@ -361,5 +365,27 @@ open class AppMainActivity :
 
   override fun onGrantedPermissions() {
     appMainViewModel.run { schedulePeriodicJobsForNotification() }
+  }
+  
+  private fun overrideOnBackPressListener() {
+    onBackPressedDispatcher.addCallback(
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          val navHostFragment =
+            (supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment)
+          if (navHostFragment.childFragmentManager.backStackEntryCount == 0) {
+            AlertDialogue.showAlert(
+              this@AppMainActivity,
+              alertIntent = AlertIntent.CONFIRM,
+              title = getString(R.string.exit_app),
+              message = getString(R.string.exit_app_message),
+              cancellable = false,
+              confirmButtonListener = { finish() },
+              neutralButtonListener = { dialog -> dialog.dismiss() },
+            )
+          } else navHostFragment.navController.navigateUp()
+        }
+      },
+    )
   }
 }
