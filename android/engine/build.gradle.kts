@@ -162,7 +162,7 @@ dependencies {
   api(libs.glide)
   api(libs.knowledge) { exclude(group = "org.slf4j", module = "jcl-over-slf4j") }
   api(libs.p2p.lib)
-  api(libs.jjwt)
+  api(libs.java.jwt)
   api(libs.fhir.common.utils) { exclude(group = "org.slf4j", module = "jcl-over-slf4j") }
   api(libs.runtime.livedata)
   api(libs.foundation)
