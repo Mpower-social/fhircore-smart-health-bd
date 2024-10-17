@@ -464,32 +464,16 @@ constructor(
           registerData.value =
             retrieveCompleteRegisterData(currentRegisterConfiguration.id, clearCache)
         } else {
-        registerData.value =
-          currentRegisterConfiguration.configRules?.let {
-            val computedValuesMap =
-              resourceDataRulesExecutor.computeResourceDataRules(
-                ruleConfigs = it,
-                repositoryResourceData = null,
-                params = paramsMap,
-              )
-
-            ResourceData(
-              baseResourceId = "",
-              baseResourceType = ResourceType.Location,
-              computedValuesMap = computedValuesMap,
-            )
+          currentRegisterConfiguration.registerNotification?.let {
+            val actionConfig = it.first()
+            actionConfig.id?.let { notificationId ->
+              _unreadNotificationsCount.longValue =
+                registerRepository.countRegisterData(
+                  registerId = notificationId,
+                  fhirResourceConfig = actionConfig.resourceConfig,
+                )
+            }
           }
-
-        currentRegisterConfiguration.registerNotification?.let {
-          val actionConfig = it.first()
-          actionConfig.id?.let { notificationId ->
-            _unreadNotificationsCount.longValue =
-              registerRepository.countRegisterData(
-                registerId = notificationId,
-                fhirResourceConfig = actionConfig.resourceConfig,
-              )
-          }
-        }
 
           _totalRecordsCount.longValue =
             registerRepository.countRegisterData(registerId = registerId, paramsMap = paramsMap)
@@ -510,31 +494,29 @@ constructor(
           RegisterUiState(
             screenTitle = currentRegisterConfiguration.registerTitle ?: screenTitle,
             isFirstTimeSync =
-              sharedPreferencesHelper
-                .read(
-                  SharedPreferenceKey.LAST_SYNC_TIMESTAMP.name,
-                  null,
-                )
-                .isNullOrEmpty() &&
-                _totalRecordsCount.longValue == 0L &&
-                applicationConfiguration.usePractitionerAssignedLocationOnSync,
-	    resourceData = resourceData,
+            sharedPreferencesHelper
+              .read(
+                SharedPreferenceKey.LAST_SYNC_TIMESTAMP.name,
+                null,
+              )
+              .isNullOrEmpty() &&
+              _totalRecordsCount.longValue == 0L &&
+              applicationConfiguration.usePractitionerAssignedLocationOnSync,
             registerConfiguration = currentRegisterConfiguration,
             registerId = registerId,
             totalRecordsCount = _totalRecordsCount.longValue,
             filteredRecordsCount = _filteredRecordsCount.longValue,
-            unreadNotificationsCount = _unreadNotificationsCount.longValue,
             pagesCount =
-              ceil(
-                  (if (registerFilterState.value.fhirResourceConfig != null) {
-                      _filteredRecordsCount.longValue
-                    } else {
-                      _totalRecordsCount.longValue
-                    })
-                    .toDouble()
-                    .div(currentRegisterConfiguration.pageSize.toLong()),
-                )
-                .toInt(),
+            ceil(
+              (if (registerFilterState.value.fhirResourceConfig != null) {
+                _filteredRecordsCount.longValue
+              } else {
+                _totalRecordsCount.longValue
+              })
+                .toDouble()
+                .div(currentRegisterConfiguration.pageSize.toLong()),
+            )
+              .toInt(),
             progressPercentage = _percentageProgress,
             isSyncUpload = _isUploadSync,
             currentSyncJobStatus = _currentSyncJobStatusFlow,
