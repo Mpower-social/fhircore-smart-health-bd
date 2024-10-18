@@ -37,6 +37,7 @@ data class TabViewProperties(
   override val fillMaxHeight: Boolean = false,
   override val clickable: String = "true",
   override val visible: String = "true",
+  override val opacity: Float? = null,
   val tabContents: List<TabViewContent> = emptyList(),
   val contentScrollable: Boolean = false,
   val tabBackgroundColor: String = "#F2F4F7",

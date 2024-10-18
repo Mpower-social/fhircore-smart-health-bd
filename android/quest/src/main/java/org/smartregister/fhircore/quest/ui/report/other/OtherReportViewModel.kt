@@ -16,7 +16,9 @@
 
 package org.smartregister.fhircore.quest.ui.report.other
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,6 +28,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hl7.fhir.r4.model.ResourceType
 import org.smartregister.fhircore.engine.configuration.ConfigType
 import org.smartregister.fhircore.engine.configuration.ConfigurationRegistry
@@ -38,6 +41,7 @@ import org.smartregister.fhircore.engine.util.DefaultDispatcherProvider
 import org.smartregister.fhircore.engine.util.SharedPreferencesHelper
 import org.smartregister.fhircore.engine.util.extension.SDF_YYYY_MM_DD
 import org.smartregister.fhircore.engine.util.extension.formatDate
+import org.smartregister.fhircore.quest.util.extensions.referenceToBitmap
 
 @HiltViewModel
 class OtherReportViewModel
@@ -55,6 +59,8 @@ constructor(
   val dateRange: MutableState<androidx.core.util.Pair<Long?, Long?>> =
     mutableStateOf(defaultDateRangeState())
   val otherReportUiState = mutableStateOf(OtherReportUiState())
+
+  private val decodedImageMap = mutableStateMapOf<String, Bitmap>()
 
   private fun defaultDateRangeState() =
     androidx.core.util.Pair<Long?, Long?>(
@@ -105,4 +111,8 @@ constructor(
       configType = ConfigType.OtherReport,
       configId = reportId,
     )
+
+  fun getImageBitmap(reference: String) = runBlocking {
+    reference.referenceToBitmap(registerRepository.fhirEngine, decodedImageMap)
+  }
 }

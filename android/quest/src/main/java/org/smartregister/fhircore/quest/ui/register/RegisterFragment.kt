@@ -91,16 +91,16 @@ class RegisterFragment : Fragment(), OnSyncListener {
     container: ViewGroup?,
     savedInstanceState: Bundle?,
   ): View {
-    appMainViewModel.retrieveIconsAsBitmap()
-
     with(registerFragmentArgs) {
-      lifecycleScope.launch {
-        registerViewModel.retrieveRegisterUiState(
-          registerId = registerId,
-          screenTitle = screenTitle,
-          params = params,
-          clearCache = false,
-        )
+      viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+          registerViewModel.retrieveRegisterUiState(
+            registerId = registerId,
+            screenTitle = screenTitle,
+            params = params,
+            clearCache = false,
+          )
+        }
       }
     }
     return ComposeView(requireContext()).apply {
@@ -169,6 +169,7 @@ class RegisterFragment : Fragment(), OnSyncListener {
                 navController = findNavController(),
                 unSyncedResourceCount = appMainViewModel.unSyncedResourcesCount,
                 onCountUnSyncedResources = appMainViewModel::updateUnSyncedResourcesCount,
+                decodeImage = { registerViewModel.getImageBitmap(it) },
               )
             },
             bottomBar = {
@@ -216,6 +217,7 @@ class RegisterFragment : Fragment(), OnSyncListener {
                 pagingItems = pagingItems,
                 navController = findNavController(),
                 toolBarHomeNavigation = registerFragmentArgs.toolBarHomeNavigation,
+                decodeImage = { registerViewModel.getImageBitmap(it) },
               )
             }
           }

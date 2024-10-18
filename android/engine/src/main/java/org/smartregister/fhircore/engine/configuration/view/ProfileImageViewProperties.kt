@@ -34,6 +34,7 @@ data class ProfileImageViewProperties(
   override val fillMaxHeight: Boolean = false,
   override val clickable: String = "false",
   override val visible: String = "true",
+  override val opacity: Float? = null,
   val type: String = "local",
   val reference: String = "ic_profile",
   @Contextual var decodedBitmap: Bitmap? = null,

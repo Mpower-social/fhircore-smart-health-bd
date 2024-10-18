@@ -16,6 +16,7 @@
 
 package org.smartregister.fhircore.quest.ui.report.other
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -80,6 +81,7 @@ fun OtherReportScreen(
   onEvent: (OtherReportEvent) -> Unit,
   otherReportUiState: OtherReportUiState,
   initialDateRange: Pair<Long?, Long?>,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   val currentSelectedDateState = remember { mutableStateOf(initialDateRange) }
   val state =
@@ -223,7 +225,7 @@ fun OtherReportScreen(
                   emptyMap(),
                 ),
             navController = navController,
-            decodedImageMap = remember { mutableStateMapOf() },
+            decodeImage = decodeImage,
             selectedTabIndex = selectedPageState.value,
             tabChangedEvent = { index -> selectedPageState.value = index },
           )

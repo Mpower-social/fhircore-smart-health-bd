@@ -20,6 +20,7 @@ package org.smartregister.fhircore.quest.ui.main.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -129,6 +130,7 @@ fun AppDrawer(
   appVersionPair: Pair<Int, String>? = null,
   unSyncedResourceCount: MutableIntState,
   onCountUnSyncedResources: () -> Unit,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   val context = LocalContext.current
   val (versionCode, versionName) = remember { appVersionPair ?: context.appVersion() }
@@ -159,6 +161,7 @@ fun AppDrawer(
         unSyncedResourceCount = unSyncedResourceCount,
         onSideMenuClick = onSideMenuClick,
         openDrawer = openDrawer,
+        decodeImage = decodeImage,
       )
     },
   ) { innerPadding ->
@@ -190,7 +193,6 @@ fun AppDrawer(
                 "%d",
                 appUiState.registerCountMap[navigationMenu.id] ?: 0,
               ),
-            showEndText = navigationMenu.showCount,            
 	          endTextColor = MenuItemColor,
             hasSubRegister = navigationMenu.subRegisters.isNotEmpty(),
             subRegisters = {
@@ -205,23 +207,31 @@ fun AppDrawer(
                       appUiState.registerCountMap[navigationSubMenu.id] ?: 0,
                     ),
                   showEndText = navigationSubMenu.showCount,
-                ) {
-                  openDrawer(false)
-                  onSideMenuClick(
-                    AppMainEvent.TriggerWorkflow(
-                      navController = navController,
-                      navMenu = navigationSubMenu,
-                    ),
-                  )
-                }
+                  onSideMenuClick = {
+                    openDrawer(false)
+                    onSideMenuClick(
+                      AppMainEvent.TriggerWorkflow(
+                        navController = navController,
+                        navMenu = navigationSubMenu,
+                      ),
+                    )
+                  },
+                  decodeImage = decodeImage,
+                )
               }
             },
-          ) {
-            openDrawer(false)
-            onSideMenuClick(
-              AppMainEvent.TriggerWorkflow(navController = navController, navMenu = navigationMenu),
-            )
-          }
+            showEndText = navigationMenu.showCount,
+            onSideMenuClick = {
+              openDrawer(false)
+              onSideMenuClick(
+                AppMainEvent.TriggerWorkflow(
+                  navController = navController,
+                  navMenu = navigationMenu,
+                ),
+              )
+            },
+            decodeImage = decodeImage,
+          )
         }
 
         item {
@@ -232,6 +242,7 @@ fun AppDrawer(
                 onSideMenuClick = onSideMenuClick,
                 openDrawer = openDrawer,
                 navController = navController,
+              decodeImage = decodeImage,
               )
               if (navigationConfiguration.staticMenu.isNotEmpty()) Divider(color = DividerColor)
             }
@@ -251,14 +262,19 @@ fun AppDrawer(
                 "%d",
                 appUiState.registerCountMap[navigationMenu.id] ?: 0,
               ),
-            showEndText = navigationMenu.showCount,
             endTextColor = MenuItemColor,
-          ) {
-            openDrawer(false)
-            onSideMenuClick(
-              AppMainEvent.TriggerWorkflow(navController = navController, navMenu = navigationMenu),
-            )
-          }
+            showEndText = navigationMenu.showCount,
+            onSideMenuClick = {
+              openDrawer(false)
+              onSideMenuClick(
+                AppMainEvent.TriggerWorkflow(
+                  navController = navController,
+                  navMenu = navigationMenu,
+                ),
+              )
+            },
+            decodeImage = decodeImage,
+          )
         }
       }
     }
@@ -272,6 +288,7 @@ private fun NavBottomSection(
   unSyncedResourceCount: MutableIntState,
   onSideMenuClick: (AppMainEvent) -> Unit,
   openDrawer: (Boolean) -> Unit,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   val currentSyncJobStatus = appDrawerUIState.currentSyncJobStatus
   val context = LocalContext.current
@@ -326,6 +343,7 @@ private fun NavBottomSection(
             unSyncedResourceCount = unSyncedResourceCount,
             openDrawer = openDrawer,
             onSideMenuClick = onSideMenuClick,
+            decodeImage = decodeImage,
           )
         } else {
           SyncStatusView(
@@ -342,6 +360,7 @@ private fun NavBottomSection(
           unSyncedResourceCount = unSyncedResourceCount,
           openDrawer = openDrawer,
           onSideMenuClick = onSideMenuClick,
+          decodeImage = decodeImage,
         )
       }
     }
@@ -354,6 +373,7 @@ private fun DefaultSyncStatus(
   context: Context,
   unSyncedResourceCount: MutableIntState,
   openDrawer: (Boolean) -> Unit,
+  decodeImage: ((String) -> Bitmap?)?,
   onSideMenuClick: (AppMainEvent) -> Unit,
 ) {
   val allDataSynced = unSyncedResourceCount.intValue == 0
@@ -371,6 +391,7 @@ private fun DefaultSyncStatus(
     SideMenuItem(
       modifier = Modifier,
       imageConfig = ImageConfig(type = ICON_TYPE_LOCAL, reference = "ic_sync"),
+      mainTextColor = if (allDataSynced) Color.White else Color.Unspecified,
       title =
         stringResource(
           if (allDataSynced) {
@@ -387,17 +408,18 @@ private fun DefaultSyncStatus(
         },
       subTitleTextColor = SubtitleTextColor,
       endText = appUiState.lastSyncTime,
+      endTextColor = if (allDataSynced) SubtitleTextColor else Color.Unspecified,
       padding = 0,
       showEndText = true,
-      endTextColor = if (allDataSynced) SubtitleTextColor else Color.Unspecified,
-      mainTextColor = if (allDataSynced) Color.White else Color.Unspecified,
       mainTextBold = !allDataSynced,
       startIcon = if (allDataSynced) null else Icons.Default.Error,
       startIconColor = if (allDataSynced) null else WarningColor,
-    ) {
-      openDrawer(false)
-      onSideMenuClick(AppMainEvent.SyncData(context))
-    }
+      onSideMenuClick = {
+        openDrawer(false)
+        onSideMenuClick(AppMainEvent.SyncData(context))
+      },
+      decodeImage = decodeImage,
+    )
   }
 }
 
@@ -405,6 +427,7 @@ private fun DefaultSyncStatus(
 private fun OtherPatientsItem(
   navigationConfiguration: NavigationConfiguration,
   onSideMenuClick: (AppMainEvent) -> Unit,
+  decodeImage: ((String) -> Bitmap?)?,
   openDrawer: (Boolean) -> Unit,
   navController: NavController,
 ) {
@@ -416,24 +439,26 @@ private fun OtherPatientsItem(
         stringResource(org.smartregister.fhircore.engine.R.string.other_patients)
       },
     endText = "",
+    endTextColor = SubtitleTextColor,
     showEndText = false,
     endImageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-    endTextColor = SubtitleTextColor,
-  ) {
-    openDrawer(false)
-    onSideMenuClick(
-      AppMainEvent.OpenRegistersBottomSheet(
-        registersList = navigationConfiguration.bottomSheetRegisters?.registers,
-        navController = navController,
-        title =
-          if (navigationConfiguration.bottomSheetRegisters?.display.isNullOrEmpty()) {
-            context.getString(org.smartregister.fhircore.engine.R.string.other_patients)
-          } else {
-            navigationConfiguration.bottomSheetRegisters?.display
-          },
-      ),
-    )
-  }
+    onSideMenuClick = {
+      openDrawer(false)
+      onSideMenuClick(
+        AppMainEvent.OpenRegistersBottomSheet(
+          registersList = navigationConfiguration.bottomSheetRegisters?.registers,
+          navController = navController,
+          title =
+            if (navigationConfiguration.bottomSheetRegisters?.display.isNullOrEmpty()) {
+              context.getString(org.smartregister.fhircore.engine.R.string.other_patients)
+            } else {
+              navigationConfiguration.bottomSheetRegisters?.display
+            },
+        ),
+      )
+    },
+    decodeImage = decodeImage,
+  )
 }
 
 @Composable
@@ -535,6 +560,7 @@ private fun SideMenuItem(
   hasSubRegister: Boolean = false,
   subRegisters: (@Composable () -> Unit)? = null,
   onSideMenuClick: () -> Unit,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   var subItemsVisible by remember { mutableStateOf(false) }
 
@@ -586,6 +612,7 @@ private fun SideMenuItem(
                 imageProperties = ImageProperties(imageConfig = imageConfig, size = 32),
                 tint = MenuItemColor,
                 navController = rememberNavController(),
+          decodeImage = decodeImage,
               )
           }
         SideMenuItemText(title = title, textColor = mainTextColor)
@@ -668,6 +695,7 @@ fun AppDrawerPreview() {
       appVersionPair = Pair(1, "0.0.1"),
       unSyncedResourceCount = remember { mutableIntStateOf(0) },
       onCountUnSyncedResources = {},
+      decodeImage = null,
     )
   }
 }
@@ -719,6 +747,7 @@ fun AppDrawerWithSubMenuPreview() {
     appVersionPair = Pair(1, "0.0.1"),
     unSyncedResourceCount = remember { mutableIntStateOf(10) },
     onCountUnSyncedResources = {},
+    decodeImage = null,
   )
 }
 
@@ -756,6 +785,7 @@ fun AppDrawerWithUnSyncedDataPreview() {
       appVersionPair = Pair(1, "0.0.1"),
       unSyncedResourceCount = remember { mutableIntStateOf(10) },
       onCountUnSyncedResources = {},
+      decodeImage = null,
     )
   }
 }
@@ -798,6 +828,7 @@ fun AppDrawerOnSyncCompletePreview() {
       appVersionPair = Pair(1, "0.0.1"),
       unSyncedResourceCount = remember { mutableIntStateOf(0) },
       onCountUnSyncedResources = {},
+      decodeImage = null,
     )
   }
 }
@@ -840,6 +871,7 @@ fun AppDrawerOnSyncFailedPreview() {
       appVersionPair = Pair(1, "0.0.1"),
       unSyncedResourceCount = remember { mutableIntStateOf(0) },
       onCountUnSyncedResources = {},
+      decodeImage = null,
     )
   }
 }
@@ -883,6 +915,7 @@ fun AppDrawerOnSyncRunningPreview() {
       appVersionPair = Pair(1, "0.0.1"),
       unSyncedResourceCount = remember { mutableIntStateOf(0) },
       onCountUnSyncedResources = {},
+      decodeImage = null,
     )
   }
 }

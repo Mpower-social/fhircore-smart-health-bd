@@ -16,6 +16,7 @@
 
 package org.smartregister.fhircore.quest.ui.register
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -99,6 +100,7 @@ fun RegisterScreen(
   pagingItems: LazyPagingItems<ResourceData>,
   navController: NavController,
   toolBarHomeNavigation: ToolBarHomeNavigation = ToolBarHomeNavigation.OPEN_DRAWER,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   val lazyListState: LazyListState = rememberLazyListState()
   Scaffold(
@@ -129,6 +131,7 @@ fun RegisterScreen(
           isNotificationIconEnabled = notificationActions?.isNotEmpty() ?: false,
           topScreenSection = registerUiState.registerConfiguration?.topScreenSection,
           navController = navController,
+          decodeImage = decodeImage,
         ) { event ->
           when (event) {
             ToolbarClickEvent.Navigate ->
@@ -160,6 +163,7 @@ fun RegisterScreen(
           resourceData = registerUiState.resourceData,
           navController = navController,
           lazyListState = lazyListState,
+          decodeImage = decodeImage,
         )
       }
     },
@@ -222,6 +226,7 @@ fun RegisterScreen(
                     }
                 }
               },
+              decodeImage = decodeImage,
             )
           } else {
             registerUiState.registerConfiguration?.noResults?.let { noResultConfig ->
@@ -319,6 +324,7 @@ fun RegisterScreenWithDataPreview() {
       currentPage = currentPage,
       pagingItems = pagingItems,
       navController = rememberNavController(),
+      decodeImage = null,
     )
   }
 }

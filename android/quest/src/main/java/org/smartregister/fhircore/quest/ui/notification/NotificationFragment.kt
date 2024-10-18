@@ -104,6 +104,7 @@ class NotificationFragment : Fragment() {
                 currentPage = registerViewModel.currentPage,
                 pagingItems = pagingItems,
                 navController = findNavController(),
+                decodeImage = { registerViewModel.getImageBitmap(it) },
               )
             }
           }

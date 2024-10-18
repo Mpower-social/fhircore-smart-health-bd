@@ -16,6 +16,7 @@
 
 package org.smartregister.fhircore.quest.ui.notification.components
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,6 +64,7 @@ fun NotificationCardList(
   registerUiState: NotificationUiState,
   currentPage: MutableState<Int>,
   showPagination: Boolean = false,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   LazyColumn(modifier = modifier.testTag(NOTIFICATION_CARD_LIST_TEST_TAG), state = lazyListState) {
     items(
@@ -87,7 +89,7 @@ fun NotificationCardList(
           viewProperties = registerCardConfig.views,
           resourceData = data,
           navController = navController,
-          decodedImageMap = remember { mutableStateMapOf() },
+          decodeImage = decodeImage,
         )
       }
       Divider(color = DividerColor, thickness = 1.dp)

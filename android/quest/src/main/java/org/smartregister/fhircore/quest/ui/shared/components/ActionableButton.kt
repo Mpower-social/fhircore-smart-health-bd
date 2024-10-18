@@ -16,6 +16,7 @@
 
 package org.smartregister.fhircore.quest.ui.shared.components
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -70,6 +71,7 @@ fun ActionableButton(
   buttonProperties: ButtonProperties,
   resourceData: ResourceData,
   navController: NavController,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   if (buttonProperties.visible.toBoolean()) {
     val status = buttonProperties.status
@@ -162,6 +164,7 @@ fun ActionableButton(
           tint = iconTintColor,
           resourceData = resourceData,
           navController = navController,
+          decodeImage = decodeImage,
         )
       } else {
         Icon(
@@ -218,6 +221,7 @@ fun ActionableButtonPreview() {
       ),
     resourceData = ResourceData("id", ResourceType.Patient, emptyMap()),
     navController = rememberNavController(),
+    decodeImage = null,
   )
 }
 
@@ -234,6 +238,7 @@ fun ActionableButtonTinyButtonPreview() {
       ),
     resourceData = ResourceData("id", ResourceType.Patient, emptyMap()),
     navController = rememberNavController(),
+    decodeImage = null,
   )
 }
 
@@ -256,6 +261,7 @@ fun DisabledActionableButtonPreview() {
         ),
       resourceData = ResourceData("id", ResourceType.Patient, emptyMap()),
       navController = rememberNavController(),
+      decodeImage = null,
     )
   }
 }
@@ -275,6 +281,7 @@ fun SmallActionableButtonPreview() {
         ),
       resourceData = ResourceData("id", ResourceType.Patient, emptyMap()),
       navController = rememberNavController(),
+      decodeImage = null,
     )
     ActionableButton(
       modifier = Modifier.weight(1.0f),
@@ -287,6 +294,7 @@ fun SmallActionableButtonPreview() {
         ),
       resourceData = ResourceData("id", ResourceType.Patient, emptyMap()),
       navController = rememberNavController(),
+      decodeImage = null,
     )
   }
 }

@@ -31,11 +31,8 @@ import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,7 +62,7 @@ fun TabView(
   viewProperties: TabViewProperties,
   resourceData: ResourceData,
   navController: NavController,
-  decodedImageMap: SnapshotStateMap<String, Bitmap>,
+  decodeImage: ((String) -> Bitmap?)?,
   selectedTabIndex: Int? = null,
   tabChangedEvent: ((Int) -> Unit)? = null,
 ) {
@@ -91,7 +88,7 @@ fun TabView(
       viewProperties = viewProperties,
       resourceData = resourceData,
       navController = navController,
-      decodedImageMap = decodedImageMap,
+      decodeImage = decodeImage,
     )
   }
 }
@@ -168,7 +165,7 @@ fun TabContents(
   viewProperties: TabViewProperties,
   resourceData: ResourceData,
   navController: NavController,
-  decodedImageMap: SnapshotStateMap<String, Bitmap>,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   val tabContents = viewProperties.tabContents.filter { it.visible == "true" }.map { it.contents }
 
@@ -188,7 +185,7 @@ fun TabContents(
             viewProperties = tabContents[pageIndex],
             resourceData = resourceData,
             navController = navController,
-            decodedImageMap = decodedImageMap
+            decodeImage = decodeImage,
           )
         }
       }
@@ -197,7 +194,7 @@ fun TabContents(
         viewProperties = tabContents[pageIndex],
         resourceData = resourceData,
         navController = navController,
-        decodedImageMap = decodedImageMap,
+        decodeImage = decodeImage,
       )
     }
   }
@@ -260,7 +257,7 @@ private fun TabViewPreview() {
       viewProperties = viewProperties,
       resourceData = ResourceData("id", ResourceType.Patient, emptyMap()),
       navController = rememberNavController(),
-      decodedImageMap = remember { mutableStateMapOf() },
+      decodeImage = null,
     )
   }
 }

@@ -16,6 +16,7 @@
 
 package org.smartregister.fhircore.quest.ui.notification
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -50,6 +51,7 @@ fun NotificationScreen(
   currentPage: MutableState<Int>,
   pagingItems: LazyPagingItems<ResourceData>,
   navController: NavController,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   val lazyListState: LazyListState = rememberLazyListState()
   Scaffold(
@@ -80,6 +82,7 @@ fun NotificationScreen(
           registerUiState = registerUiState,
           currentPage = currentPage,
           showPagination = searchText.value.isEmpty(),
+          decodeImage = decodeImage
         )
       } else {
         registerUiState.registerConfiguration?.noResults?.let { noResultConfig ->

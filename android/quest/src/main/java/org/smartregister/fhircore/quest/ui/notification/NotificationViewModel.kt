@@ -16,9 +16,11 @@
 
 package org.smartregister.fhircore.quest.ui.notification
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,6 +38,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.smartregister.fhircore.engine.configuration.ConfigType
 import org.smartregister.fhircore.engine.configuration.ConfigurationRegistry
 import org.smartregister.fhircore.engine.configuration.register.RegisterConfiguration
@@ -47,6 +50,7 @@ import org.smartregister.fhircore.engine.util.DispatcherProvider
 import org.smartregister.fhircore.engine.util.SharedPreferencesHelper
 import org.smartregister.fhircore.quest.data.register.RegisterPagingSource
 import org.smartregister.fhircore.quest.data.register.model.RegisterPagingSourceState
+import org.smartregister.fhircore.quest.util.extensions.referenceToBitmap
 import org.smartregister.fhircore.quest.util.extensions.toParamDataMap
 
 @HiltViewModel
@@ -70,6 +74,8 @@ constructor(
   private val _totalRecordsCount = mutableLongStateOf(0L)
   private lateinit var registerConfiguration: RegisterConfiguration
   private var allPatientRegisterData: Flow<PagingData<ResourceData>>? = null
+
+  private val decodedImageMap = mutableStateMapOf<String, Bitmap>()
 
   /**
    * This function paginates the register data. An optional [clearCache] resets the data in the
@@ -226,5 +232,9 @@ constructor(
           )
       }
     }
+  }
+
+  fun getImageBitmap(reference: String) = runBlocking {
+    reference.referenceToBitmap(registerRepository.fhirEngine, decodedImageMap)
   }
 }

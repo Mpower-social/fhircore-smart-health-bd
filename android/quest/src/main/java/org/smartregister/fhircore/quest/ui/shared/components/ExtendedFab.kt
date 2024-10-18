@@ -16,6 +16,7 @@
 
 package org.smartregister.fhircore.quest.ui.shared.components
 
+import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -57,6 +58,7 @@ fun ExtendedFab(
   resourceData: ResourceData? = null,
   navController: NavController,
   lazyListState: LazyListState?,
+  decodeImage: ((String) -> Bitmap?)?,
 ) {
   val firstFabAction = remember { fabActions.first() }
   val firstFabEnabled =
@@ -97,6 +99,7 @@ fun ExtendedFab(
           tint = if (firstFabEnabled) Color.White else DefaultColor,
           navController = navController,
           resourceData = resourceData,
+          decodeImage = decodeImage,
         )
       }
       if (text.isNotEmpty()) {
@@ -133,6 +136,7 @@ fun PreviewDisabledExtendedFab() {
       ),
     navController = rememberNavController(),
     lazyListState = rememberLazyListState(),
+    decodeImage = null,
   )
 }
 
@@ -150,6 +154,7 @@ fun PreviewExtendedFab() {
       ),
     navController = rememberNavController(),
     lazyListState = rememberLazyListState(),
+    decodeImage = null,
   )
 }
 
@@ -167,5 +172,6 @@ fun PreviewExtendedFabJustIcon() {
       ),
     navController = rememberNavController(),
     lazyListState = rememberLazyListState(),
+    decodeImage = null,
   )
 }

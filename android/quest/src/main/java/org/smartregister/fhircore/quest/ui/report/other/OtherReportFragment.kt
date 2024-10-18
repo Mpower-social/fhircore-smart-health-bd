@@ -55,6 +55,7 @@ class OtherReportFragment : Fragment() {
             otherReportUiState = otherReportViewModel.otherReportUiState.value,
             onEvent = otherReportViewModel::onEvent,
             navController = findNavController(),
+            decodeImage = { otherReportViewModel.getImageBitmap(it) },
           )
         }
       }
