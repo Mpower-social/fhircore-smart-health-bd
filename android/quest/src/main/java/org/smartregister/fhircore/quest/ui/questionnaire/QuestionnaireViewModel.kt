@@ -1198,13 +1198,8 @@ constructor(
           it.resourceType != null &&
           it.value.isNotEmpty()
       }
-      .mapNotNull {
-        try {
-          loadResource(it.resourceType!!, it.value)
-        } catch (resourceNotFoundException: ResourceNotFoundException) {
-          null
-        }
-      }
+      .distinctBy { "${it.resourceType?.name}${it.value}" }
+      .mapNotNull { loadResource(it.resourceType!!, it.value) }
   }
 
   /** Load [Resource] of type [ResourceType] for the provided [resourceIdentifier] */
