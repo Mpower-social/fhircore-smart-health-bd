@@ -54,12 +54,13 @@ class UserInsightScreenFragment : Fragment() {
             location = userSettingViewModel.practitionerLocation(),
             appVersionCode = userSettingViewModel.appVersionCode.toString(),
             appVersion = userSettingViewModel.appVersionName,
-            buildDate = userSettingViewModel.buildDate,
+            buildDate = userSettingViewModel.getBuildDate(),
             unsyncedResourcesFlow = userSettingViewModel.unsyncedResourcesMutableSharedFlow,
             navController = findNavController(),
             showProgressIndicator =
               userSettingViewModel.showProgressIndicatorFlow.collectAsState().value,
             onRefreshRequest = { userSettingViewModel.fetchUnsyncedResources() },
+            dateFormat = userSettingViewModel.getDateFormat(),
           )
         }
       }
