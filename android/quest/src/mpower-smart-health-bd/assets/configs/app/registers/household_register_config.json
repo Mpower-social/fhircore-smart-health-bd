@@ -1,0 +1,391 @@
+{
+  "appId": "app",
+  "configType": "register",
+  "id": "householdRegister",
+  "configRules": [
+    {
+      "name": "practitionerLocationId",
+      "condition": "true",
+      "actions": [
+        "data.put('practitionerLocationId', service.retrievePractitionerLocationId())"
+      ]
+    },
+    {
+      "name": "humanReadableId",
+      "condition": "true",
+      "actions": [
+        "data.put('humanReadableId', service.generateRandomVariableDigitInt(10000, 99999))"
+      ]
+    }
+  ],
+  "fhirResource": {
+    "baseResource": {
+      "resource": "Group",
+      "filterId": "household",
+      "dataQueries": [
+        {
+          "paramName": "type",
+          "filterCriteria": [
+            {
+              "dataType": "CODE",
+              "value": {
+                "system": "http://hl7.org/fhir/group-type",
+                "code": "person"
+              }
+            }
+          ]
+        },
+        {
+          "paramName": "code",
+          "filterCriteria": [
+            {
+              "dataType": "CODE",
+              "value": {
+                "system": "https://www.snomed.org",
+                "code": "35359004"
+              }
+            }
+          ]
+        }
+      ],
+      "sortConfigs": [
+        {
+          "paramName": "_lastUpdated",
+          "dataType": "DATE",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    "relatedResources": [
+      {
+        "resource": "Patient",
+        "isRevInclude": false,
+        "searchParameter": "member",
+        "relatedResources": [
+          {
+            "resource": "Condition",
+            "searchParameter": "subject",
+            "dataQueries": [
+              {
+                "paramName": "clinical-status",
+                "filterCriteria": [
+                  {
+                    "dataType": "CODEABLECONCEPT",
+                    "value": {
+                      "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+                      "code": "active"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "overdueTasks",
+            "resource": "Task",
+            "searchParameter": "subject",
+            "resultAsCount": true,
+            "dataQueries": [
+              {
+                "paramName": "status",
+                "filterCriteria": [
+                  {
+                    "dataType": "CODE",
+                    "value": {
+                      "system": "http://hl7.org/fhir/task-status",
+                      "code": "failed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "dueTasks",
+            "resource": "Task",
+            "searchParameter": "subject",
+            "resultAsCount": true,
+            "dataQueries": [
+              {
+                "paramName": "status",
+                "filterCriteria": [
+                  {
+                    "dataType": "CODE",
+                    "value": {
+                      "system": "http://hl7.org/fhir/task-status",
+                      "code": "ready"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "searchBar": {
+    "visible": true,
+    "display": "{{ search.name.or.id }}",
+    "computedRules": [
+      "familyName",
+      "familyId",
+      "practitionerId"
+    ]
+  },
+  "registerCard": {
+    "rules": [
+      {
+        "name": "activeConditions",
+        "condition": "true",
+        "actions": [
+          "data.put('activeConditions', service.filterResources(Condition, \"Condition.clinicalStatus.coding.code = 'active'\"))"
+        ]
+      },
+      {
+        "name": "familyLogicalId",
+        "condition": "true",
+        "actions": [
+          "data.put('familyLogicalId', fhirPath.extractValue(Group, 'Group.id'))"
+        ]
+      },
+      {
+        "name": "familyName",
+        "condition": "true",
+        "actions": [
+          "data.put('familyName', fhirPath.extractValue(Group, 'Group.name'))"
+        ]
+      },
+      {
+        "name": "familyId",
+        "condition": "true",
+        "actions": [
+          "data.put('familyId', fhirPath.extractValue(Group, 'Group.identifier[0].value'))"
+        ]
+      },
+      {
+        "name": "practitionerId",
+        "condition": "true",
+        "actions": [
+          "data.put('practitionerId', fhirPath.extractValue(Practitioner, \"Practitioner.id.split(\"/\")[1]\"))"
+        ]
+      },
+      {
+        "name": "familyVillage",
+        "condition": "true",
+        "actions": [
+          "data.put('familyVillage', fhirPath.extractValue(Group, 'Group.characteristic[0].code.text'))"
+        ]
+      },
+      {
+        "name": "familyRegisteredMember",
+        "condition": "true",
+        "actions": [
+          "data.put('familyRegisteredMember', fhirPath.extractValue(Group, \"Group.characteristic.code.where(coding.code='hh_member_count').text\"))"
+        ]
+      },
+      {
+        "name": "dueTaskCount",
+        "condition": "true",
+        "actions": [
+          "data.put('dueTaskCount', service.computeTotalCount(dueTasks))"
+        ]
+      },
+      {
+        "name": "overDueTaskCount",
+        "condition": "true",
+        "actions": [
+          "data.put('overDueTaskCount', service.computeTotalCount(overdueTasks))"
+        ]
+      },
+      {
+        "name": "totalTaskCount",
+        "condition": "true",
+        "priority": 2,
+        "actions": [
+          "var sum = data.get('dueTaskCount') + data.get('overDueTaskCount'); data.put('totalTaskCount', sum == 0 ? '' : sum)"
+        ]
+      },
+      {
+        "name": "serviceStatus",
+        "condition": "true",
+        "priority": 2,
+        "actions": [
+          "data.put('serviceStatus', data.get('dueTaskCount') > 0 ? 'DUE' : data.get('overDueTaskCount') > 0 ? 'OVERDUE' : 'UPCOMING' )"
+        ]
+      },
+      {
+        "name": "serviceMemberIcons",
+        "condition": "true",
+        "actions": [
+          "data.put('serviceMemberIcons', StringUtils:join([service.mapResourcesToLabeledCSV(Patient, \"Patient.active and (Patient.birthDate >= today() - 5 'years')\", 'CHILD'), service.mapResourcesToLabeledCSV(data.get('activeConditions'), \"Condition.code.text = 'Pregnant'\", 'PREGNANT_WOMAN'), service.mapResourcesToLabeledCSV(data.get('activeConditions'), \"Condition.code.text = 'PNC'\", 'BABY_MOTHER')], ','))"
+        ]
+      },
+      {
+        "name": "familyMemberCount",
+        "condition": "true",
+        "actions": [
+          "data.put('familyMemberCount', size(Patient))"
+        ]
+      }
+    ],
+    "views": [
+      {
+        "viewType": "COLUMN",
+        "padding": 10,
+        "children": [
+          {
+            "viewType": "SERVICE_CARD",
+            "details": [
+              {
+                "viewType": "COMPOUND_TEXT",
+                "primaryText": "@{familyName} Family",
+                "fontSize": 16.0,
+                "primaryTextColor": "#000000"
+              },
+              {
+                "viewType": "COMPOUND_TEXT",
+                "primaryText": "{{hh.id.label}}: @{familyId}",
+                "fontSize": 14.0,
+                "primaryTextColor": "#000000"
+              },
+              {
+                "viewType": "COMPOUND_TEXT",
+                "primaryText": "{{hh.member.count}} @{familyRegisteredMember} ({{hh.registered.member.count}} @{familyMemberCount})",
+                "fontSize": 14.0,
+                "primaryTextColor": "#000000"
+              }
+            ],
+            "showVerticalDivider": true,
+            "serviceMemberIcons": "@{serviceMemberIcons}",
+            "serviceButton": {
+              "visible": true,
+              "text": "@{totalTaskCount}",
+              "status": "@{serviceStatus}",
+              "fontSize": 14.0,
+              "smallSized": false,
+              "actions": [
+                {
+                  "trigger": "ON_CLICK",
+                  "workflow": "LAUNCH_PROFILE",
+                  "id": "householdProfile",
+                  "params": [
+                    {
+                      "paramType": "PARAMDATA",
+                      "key": "familyLogicalId",
+                      "value": "@{familyLogicalId}"
+                    }
+                  ]
+                }
+              ]
+            },
+            "actions": [
+              {
+                "trigger": "ON_CLICK",
+                "workflow": "LAUNCH_PROFILE",
+                "id": "householdProfile",
+                "params": [
+                  {
+                    "paramType": "PARAMDATA",
+                    "key": "familyLogicalId",
+                    "value": "@{familyLogicalId}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "fabActions": [
+    {
+      "id": "ActionButton",
+      "visible": true,
+      "animate": false,
+      "display": "{{add.family}}",
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_households"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "3",
+            "title": "{{add.family}}",
+            "setPractitionerDetails": true,
+            "setOrganizationDetails": true,
+            "snackBarMessage": {
+              "message": "New Household Added",
+              "actionLabel": "",
+              "duration": "Short"
+            }
+          },
+          "params": [
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "0eb238ad-e009-434b-c56f-88e7dc860daa",
+              "dataType": "INTEGER",
+              "key": "humanReadableId",
+              "value": "@{humanReadableId}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "a8e0a3fb-f4d5-4b24-86e2-f2f4bd3dce80",
+              "dataType": "STRING",
+              "key": "practitionerLocationId",
+              "value": "@{practitionerLocationId}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "registerNotification": [
+    {
+      "trigger": "ON_CLICK",
+      "workflow": "LAUNCH_NOTIFICATIONS",
+      "id": "notification",
+      "resourceConfig": {
+        "baseResource": {
+          "resource": "MessageDefinition",
+          "dataQueries": [
+            {
+              "paramName": "category",
+              "filterCriteria": [
+                {
+                  "dataType": "CODE",
+                  "value": {
+                    "system": "http://hl7.org/fhir/message-significance-category",
+                    "code": "notification"
+                  }
+                }
+              ]
+            },
+            {
+              "paramName": "status",
+              "filterCriteria": [
+                {
+                  "dataType": "CODE",
+                  "value": {
+                    "system": "http://hl7.org/fhir/publication-status",
+                    "code": "active"
+                  }
+                }
+              ]
+            }
+          ],
+          "sortConfigs": [
+            {
+              "paramName": "date",
+              "dataType": "DATE",
+              "order": "DESCENDING"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

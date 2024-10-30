@@ -1,0 +1,16 @@
+{
+  "appId": "app",
+  "configType": "measureReport",
+  "id": "serviceDeliveryMeasureReport",
+  "registerId": "inventoryRegister",
+  "registerDate": "2020-10-27",
+  "showFixedRangeSelection": true,
+  "reports": [
+    {
+      "title": "Household Members",
+      "description": "Number of Households, Household members registered, disaggregated by age and gender for each age group",
+      "url": "http://fhir-lab.mpower-social.com:8080/fhir/Measure/1147502",
+      "module": "Module 1"
+    }
+  ]
+}

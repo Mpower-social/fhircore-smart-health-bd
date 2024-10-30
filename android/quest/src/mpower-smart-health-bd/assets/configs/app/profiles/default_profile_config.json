@@ -1,0 +1,2358 @@
+{
+  "appId": "app",
+  "configType": "profile",
+  "id": "defaultProfile",
+  "fhirResource": {
+    "baseResource": {
+      "resource": "Patient"
+    },
+    "relatedResources": [
+      {
+        "resource": "Condition",
+        "searchParameter": "subject",
+        "dataQueries": [
+          {
+            "paramName": "clinical-status",
+            "filterCriteria": [
+              {
+                "dataType": "CODEABLECONCEPT",
+                "value": {
+                  "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+                  "code": "active"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "resource": "CarePlan",
+        "searchParameter": "subject"
+      },
+      {
+        "id": "availableTasks",
+        "resource": "Task",
+        "searchParameter": "subject",
+        "sortConfigs": [
+          {
+            "paramName": "period",
+            "dataType": "DATE"
+          }
+        ]
+      },
+      {
+        "id": "totalEncounters",
+        "resource": "Encounter",
+        "searchParameter": "subject"
+      },
+      {
+        "id": "totalObservations",
+        "resource": "Observation",
+        "searchParameter": "subject",
+        "sortConfigs": [
+          {
+            "paramName": "date",
+            "dataType": "DATE",
+            "order": "DESCENDING"
+          }
+        ]
+      }
+    ]
+  },
+  "secondaryResources": [
+    {
+      "baseResource": {
+        "id": "commodities",
+        "resource": "Group",
+        "dataQueries": [
+          {
+            "paramName": "code",
+            "filterCriteria": [
+              {
+                "dataType": "CODE",
+                "value": {
+                  "system": "http://snomed.info/sct",
+                  "code": "386452003"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "relatedResources": [
+        {
+          "id": "stockObservations",
+          "resource": "Observation",
+          "searchParameter": "subject",
+          "sortConfigs": [
+            {
+              "paramName": "date",
+              "dataType": "DATE",
+              "order": "DESCENDING"
+            }
+          ]
+        },
+        {
+          "id": "stockOutFlags",
+          "resource": "Flag",
+          "searchParameter": "subject"
+        }
+      ]
+    }
+  ],
+  "topAppBar": {
+    "title": {
+      "viewType": "COMPOUND_TEXT",
+      "primaryText": "{{patient.profile}}",
+      "primaryTextColor": "#FFFFFF",
+      "fontSize": 16.0,
+      "maxLines": 1,
+      "primaryTextFontWeight": "BOLD"
+    },
+    "content": [
+      {
+        "viewType": "ROW",
+        "alignment": "START",
+        "children": [
+          {
+            "viewType": "SPACER",
+            "width": 10
+          },
+          {
+            "viewType": "IMAGE_VIEW",
+            "width": 80,
+            "height": 80,
+            "reference": "@{patientProfileIcon}"
+          },
+          {
+            "viewType": "SPACER",
+            "width": 10
+          },
+          {
+            "viewType": "COLUMN",
+            "backgroundColor": "primaryColor",
+            "children": [
+              {
+                "viewType": "ROW",
+                "children": [
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "{{hh.name.label}} ",
+                    "primaryTextColor": "#FFFFFF",
+                    "primaryTextFontWeight": "BOLD"
+                  },
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "@{patientName}",
+                    "primaryTextColor": "#FFFFFF"
+                  }
+                ]
+              },
+              {
+                "viewType": "ROW",
+                "children": [
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "{{hh.id.label}} ",
+                    "primaryTextColor": "#FFFFFF",
+                    "primaryTextFontWeight": "BOLD"
+                  },
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "#@{patientIdentifier}",
+                    "primaryTextColor": "#FFFFFF"
+                  }
+                ]
+              },
+              {
+                "viewType": "ROW",
+                "children": [
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "{{patient.gender.label}} ",
+                    "primaryTextColor": "#FFFFFF",
+                    "primaryTextFontWeight": "BOLD"
+                  },
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "@{patientGender}",
+                    "primaryTextColor": "#FFFFFF"
+                  }
+                ]
+              },
+              {
+                "viewType": "ROW",
+                "children": [
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "{{patient.age.label}} ",
+                    "primaryTextColor": "#FFFFFF",
+                    "primaryTextFontWeight": "BOLD"
+                  },
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "@{patientAge}",
+                    "primaryTextColor": "#FFFFFF"
+                  }
+                ]
+              },
+              {
+                "viewType": "ROW",
+                "children": [
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "{{patient.dob.label}} ",
+                    "primaryTextColor": "#FFFFFF",
+                    "primaryTextFontWeight": "BOLD"
+                  },
+                  {
+                    "viewType": "COMPOUND_TEXT",
+                    "primaryText": "@{patientDOB}",
+                    "primaryTextColor": "#FFFFFF"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "collapsible": false
+  },
+  "rules": [
+    {
+      "name": "totalTaskCount",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('totalTaskCount', size(Task))"
+      ]
+    },
+    {
+      "name": "totalEncounterCount",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('totalEncounterCount', size(totalEncounters))"
+      ]
+    },
+    {
+      "name": "totalObservationCount",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('totalObservationCount', size(totalObservations))"
+      ]
+    },
+    {
+      "name": "totalConditionCount",
+      "condition": "true",
+      "actions": [
+        "data.put('totalObservationCount', size(Condition))"
+      ]
+    },
+    {
+      "name": "activeConditions",
+      "condition": "true",
+      "actions": [
+        "data.put('activeConditions', service.filterResources(Condition, \"Condition.clinicalStatus.coding.code = 'active'\"))"
+      ]
+    },
+    {
+      "name": "patientFirstName",
+      "condition": "true",
+      "actions": [
+        "data.put('patientFirstName', fhirPath.extractValue(Patient, \"Patient.name[0].select(given[0])\"))"
+      ]
+    },
+    {
+      "name": "patientMiddleName",
+      "condition": "true",
+      "actions": [
+        "data.put('patientMiddleName', fhirPath.extractValue(Patient, \"Patient.name[0].select(text)\"))"
+      ]
+    },
+    {
+      "name": "patientLastName",
+      "condition": "true",
+      "actions": [
+        "data.put('patientLastName', fhirPath.extractValue(Patient, \"Patient.name[0].select(family)\"))"
+      ]
+    },
+    {
+      "name": "patientName",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('patientName', data.get('patientFirstName') + ' ' + data.get('patientMiddleName') + ' ' + data.get('patientLastName'))"
+      ]
+    },
+    {
+      "name": "patientActive",
+      "condition": "true",
+      "actions": [
+        "data.put('patientActive', fhirPath.extractValue(Patient, 'Patient.active'))"
+      ]
+    },
+    {
+      "name": "patientTextColor",
+      "condition": "true",
+      "actions": [
+        "data.put('patientTextColor', Patient.active ? '#000000' : 'DefaultColor')"
+      ]
+    },
+    {
+      "name": "patientIdentifier",
+      "condition": "true",
+      "actions": [
+        "data.put('patientIdentifier', fhirPath.extractValue(Patient, \"Patient.identifier.where(use='official').value\"))"
+      ]
+    },
+    {
+      "name": "patientNid",
+      "condition": "true",
+      "actions": [
+        "data.put('patientNid', fhirPath.extractValue(Patient, \"Patient.identifier.where(type.coding.code='11111111').value\"))"
+      ]
+    },
+    {
+      "name": "patientBrid",
+      "condition": "true",
+      "actions": [
+        "data.put('patientBrid', fhirPath.extractValue(Patient, \"Patient.identifier.where(type.coding.code='22222222').value\"))"
+      ]
+    },
+    {
+      "name": "patientId",
+      "condition": "true",
+      "actions": [
+        "data.put('patientId', fhirPath.extractValue(Patient, 'Patient.id'))"
+      ]
+    },
+    {
+      "name": "patientAge",
+      "condition": "true",
+      "actions": [
+        "data.put('patientAge', service.extractAge(Patient))"
+      ]
+    },
+    {
+      "name": "childCardVisible",
+      "condition": "true",
+      "actions": [
+        "data.put('childCardVisible', data.get('patientAge') == 'true' && data.get('patientAge')<=5)"
+      ]
+    },
+    {
+      "name": "patientGender",
+      "condition": "true",
+      "actions": [
+        "data.put('patientGender', service.extractGender(Patient))"
+      ]
+    },
+    {
+      "name": "patientMobile",
+      "condition": "true",
+      "actions": [
+        "data.put('patientMobile', fhirPath.extractValue(Patient, 'Patient.telecom.value'))"
+      ]
+    },
+    {
+      "name": "patientHeight",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('patientHeight', fhirPath.extractValue(service.filterResources(totalObservations, \"Observation.code.coding.code = '1153637007' \").get(0), \"Observation.value\"))"
+      ]
+    },
+    {
+      "name": "patientWeightObservations",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('patientWeightObservations', service.filterResources(totalObservations, \"Observation.code.coding.code = '27113001' \"))"
+      ]
+    },
+    {
+      "name": "patientWeight",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('patientWeight', size(data.get('patientWeightObservations')) > 0 ? fhirPath.extractValue(data.get('patientWeightObservations').get(0), \"Observation.value\") : 0)"
+      ]
+    },
+    {
+      "name": "patientWeightDate",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('patientWeightDate', size(data.get('patientWeightObservations')) > 0 ? service.formatDate(fhirPath.extractValue(data.get('patientWeightObservations').get(0), \"Observation.effective\"), \"yyyy-MM-dd'T'HH:mm:ssZ\", \"yyyy-MM-dd\") : null)"
+      ]
+    },
+    {
+      "name": "noOfBracAncVisit",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('noOfBracAncVisit', size(service.filterResources(totalEncounters, \"Encounter.type[0].coding.code = 'anc-contact-in-brac' \")))"
+      ]
+    },
+    {
+      "name": "bracPncVisits",
+      "condition": "true",
+      "actions": [
+        "data.put('bracPncVisits', service.filterResources(totalEncounters, \"Encounter.type[0].coding.code = 'pnc-contact-in-brac' \"))"
+      ]
+    },
+    {
+      "name": "noOfBracPncVisit",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('noOfBracPncVisit', size(data.get('bracPncVisits')))"
+      ]
+    },
+    {
+      "name": "isLastPncVisitPast24Hours",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('isLastPncVisitPast24Hours', data.get('noOfBracPncVisit') > 0 ? fhirPath.extractValue(service.filterResources(totalEncounters, \"Encounter.type[0].coding.code = 'pnc-contact-in-brac' \").get(0), \"Encounter.period.start < now() - 24 'hours'\") : true)"
+      ]
+    },
+    {
+      "name": "patientBirthDate",
+      "condition": "true",
+      "actions": [
+        "data.put('patientBirthDate', fhirPath.extractValue(Patient, 'Patient.birthDate'))"
+      ]
+    },
+    {
+      "name": "patientDOB",
+      "condition": "true",
+      "actions": [
+        "data.put('patientDOB', service.extractDOB(Patient, 'dd MM yyyy'))"
+      ]
+    },
+    {
+      "name": "isChild",
+      "condition": "true",
+      "actions": [
+        "data.put('isChild', fhirPath.extractValue(Patient, \"Patient.active and (Patient.birthDate >= today() - 5 'years')\"))"
+      ]
+    },
+    {
+      "name": "isMarried",
+      "condition": "true",
+      "actions": [
+        "data.put('isMarried', fhirPath.extractValue(Patient, \"Patient.active and Patient.maritalStatus.coding[0].code = 'M'\"))"
+      ]
+    },
+    {
+      "name": "canBearChild",
+      "condition": "true",
+      "actions": [
+        "data.put('canBearChild',  fhirPath.extractValue(Patient, \"Patient.active and Patient.gender = 'female' and ((Patient.birthDate <= today() - 14 'years') and (Patient.birthDate >= today() - 49 'years'))\"))"
+      ]
+    },
+    {
+      "name": "isEligibleForFP",
+      "condition": "true",
+      "actions": [
+        "data.put('isEligibleForFP',  fhirPath.extractValue(Patient, \"Patient.active and ((Patient.birthDate <= today() - 14 'years') and (Patient.birthDate >= today() - 49 'years'))\"))"
+      ]
+    },
+    {
+      "name": "isPregnant",
+      "condition": "true",
+      "actions": [
+        "data.put('isPregnant', service.evaluateToBoolean(Condition, \"Condition.code.text = 'Pregnant' \", false))"
+      ]
+    },
+    {
+      "name": "lmpDate",
+      "condition": "true",
+      "actions": [
+        "data.put('lmpDate', fhirPath.extractValue(service.filterResources(Condition, \"Condition.code.text = 'Pregnant' \").get(0), \"Condition.onset\"))"
+      ]
+    },
+    {
+      "name": "activeDeliveryDate",
+      "condition": "true",
+      "actions": [
+        "data.put('activeDeliveryDate', fhirPath.extractValue(service.filterResources(Condition, 'Condition.code.coding.code=\"234234234\"').get(0), \"Condition.onset\"))"
+      ]
+    },
+    {
+      "name": "pregnancyOutcomeDateCompleted",
+      "condition": "true",
+      "actions": [
+        "data.put('pregnancyOutcomeDateCompleted', fhirPath.extractValue(service.filterResources(Condition, 'Condition.code.coding.code=\"234234234\"').get(0), \"Condition.onset <= (today() - 42 'days')\"))"
+      ]
+    },
+    {
+      "name": "isActivePnc",
+      "condition": "true",
+      "actions": [
+        "data.put('isActivePnc', service.evaluateToBoolean(Condition, \"Condition.code.text = 'PNC' \", false))"
+      ]
+    },
+    {
+      "name": "canRegisterPregnancy",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('canRegisterPregnancy', data.get('isMarried') and data.get('canBearChild') && !data.get('isPregnant') && (!data.get('isActivePnc') || data.get('pregnancyOutcomeDateCompleted')))"
+      ]
+    },
+    {
+      "name": "canOutcomePregnancy",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('canOutcomePregnancy', data.get('isPregnant') && !data.get('isActivePnc'))"
+      ]
+    },
+    {
+      "name": "patientProfileIcon",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('patientProfileIcon', data.get('isChild') ? 'ic_kids' : data.get('isActivePnc') ? 'ic_baby_mother' : data.get('isPregnant') ? 'ic_pregnant' : 'ic_profile')"
+      ]
+    },
+    {
+      "name": "canEnrollToFp",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('canEnrollToFp', data.get('isEligibleForFP') && !data.get('isPregnant'))"
+      ]
+    },
+    {
+      "name": "isChildUnder2months",
+      "condition": "true",
+      "actions": [
+        "data.put('isChildUnder2months', fhirPath.extractValue(Patient, \"Patient.active and (Patient.birthDate > today() - 2 'months')\"))"
+      ]
+    },
+    {
+      "name": "isChildOver2months",
+      "condition": "true",
+      "actions": [
+        "data.put('isChildOver2months', fhirPath.extractValue(Patient, \"Patient.active and ((Patient.birthDate <= today() - 2 'months') and (Patient.birthDate >= today() - 5 'years'))\"))"
+      ]
+    },
+    {
+      "name": "applicableForNCDPackage",
+      "condition": "true",
+      "actions": [
+        "data.put('applicableForNCDPackage', fhirPath.extractValue(Patient, \"Patient.active and (Patient.birthDate <= today() - 18 'years') and (Patient.birthDate >= today() - 50 'years')\"))"
+      ]
+    },
+    {
+      "name": "applicableForWomenReferral",
+      "condition": "true",
+      "actions": [
+        "data.put('applicableForWomenReferral', fhirPath.extractValue(Patient, \"Patient.active and Patient.gender = 'female' and (Patient.birthDate < today() - 5 'years')\"))"
+      ]
+    },
+    {
+      "name": "applicableForMemberReferral",
+      "condition": "true",
+      "actions": [
+        "data.put('applicableForMemberReferral', fhirPath.extractValue(Patient, \"Patient.active and Patient.gender != 'female' and (Patient.birthDate < today() - 5 'years')\"))"
+      ]
+    },
+    {
+      "name": "fpConditionId",
+      "condition": "true",
+      "actions": [
+        "data.put('fpConditionId', (service.filterResources(data.get('activeConditions'), \"Condition.code.coding.code = '99998888'\")).get(0).idElement.idPart)"
+      ]
+    },
+    {
+      "name": "ancConditionId",
+      "condition": "true",
+      "actions": [
+        "data.put('ancConditionId', (service.filterResources(data.get('activeConditions'), \"Condition.code.coding.code = '77386006'\")).get(0).idElement.idPart)"
+      ]
+    },
+    {
+      "name": "riskyAncConditionId",
+      "condition": "true",
+      "actions": [
+        "data.put('riskyAncConditionId', (service.filterResources(data.get('activeConditions'), \"Condition.code.coding.code = 'high-risk-anc'\")).get(0).idElement.idPart)"
+      ]
+    },
+    {
+      "name": "riskyPncConditionId",
+      "condition": "true",
+      "actions": [
+        "data.put('riskyPncConditionId', (service.filterResources(data.get('activeConditions'), \"Condition.code.coding.code = 'high-risk-pnc'\")).get(0).idElement.idPart)"
+      ]
+    },
+    {
+      "name": "pncFollowupTaskName",
+      "condition": "true",
+      "priority": 4,
+      "actions": [
+        "data.put('pncFollowupTaskName', (data.get('noOfBracPncVisit') == 0 ? '1st' : data.get('noOfBracPncVisit') == 1 ? '2nd' : data.get('noOfBracPncVisit') == 2 ? '3rd' : '4th') + ' PNC Follow Up Visit')"
+      ]
+    },
+    {
+      "name": "applicableForPncFollowup",
+      "condition": "true",
+      "priority": 4,
+      "actions": [
+        "data.put('applicableForPncFollowup', data.get('isActivePnc') and data.get('noOfBracPncVisit') < 4 and data.get('isLastPncVisitPast24Hours'))"
+      ]
+    },
+    {
+      "name": "latestObservations",
+      "condition": "true",
+      "actions": [
+        "data.put('latestObservations', service.filterResources(stockObservations, \"Observation.status = 'preliminary'\"))"
+      ]
+    },
+    {
+      "name": "activeFlags",
+      "condition": "true",
+      "actions": [
+        "data.put('activeFlags', service.filterResources(stockOutFlags, \"Flag.status = 'active'\"))"
+      ]
+    },
+    {
+      "name": "ancObservation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('ancObservation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/f1c7de7d-0c2a-448d-8060-2b8defd51e42'\").get(0) )"
+      ]
+    },
+    {
+      "name": "ancObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('ancObservationId', fhirPath.extractValue(data.get('ancObservation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "ancPreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('ancPreviousBalance', fhirPath.extractValue(data.get('ancObservation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "ancStockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('ancStockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/f1c7de7d-0c2a-448d-8060-2b8defd51e42'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "pncObservation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('pncObservation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/e5897c35-d071-4254-a844-43b5a2a799cb'\").get(0) )"
+      ]
+    },
+    {
+      "name": "pncObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('pncObservationId', fhirPath.extractValue(data.get('pncObservation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "pncPreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('pncPreviousBalance', fhirPath.extractValue(data.get('pncObservation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "pncStockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('pncStockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/e5897c35-d071-4254-a844-43b5a2a799cb'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "ncdObservation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('ncdObservation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/2dfbaf0d-b207-4b43-9536-1daa4d5efcae'\").get(0) )"
+      ]
+    },
+    {
+      "name": "ncdObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('ncdObservationId', fhirPath.extractValue(data.get('ncdObservation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "ncdPreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('ncdPreviousBalance', fhirPath.extractValue(data.get('ncdObservation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "ncdStockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('ncdStockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/2dfbaf0d-b207-4b43-9536-1daa4d5efcae'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "glassesObservation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('glassesObservation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/395cc84c-a5f5-4440-9798-1ded5036170f'\").get(0) )"
+      ]
+    },
+    {
+      "name": "glassesObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('glassesObservationId', fhirPath.extractValue(data.get('glassesObservation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "glassesPreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('glassesPreviousBalance', fhirPath.extractValue(data.get('glassesObservation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "glassesStockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('glassesStockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/395cc84c-a5f5-4440-9798-1ded5036170f'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sunGlassesObservation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('sunGlassesObservation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/69abf560-719a-43ba-8ab9-3e1cd31f0a8b'\").get(0) )"
+      ]
+    },
+    {
+      "name": "sunGlassesObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sunGlassesObservationId', fhirPath.extractValue(data.get('sunGlassesObservation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sunGlassesPreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sunGlassesPreviousBalance', fhirPath.extractValue(data.get('sunGlassesObservation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "sunGlassesStockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('sunGlassesStockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/69abf560-719a-43ba-8ab9-3e1cd31f0a8b'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf100Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('bf100Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/6e15f59e-3466-4ba4-9989-60e57e8ee2ff'\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf100ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf100ObservationId', fhirPath.extractValue(data.get('bf100Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf100PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf100PreviousBalance', fhirPath.extractValue(data.get('bf100Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "bf100StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('bf100StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/6e15f59e-3466-4ba4-9989-60e57e8ee2ff'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf150Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('bf150Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/3ee0c4e9-3dab-49d7-f141-177fdf6c41e0'\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf150ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf150ObservationId', fhirPath.extractValue(data.get('bf150Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf150PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf150PreviousBalance', fhirPath.extractValue(data.get('bf150Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "bf150StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('bf150StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/3ee0c4e9-3dab-49d7-f141-177fdf6c41e0'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf200Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('bf200Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/d88536ec-161f-4a02-8af9-1df62eab7be7'\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf200ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf200ObservationId', fhirPath.extractValue(data.get('bf200Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf200PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf200PreviousBalance', fhirPath.extractValue(data.get('bf200Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "bf200StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('bf200StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/d88536ec-161f-4a02-8af9-1df62eab7be7'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf250Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('bf250Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/ee3378d4-f816-4933-ad5a-4146b618db8a'\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf250ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf250ObservationId', fhirPath.extractValue(data.get('bf250Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf250PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf250PreviousBalance', fhirPath.extractValue(data.get('bf250Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "bf250StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('bf250StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/ee3378d4-f816-4933-ad5a-4146b618db8a'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf300Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('bf300Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/5e09afc5-4be8-4f8b-8603-3e1b9ba74db3'\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf300ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf300ObservationId', fhirPath.extractValue(data.get('bf300Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "bf300PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('bf300PreviousBalance', fhirPath.extractValue(data.get('bf300Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "bf300StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('bf300StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/5e09afc5-4be8-4f8b-8603-3e1b9ba74db3'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv100Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('sv100Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/79b8d655-fbe4-410f-9147-ba7b471356a0'\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv100ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv100ObservationId', fhirPath.extractValue(data.get('sv100Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv100PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv100PreviousBalance', fhirPath.extractValue(data.get('sv100Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "sv100StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('sv100StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/79b8d655-fbe4-410f-9147-ba7b471356a0'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv150Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('sv150Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/b0e83719-e5d4-4086-f504-ac0b854f758d'\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv150ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv150ObservationId', fhirPath.extractValue(data.get('sv150Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv150PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv150PreviousBalance', fhirPath.extractValue(data.get('sv150Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "sv150StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('sv150StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/b0e83719-e5d4-4086-f504-ac0b854f758d'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv200Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('sv200Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/ff451512-4e17-4bf4-d0bc-b1671a57a24e'\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv200ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv200ObservationId', fhirPath.extractValue(data.get('sv200Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv200PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv200PreviousBalance', fhirPath.extractValue(data.get('sv200Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "sv200StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('sv200StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/ff451512-4e17-4bf4-d0bc-b1671a57a24e'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv250Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('sv250Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/7701468a-c44c-42ad-848d-b9410e072d41'\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv250ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv250ObservationId', fhirPath.extractValue(data.get('sv250Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv250PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv250PreviousBalance', fhirPath.extractValue(data.get('sv250Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "sv250StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('sv250StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/7701468a-c44c-42ad-848d-b9410e072d41'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv300Observation",
+      "condition": "true",
+      "priority": 2,
+      "actions": [
+        "data.put('sv300Observation', service.filterResources(data.get('latestObservations'), \"Observation.subject.reference = 'Group/57dbe381-2f41-451a-8876-53e40ff61149'\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv300ObservationId",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv300ObservationId', fhirPath.extractValue(data.get('sv300Observation'), 'Observation.id').replace(\"Observation/\",\"\").split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "sv300PreviousBalance",
+      "condition": "true",
+      "priority": 3,
+      "actions": [
+        "data.put('sv300PreviousBalance', fhirPath.extractValue(data.get('sv300Observation'), 'Observation.component.value.value') )"
+      ]
+    },
+    {
+      "name": "sv300StockOutFlagId",
+      "condition": "true",
+      "actions": [
+        "data.put('sv300StockOutFlagId', fhirPath.extractValue(service.filterResources(data.get('activeFlags'), \"Flag.subject.reference = 'Group/57dbe381-2f41-451a-8876-53e40ff61149'\").get(0), 'Flag.id').replace(\"Flag/\",\"\").split(\"/\").get(0) )"
+      ]
+    }
+  ],
+  "tabBar": {
+    "viewType": "TABS",
+    "contentScrollable": "true",
+    "contentPadding": 0,
+    "tabs": [
+      "{{patient.due}}",
+      "{{patient.other}}",
+      "{{patient.history}}"
+    ],
+    "tabIndicatorColor": "#FFFF00",
+    "tabContents": [
+      {
+        "viewType": "COLUMN",
+        "padding": 16,
+        "children": [
+          {
+            "viewType": "CARD",
+            "content": [
+              {
+                "viewType": "BUTTON",
+                "smallSized": "true",
+                "text": "{{hh.due.referral}}",
+                "status": "DUE",
+                "visible": "@{isChild}",
+                "enabled": "@{patientActive}",
+                "startIcon": {
+                  "reference": "ic_kids"
+                },
+                "actions": [
+                  {
+                    "trigger": "ON_CLICK",
+                    "workflow": "LAUNCH_QUESTIONNAIRE",
+                    "questionnaire": {
+                      "id": "10",
+                      "title": "{{hh.due.referral}}",
+                      "resourceType": "Patient",
+                      "resourceIdentifier": "@{patientId}"
+                    }
+                  }
+                ]
+              },
+              {
+                "viewType": "BUTTON",
+                "smallSized": "true",
+                "text": "{{hh.due.referral}}",
+                "status": "DUE",
+                "visible": "@{applicableForWomenReferral}",
+                "enabled": "@{patientActive}",
+                "startIcon": {
+                  "reference": "ic_women"
+                },
+                "actions": [
+                  {
+                    "trigger": "ON_CLICK",
+                    "workflow": "LAUNCH_QUESTIONNAIRE",
+                    "questionnaire": {
+                      "id": "11",
+                      "title": "{{hh.due.referral}}",
+                      "resourceType": "Patient",
+                      "resourceIdentifier": "@{patientId}"
+                    }
+                  }
+                ]
+              },
+              {
+                "viewType": "BUTTON",
+                "smallSized": "true",
+                "text": "{{hh.due.referral}}",
+                "status": "DUE",
+                "visible": "@{applicableForMemberReferral}",
+                "enabled": "@{patientActive}",
+                "startIcon": {
+                  "reference": "ic_profile"
+                },
+                "actions": [
+                  {
+                    "trigger": "ON_CLICK",
+                    "workflow": "LAUNCH_QUESTIONNAIRE",
+                    "questionnaire": {
+                      "id": "12",
+                      "title": "{{hh.due.referral}}",
+                      "resourceType": "Patient",
+                      "resourceIdentifier": "@{patientId}"
+                    }
+                  }
+                ]
+              },
+              {
+                "viewType": "BUTTON",
+                "smallSized": "true",
+                "text": "@{pncFollowupTaskName}",
+                "status": "DUE",
+                "visible": "@{applicableForPncFollowup}",
+                "enabled": "@{patientActive}",
+                "startIcon": {
+                  "reference": "ic_baby_mother"
+                },
+                "actions": [
+                  {
+                    "trigger": "ON_CLICK",
+                    "workflow": "LAUNCH_QUESTIONNAIRE",
+                    "questionnaire": {
+                      "id": "20",
+                      "title": "@{pncFollowupTaskName}",
+                      "resourceType": "Patient",
+                      "resourceIdentifier": "@{patientId}"
+                    },
+                    "params": [
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "54777657-5ff3-44d6-fe0d-317cce261588",
+                        "dataType": "STRING",
+                        "key": "pncFollowupTaskName",
+                        "value": "@{pncFollowupTaskName}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "bd4dba60-545c-4946-88c2-29c85f9bdf7e",
+                        "dataType": "DATETIME",
+                        "key": "activeDeliveryDate",
+                        "value": "@{activeDeliveryDate}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "6d331134-5e5d-47eb-c828-22d5927c67ba",
+                        "dataType": "INTEGER",
+                        "key": "noOfBracPncVisit",
+                        "value": "@{noOfBracPncVisit}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "9e5b72da-8e7c-4646-8e12-f3bacb5ac50a",
+                        "dataType": "INTEGER",
+                        "key": "pncPreviousBalance",
+                        "value": "@{pncPreviousBalance}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "d9fc1aaf-00d8-429f-d5ba-3b1831921b1d",
+                        "dataType": "STRING",
+                        "key": "pncObservationId",
+                        "value": "@{pncObservationId}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "9fc038a4-1526-4e2b-826a-1833b654a045",
+                        "dataType": "STRING",
+                        "key": "pncStockOutFlagId",
+                        "value": "@{pncStockOutFlagId}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "a1f75d6a-7be8-42c6-9dbf-7ef293b49227",
+                        "dataType": "STRING",
+                        "key": "riskyPncConditionId",
+                        "value": "@{riskyPncConditionId}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+                        "dataType": "STRING",
+                        "key": "patientIdentifier",
+                        "value": "@{patientIdentifier}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "f095de5f-c913-4e86-88af-c6fcdd93da1f",
+                        "dataType": "STRING",
+                        "key": "patientNid",
+                        "value": "@{patientNid}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "8d25e0f0-ce4c-42de-89d4-98f70e0b7619",
+                        "dataType": "STRING",
+                        "key": "patientBrid",
+                        "value": "@{patientBrid}"
+                      },
+                      {
+                        "paramType": "PREPOPULATE",
+                        "linkId": "b441b988-2d56-408e-8564-c8702579058d",
+                        "dataType": "STRING",
+                        "key": "patientMobile",
+                        "value": "@{patientMobile}"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "viewType": "BUTTON",
+                "smallSized": "true",
+                "text": "{{hh.due.elco}}",
+                "status": "DUE",
+                "visible": "@{canRegisterPregnancy}",
+                "enabled": "@{patientActive}",
+                "startIcon": {
+                  "reference": "ic_family_planning"
+                },
+                "actions": [
+                  {
+                    "trigger": "ON_CLICK",
+                    "workflow": "LAUNCH_QUESTIONNAIRE",
+                    "questionnaire": {
+                      "id": "16",
+                      "title": "Eligible Couple Visit",
+                      "resourceType": "Patient",
+                      "resourceIdentifier": "@{patientId}"
+                    }
+                  }
+                ]
+              },
+              {
+                "viewType": "LIST",
+                "id": "readyTasksList",
+                "resources": [
+                  {
+                    "id": "availableReadyTasks",
+                    "relatedResourceId": "availableTasks",
+                    "resourceType": "Task",
+                    "conditionalFhirPathExpression": "((Task.status = 'ready' or Task.status = 'failed') and (Task.code.empty()))"
+                  }
+                ],
+                "registerCard": {
+                  "rules": [
+                    {
+                      "name": "taskStatus",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskStatus', fhirPath.extractValue(Task, 'Task.status'))"
+                      ]
+                    },
+                    {
+                      "name": "taskStatusColorCode",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskStatusColorCode', data.get('taskStatus').equals('ready') ? 'DUE' : data.get('taskStatus').equals('failed') || data.get('taskStatus').equals('cancelled') ? 'OVERDUE' : data.get('taskStatus').equals('requested') ? 'UPCOMING' : data.get('taskStatus').equals('completed') ? 'COMPLETED' : 'UPCOMING')"
+                      ]
+                    },
+                    {
+                      "name": "taskExecutionStartDate",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskExecutionStartDate', fhirPath.extractValue(Task, 'Task.executionPeriod.start'))"
+                      ]
+                    },
+                    {
+                      "name": "taskScheduleDate",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskScheduleDate', service.formatDate(data.get('taskExecutionStartDate'), \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\", \"yyyy-MM-dd\"))"
+                      ]
+                    },
+                    {
+                      "name": "taskPeriodDueDate",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskPeriodDueDate', service.formatDate(data.get('taskExecutionStartDate'), \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\", \"dd MMM yyyy\"))"
+                      ]
+                    },
+                    {
+                      "name": "taskDescription",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskDescription', fhirPath.extractValue(Task, 'Task.description'))"
+                      ]
+                    },
+                    {
+                      "name": "taskReasonCode",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskReasonCode', fhirPath.extractValue(Task, 'Task.input[0].value.coding.code'))"
+                      ]
+                    },
+                    {
+                      "name": "taskReasonDisplay",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskReasonDisplay', fhirPath.extractValue(Task, 'Task.input[0].value.coding.display'))"
+                      ]
+                    },
+                    {
+                      "name": "taskDescriptionWithReason",
+                      "condition": "true",
+                      "priority": 2,
+                      "actions": [
+                        "data.put('taskDescriptionWithReason', data.get('taskDescription') + ((data.get('taskReasonDisplay') != null && data.get('taskReasonDisplay') != '') ? ('(' + data.get('taskReasonDisplay') + ')') : ''))"
+                      ]
+                    },
+                    {
+                      "name": "taskDescriptionWithStartDate",
+                      "condition": "true",
+                      "priority": 3,
+                      "actions": [
+                        "data.put('taskDescriptionWithStartDate', data.get('taskDescriptionWithReason') + ' ' + 'due on' + ' ' + data.get('taskPeriodDueDate'))"
+                      ]
+                    },
+                    {
+                      "name": "taskId",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskId', fhirPath.extractValue(Task, 'Task.id'))"
+                      ]
+                    },
+                    {
+                      "name": "taskFor",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskFor', fhirPath.extractValue(Task, 'Task.for.reference'))"
+                      ]
+                    },
+                    {
+                      "name": "taskQuestionnaireId",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskQuestionnaireId', fhirPath.extractValue(Task, 'Task.reasonReference.reference'))"
+                      ]
+                    }
+                  ],
+                  "views": [
+                    {
+                      "viewType": "BUTTON",
+                      "smallSized": "true",
+                      "text": "@{taskDescriptionWithStartDate}",
+                      "status": "@{taskStatusColorCode}",
+                      "visible": "true",
+                      "enabled": "@{patientActive}",
+                      "actions": [
+                        {
+                          "trigger": "ON_CLICK",
+                          "workflow": "LAUNCH_QUESTIONNAIRE",
+                          "questionnaire": {
+                            "id": "@{taskQuestionnaireId}",
+                            "title": "@{taskDescription}",
+                            "taskId": "@{taskId}",
+                            "resourceIdentifier": "@{taskFor}"
+                          },
+                          "params": [
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "ae2f17cb-deff-48a6-8ece-27e6bd475f30",
+                              "dataType": "DATE",
+                              "key": "taskScheduleDate",
+                              "value": "@{taskScheduleDate}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "d5962592-08d5-447b-d6a2-62a077e6bb05",
+                              "dataType": "STRING",
+                              "key": "taskReasonCode",
+                              "value": "@{taskReasonCode}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "c706016d-b8e9-44c7-9acb-155bb4e6092c",
+                              "dataType": "STRING",
+                              "key": "taskReasonDisplay",
+                              "value": "@{taskReasonDisplay}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "bb2b5f1d-3aee-4d19-883a-f5a65b349f5f",
+                              "dataType": "DATE",
+                              "key": "lmpDate",
+                              "value": "@{lmpDate}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "93ff6669-bbee-47fd-e54d-8c9e9cda1f94",
+                              "dataType": "INTEGER",
+                              "key": "noOfBracAncVisit",
+                              "value": "@{noOfBracAncVisit}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "5d8ac884-da47-4ec3-f077-1dd9812d0d43",
+                              "dataType": "INTEGER",
+                              "key": "patientHeight",
+                              "value": "@{patientHeight}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "4e7336a4-4dd1-4efc-89a1-0eb0748a828c",
+                              "dataType": "INTEGER",
+                              "key": "patientWeight",
+                              "value": "@{patientWeight}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "2fd89181-2d0f-405b-8d15-f312427dd7c6",
+                              "dataType": "DATE",
+                              "key": "patientWeightDate",
+                              "value": "@{patientWeightDate}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "d91c5e51-ac81-41f6-8f09-87805b87a98d",
+                              "dataType": "INTEGER",
+                              "key": "ancPreviousBalance",
+                              "value": "@{ancPreviousBalance}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "77001671-c07b-4afb-81ae-2220d4f38157",
+                              "dataType": "STRING",
+                              "key": "ancObservationId",
+                              "value": "@{ancObservationId}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "351ca898-582a-4585-8bd9-30aafc7a6174",
+                              "dataType": "STRING",
+                              "key": "riskyAncConditionId",
+                              "value": "@{riskyAncConditionId}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "e6b390ca-699d-4f4f-b388-d3abfb097e26",
+                              "dataType": "STRING",
+                              "key": "ancStockOutFlagId",
+                              "value": "@{ancStockOutFlagId}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+                              "dataType": "STRING",
+                              "key": "patientIdentifier",
+                              "value": "@{patientIdentifier}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "f095de5f-c913-4e86-88af-c6fcdd93da1f",
+                              "dataType": "STRING",
+                              "key": "patientNid",
+                              "value": "@{patientNid}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "8d25e0f0-ce4c-42de-89d4-98f70e0b7619",
+                              "dataType": "STRING",
+                              "key": "patientBrid",
+                              "value": "@{patientBrid}"
+                            },
+                            {
+                              "paramType": "PREPOPULATE",
+                              "linkId": "b441b988-2d56-408e-8564-c8702579058d",
+                              "dataType": "STRING",
+                              "key": "patientMobile",
+                              "value": "@{patientMobile}"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "otherServices",
+        "viewType": "COLUMN",
+        "padding": 16,
+        "children": [
+          {
+            "viewType": "CARD",
+            "content": [
+              {
+                "viewType": "COLUMN",
+                "id": "otherServices",
+                "children": [
+                  {
+                    "viewType": "BUTTON",
+                    "smallSized": "true",
+                    "text": "{{hh.service.eye}}",
+                    "status": "DUE",
+                    "visible": "true",
+                    "enabled": "@{patientActive}",
+                    "startIcon": {
+                      "reference": "ic_eye"
+                    },
+                    "actions": [
+                      {
+                        "trigger": "ON_CLICK",
+                        "workflow": "LAUNCH_QUESTIONNAIRE",
+                        "questionnaire": {
+                          "id": "14",
+                          "title": "{{hh.service.eye}}",
+                          "resourceType": "Patient",
+                          "resourceIdentifier": "@{patientId}"
+                        },
+                        "params": [
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "49eca2ad-6524-403d-b1b3-7456485f87e3",
+                            "dataType": "INTEGER",
+                            "key": "glassesPreviousBalance",
+                            "value": "@{glassesPreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "ca0fbdf6-974e-4869-bed6-75f34e1f2c2f",
+                            "dataType": "STRING",
+                            "key": "glassesObservationId",
+                            "value": "@{glassesObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "0e0e7a86-40a6-45c3-ba73-b19330192d19",
+                            "dataType": "STRING",
+                            "key": "glassesStockOutFlagId",
+                            "value": "@{glassesStockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "e6145f08-a682-4e8c-ae28-850aa73251c2",
+                            "dataType": "INTEGER",
+                            "key": "sunGlassesPreviousBalance",
+                            "value": "@{sunGlassesPreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "d0b5c58a-bfdc-49f6-96c0-c5b37af964f2",
+                            "dataType": "STRING",
+                            "key": "sunGlassesObservationId",
+                            "value": "@{sunGlassesObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "aac22321-582c-43d7-f382-85bd5c4e5346",
+                            "dataType": "STRING",
+                            "key": "sunGlassesStockOutFlagId",
+                            "value": "@{sunGlassesStockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "e9befdd0-f56d-494e-8899-767dbcc7fa8e",
+                            "dataType": "INTEGER",
+                            "key": "bf100PreviousBalance",
+                            "value": "@{bf100PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "6ef5319f-13d4-499f-8c16-9e9ebf3a0f55",
+                            "dataType": "STRING",
+                            "key": "bf100ObservationId",
+                            "value": "@{bf100ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "4fef01af-29c8-4459-951e-b917c4ba9b12",
+                            "dataType": "STRING",
+                            "key": "bf100StockOutFlagId",
+                            "value": "@{bf100StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "764dd849-21a1-410b-b98f-29fe145bdb87",
+                            "dataType": "INTEGER",
+                            "key": "bf150PreviousBalance",
+                            "value": "@{bf150PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "44873d86-80b1-45ab-860b-4b64d57862b8",
+                            "dataType": "STRING",
+                            "key": "bf150ObservationId",
+                            "value": "@{bf150ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "bc92a5eb-8d25-4866-ca1b-d638d3eb991d",
+                            "dataType": "STRING",
+                            "key": "bf150StockOutFlagId",
+                            "value": "@{bf150StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "96dd8383-7d3e-4756-8ea2-9a720d2ebdb7",
+                            "dataType": "INTEGER",
+                            "key": "bf200PreviousBalance",
+                            "value": "@{bf200PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "a9d74f31-56ca-4750-8d69-893a004698f9",
+                            "dataType": "STRING",
+                            "key": "bf200ObservationId",
+                            "value": "@{bf200ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "7faf7f8b-c401-49a2-e6b5-ebc38d7c8952",
+                            "dataType": "STRING",
+                            "key": "bf200StockOutFlagId",
+                            "value": "@{bf200StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "2147e6cc-f4c2-40f4-8f95-c8e12f5a3906",
+                            "dataType": "INTEGER",
+                            "key": "bf250PreviousBalance",
+                            "value": "@{bf250PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "5e0e940e-d26f-4890-af22-818c32166bce",
+                            "dataType": "STRING",
+                            "key": "bf250ObservationId",
+                            "value": "@{bf250ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "06c74605-d3c2-414e-b8a1-d715cdeb8da8",
+                            "dataType": "STRING",
+                            "key": "bf250StockOutFlagId",
+                            "value": "@{bf250StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "70095888-1aac-4e94-c4f2-a0c1b615cc25",
+                            "dataType": "INTEGER",
+                            "key": "bf300PreviousBalance",
+                            "value": "@{bf300PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "bf372250-a924-4370-d3c2-7028a744c48e",
+                            "dataType": "STRING",
+                            "key": "bf300ObservationId",
+                            "value": "@{bf300ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "13935d7e-57a1-4ade-f91d-8f7cccfdb0fa",
+                            "dataType": "STRING",
+                            "key": "bf300StockOutFlagId",
+                            "value": "@{bf300StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "52e56dfa-aab3-4de1-a7b3-1872ad4b5d05",
+                            "dataType": "INTEGER",
+                            "key": "sv100PreviousBalance",
+                            "value": "@{sv100PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "82260d3e-1d12-4a56-8917-26fa39d29a35",
+                            "dataType": "STRING",
+                            "key": "sv100ObservationId",
+                            "value": "@{sv100ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "9c6affa9-6d22-4673-8664-c5d386e476fa",
+                            "dataType": "STRING",
+                            "key": "sv100StockOutFlagId",
+                            "value": "@{sv100StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "68e5a011-edde-4257-8a37-52a50f26cc0f",
+                            "dataType": "INTEGER",
+                            "key": "sv150PreviousBalance",
+                            "value": "@{sv150PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "81ec6b3e-57e0-4c36-9830-213baabb0e38",
+                            "dataType": "STRING",
+                            "key": "sv150ObservationId",
+                            "value": "@{sv150ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "0a71df31-64e1-46e5-a498-ef777f0cedaf",
+                            "dataType": "STRING",
+                            "key": "sv150StockOutFlagId",
+                            "value": "@{sv150StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "80722325-12ca-40c8-f24a-5955410c9afa",
+                            "dataType": "INTEGER",
+                            "key": "sv200PreviousBalance",
+                            "value": "@{sv200PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "14b0ddd8-cdb9-4439-81ed-56073741d06e",
+                            "dataType": "STRING",
+                            "key": "sv200ObservationId",
+                            "value": "@{sv200ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "a6785696-af28-4466-c289-6f83e3153dff",
+                            "dataType": "STRING",
+                            "key": "sv200StockOutFlagId",
+                            "value": "@{sv200StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "4620c135-06b5-46c7-bce4-13ea3cebd562",
+                            "dataType": "INTEGER",
+                            "key": "sv250PreviousBalance",
+                            "value": "@{sv250PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "06e1a33b-2476-4fab-88ad-f371c9b28e48",
+                            "dataType": "STRING",
+                            "key": "sv250ObservationId",
+                            "value": "@{sv250ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "098c7312-33c4-4598-8050-5b3b193db5e9",
+                            "dataType": "STRING",
+                            "key": "sv250StockOutFlagId",
+                            "value": "@{sv250StockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "db715612-cb19-4e19-8e95-265559eb9d2d",
+                            "dataType": "INTEGER",
+                            "key": "sv300PreviousBalance",
+                            "value": "@{sv300PreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "45979eef-d80a-44b1-c512-c70568baea2a",
+                            "dataType": "STRING",
+                            "key": "sv300ObservationId",
+                            "value": "@{sv300ObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "6655f7d1-a0fc-43fe-820a-6ec0c8c2a60c",
+                            "dataType": "STRING",
+                            "key": "sv300StockOutFlagId",
+                            "value": "@{sv300StockOutFlagId}"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "BUTTON",
+                    "smallSized": "true",
+                    "text": "{{hh.service.ncd}}",
+                    "status": "DUE",
+                    "visible": "@{applicableForNCDPackage}",
+                    "enabled": "@{patientActive}",
+                    "startIcon": {
+                      "reference": "ic_non_communicable_disease"
+                    },
+                    "actions": [
+                      {
+                        "trigger": "ON_CLICK",
+                        "workflow": "LAUNCH_QUESTIONNAIRE",
+                        "questionnaire": {
+                          "id": "15",
+                          "title": "{{hh.service.ncd}}",
+                          "resourceType": "Patient",
+                          "resourceIdentifier": "@{patientId}"
+                        },
+                        "params": [
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "d453652f-2d89-47d5-dd62-5a6bf1f695c9",
+                            "dataType": "INTEGER",
+                            "key": "ncdPreviousBalance",
+                            "value": "@{ncdPreviousBalance}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "ea04ab78-4fc1-4d1e-ebdb-d1cb336a2ea2",
+                            "dataType": "STRING",
+                            "key": "ncdObservationId",
+                            "value": "@{ncdObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "f8f3bc72-bd58-4d0a-8c1a-a065b5b3e370",
+                            "dataType": "STRING",
+                            "key": "ncdStockOutFlagId",
+                            "value": "@{ncdStockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+                            "dataType": "STRING",
+                            "key": "patientIdentifier",
+                            "value": "@{patientIdentifier}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "f095de5f-c913-4e86-88af-c6fcdd93da1f",
+                            "dataType": "STRING",
+                            "key": "patientNid",
+                            "value": "@{patientNid}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "8d25e0f0-ce4c-42de-89d4-98f70e0b7619",
+                            "dataType": "STRING",
+                            "key": "patientBrid",
+                            "value": "@{patientBrid}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "b441b988-2d56-408e-8564-c8702579058d",
+                            "dataType": "STRING",
+                            "key": "patientMobile",
+                            "value": "@{patientMobile}"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "completedHistory",
+        "viewType": "COLUMN",
+        "padding": 16,
+        "children": [
+          {
+            "viewType": "CARD",
+            "content": [
+              {
+                "viewType": "LIST",
+                "id": "completedTasksList",
+                "resources": [
+                  {
+                    "id": "completedTasks",
+                    "relatedResourceId": "availableTasks",
+                    "resourceType": "Task",
+                    "conditionalFhirPathExpression": "((Task.status = 'completed') and (Task.code.empty()))"
+                  }
+                ],
+                "emptyList": {
+                  "message": "No completed tasks available for this patient at the moment"
+                },
+                "registerCard": {
+                  "rules": [
+                    {
+                      "name": "taskStatus",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskStatus', fhirPath.extractValue(Task, 'Task.status'))"
+                      ]
+                    },
+                    {
+                      "name": "taskReasonCode",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskReasonCode', fhirPath.extractValue(Task, 'Task.input[0].value.coding.code'))"
+                      ]
+                    },
+                    {
+                      "name": "taskReasonDisplay",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskReasonDisplay', fhirPath.extractValue(Task, 'Task.input[0].value.coding.display'))"
+                      ]
+                    },
+                    {
+                      "name": "taskStatusColorCode",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskStatusColorCode', data.get('taskStatus').equals('ready') ? 'DUE' : data.get('taskStatus').equals('failed') || data.get('taskStatus').equals('cancelled') ? 'OVERDUE' : data.get('taskStatus').equals('requested') ? 'UPCOMING' : data.get('taskStatus').equals('completed') ? 'COMPLETED' : 'UPCOMING')"
+                      ]
+                    },
+                    {
+                      "name": "taskEndDate",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskEndDate', fhirPath.extractValue(Task, 'Task.lastModified'))"
+                      ]
+                    },
+                    {
+                      "name": "taskPeriodEndDate",
+                      "condition": "true",
+                      "priority": 2,
+                      "actions": [
+                        "data.put('taskPeriodEndDate', service.formatDate(data.get('taskEndDate'), (data.get('taskEndDate').toString().endsWith('Z') ? \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\" : \"yyyy-MM-dd'T'HH:mm:ssZ\"), \"dd MMM yyyy\"))"
+                      ]
+                    },
+                    {
+                      "name": "taskDescription",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskDescription', fhirPath.extractValue(Task, 'Task.description'))"
+                      ]
+                    },
+                    {
+                      "name": "taskDescriptionWithReason",
+                      "condition": "true",
+                      "priority": 2,
+                      "actions": [
+                        "data.put('taskDescriptionWithReason', data.get('taskDescription') + ((data.get('taskReasonDisplay') != null && data.get('taskReasonDisplay') != '') ? ('(' + data.get('taskReasonDisplay') + ')') : ''))"
+                      ]
+                    },
+                    {
+                      "name": "taskDescriptionWithEndDate",
+                      "condition": "true",
+                      "priority": 3,
+                      "actions": [
+                        "data.put('taskDescriptionWithEndDate', data.get('taskDescriptionWithReason') + ' ' + 'completed on' + ' ' + data.get('taskPeriodEndDate'))"
+                      ]
+                    },
+                    {
+                      "name": "taskId",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskId', fhirPath.extractValue(Task, 'Task.id'))"
+                      ]
+                    },
+                    {
+                      "name": "taskFor",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskFor', fhirPath.extractValue(Task, 'Task.for.reference'))"
+                      ]
+                    },
+                    {
+                      "name": "taskQuestionnaireId",
+                      "condition": "true",
+                      "actions": [
+                        "data.put('taskQuestionnaireId', fhirPath.extractValue(Task, 'Task.reasonReference.reference'))"
+                      ]
+                    }
+                  ],
+                  "views": [
+                    {
+                      "viewType": "BUTTON",
+                      "text": "@{taskDescriptionWithEndDate}",
+                      "status": "@{taskStatusColorCode}",
+                      "visible": "true",
+                      "enabled": "@{patientActive}",
+                      "actions": [
+                        {
+                          "trigger": "ON_CLICK",
+                          "workflow": "LAUNCH_QUESTIONNAIRE",
+                          "questionnaire": {
+                            "id": "@{taskQuestionnaireId}",
+                            "title": "@{taskDescription}",
+                            "taskId": "@{taskId}",
+                            "resourceIdentifier": "@{taskFor}"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "overFlowMenuItems": [
+    {
+      "title": "Registration info",
+      "titleColor": "@{patientTextColor}",
+      "visible": "false",
+      "enabled": "@{patientActive}",
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "4",
+            "title": "Member registration info",
+            "saveButtonText": "Update registration",
+            "setPractitionerDetails": true,
+            "setOrganizationDetails": true,
+            "type": "EDIT",
+            "resourceIdentifier": "@{patientId}"
+          },
+          "params": [
+            {
+              "key": "familyLogicalId",
+              "value": "@{familyLogicalId}",
+              "paramType": "UPDATE_DATE_ON_EDIT"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "652a752f-280a-4560-aac8-fa3196449961",
+              "dataType": "INTEGER",
+              "key": "isFamilyHeadExists",
+              "value": "@{isFamilyHeadExists}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "{{patient.menu.register.pregnancy}}",
+      "titleColor": "@{patientTextColor}",
+      "visible": "@{canRegisterPregnancy}",
+      "enabled": "@{patientActive}",
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "17",
+            "title": "{{patient.menu.register.pregnancy}}",
+            "resourceIdentifier": "@{patientId}",
+            "planDefinitions": [
+              "82"
+            ]
+          },
+          "params": [
+            {
+              "key": "familyLogicalId",
+              "value": "@{familyLogicalId}",
+              "paramType": "UPDATE_DATE_ON_EDIT"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "650dd00d-c60b-4a3d-838a-128aad048277",
+              "dataType": "STRING",
+              "key": "fpConditionId",
+              "value": "@{fpConditionId}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "4e7336a4-4dd1-4efc-89a1-0eb0748a828c",
+              "dataType": "INTEGER",
+              "key": "patientWeight",
+              "value": "@{patientWeight}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "a6bfc68e-54f6-4094-df41-02c2685c4c41",
+              "dataType": "STRING",
+              "key": "patientAge",
+              "value": "@{patientAge}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "b441b988-2d56-408e-8564-c8702579058d",
+              "dataType": "STRING",
+              "key": "patientMobile",
+              "value": "@{patientMobile}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "0f8c84c7-b2f6-462a-8488-4254af32849b",
+              "dataType": "DATE",
+              "key": "patientBirthDate",
+              "value": "@{patientBirthDate}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "2fd89181-2d0f-405b-8d15-f312427dd7c6",
+              "dataType": "DATE",
+              "key": "patientWeightDate",
+              "value": "@{patientWeightDate}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "93ff6669-bbee-47fd-e54d-8c9e9cda1f94",
+              "dataType": "INTEGER",
+              "key": "noOfBracAncVisit",
+              "value": "@{noOfBracAncVisit}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "d91c5e51-ac81-41f6-8f09-87805b87a98d",
+              "dataType": "INTEGER",
+              "key": "ancPreviousBalance",
+              "value": "@{ancPreviousBalance}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "77001671-c07b-4afb-81ae-2220d4f38157",
+              "dataType": "STRING",
+              "key": "ancObservationId",
+              "value": "@{ancObservationId}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "e6b390ca-699d-4f4f-b388-d3abfb097e26",
+              "dataType": "STRING",
+              "key": "ancStockOutFlagId",
+              "value": "@{ancStockOutFlagId}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+              "dataType": "STRING",
+              "key": "patientIdentifier",
+              "value": "@{patientIdentifier}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "f095de5f-c913-4e86-88af-c6fcdd93da1f",
+              "dataType": "STRING",
+              "key": "patientNid",
+              "value": "@{patientNid}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "8d25e0f0-ce4c-42de-89d4-98f70e0b7619",
+              "dataType": "STRING",
+              "key": "patientBrid",
+              "value": "@{patientBrid}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "{{patient.menu.pregnancy.outcome}}",
+      "titleColor": "@{patientTextColor}",
+      "visible": "@{canOutcomePregnancy}",
+      "enabled": "@{patientActive}",
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "19",
+            "title": "{{patient.menu.pregnancy.outcome}}",
+            "resourceIdentifier": "@{patientId}",
+            "groupResource": {
+              "groupIdentifier": "@{familyLogicalId}",
+              "memberResourceType": "Patient"
+            },
+            "refreshContent": true,
+            "eventWorkflows": [
+              {
+                "eventType": "RESOURCE_CLOSURE",
+                "triggerConditions": [
+                  {
+                    "eventResourceId": "ancCarePlanToBeClosed",
+                    "matchAll": false,
+                    "conditionalFhirPathExpressions": [
+                      "Patient.active and %resource.entry.where(resource is QuestionnaireResponse).resource.descendants().where(linkId='33455692-f8b4-4b90-809a-94352aad1e2f' and answer.value.exists()).exists()"
+                    ]
+                  },
+                  {
+                    "eventResourceId": "ancConditionToBeClosed",
+                    "matchAll": false,
+                    "conditionalFhirPathExpressions": [
+                      "Patient.active and %resource.entry.where(resource is QuestionnaireResponse).resource.descendants().where(linkId='33455692-f8b4-4b90-809a-94352aad1e2f' and answer.value.exists()).exists()"
+                    ]
+                  }
+                ],
+                "eventResources": [
+                  {
+                    "id": "ancCarePlanToBeClosed",
+                    "resource": "CarePlan",
+                    "configRules": [
+                      {
+                        "name": "patientId",
+                        "condition": "true",
+                        "actions": [
+                          "data.put('patientId', fhirPath.extractValue(Patient, 'Patient.id'))"
+                        ]
+                      }
+                    ],
+                    "dataQueries": [
+                      {
+                        "paramName": "instantiates-canonical",
+                        "filterCriteria": [
+                          {
+                            "dataType": "REFERENCE",
+                            "value": "PlanDefinition/82"
+                          }
+                        ]
+                      },
+                      {
+                        "paramName": "subject",
+                        "filterCriteria": [
+                          {
+                            "dataType": "REFERENCE",
+                            "computedRule": "patientId"
+                          }
+                        ]
+                      }
+                    ],
+                    "relatedResources": [
+                      {
+                        "resource": "Task",
+                        "searchParameter": "based-on"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "ancConditionToBeClosed",
+                    "resource": "Condition",
+                    "configRules": [
+                      {
+                        "name": "patientId",
+                        "condition": "true",
+                        "actions": [
+                          "data.put('patientId', fhirPath.extractValue(Patient, 'Patient.id'))"
+                        ]
+                      }
+                    ],
+                    "dataQueries": [
+                      {
+                        "paramName": "code",
+                        "filterCriteria": [
+                          {
+                            "dataType": "CODEABLECONCEPT",
+                            "value": {
+                              "system": "http://snomed.info/sct",
+                              "code": "77386006"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "paramName": "subject",
+                        "filterCriteria": [
+                          {
+                            "dataType": "REFERENCE",
+                            "computedRule": "patientId"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "params": [
+            {
+              "paramType": "UPDATE_DATE_ON_EDIT",
+              "key": "familyLogicalId",
+              "value": "@{familyLogicalId}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "650dd00d-c60b-4a3d-838a-128aad048277",
+              "dataType": "STRING",
+              "key": "ancConditionId",
+              "value": "@{ancConditionId}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "351ca898-582a-4585-8bd9-30aafc7a6174",
+              "dataType": "STRING",
+              "key": "riskyAncConditionId",
+              "value": "@{riskyAncConditionId}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

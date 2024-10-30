@@ -1,0 +1,451 @@
+{
+  "appId": "app",
+  "configType": "profile",
+  "id": "inventoryProfile",
+  "fhirResource": {
+    "baseResource": {
+      "resource": "Group",
+      "dataQueries": [
+        {
+          "paramName": "code",
+          "filterCriteria": [
+            {
+              "dataType": "CODEABLECONCEPT",
+              "value": {
+                "system": "http://snomed.info/sct",
+                "code": "386452003"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "relatedResources": [
+      {
+        "resource": "Observation",
+        "searchParameter": "subject",
+        "dataQueries": [
+          {
+            "paramName": "date",
+            "filterCriteria": [
+              {
+                "dataType": "DATE",
+                "prefix": "GREATERTHAN_OR_EQUALS"
+              }
+            ]
+          }
+        ],
+        "sortConfigs": [
+          {
+            "paramName": "date",
+            "dataType": "DATE",
+            "order": "DESCENDING"
+          }
+        ]
+      }
+    ]
+  },
+  "topAppBar": {
+    "title": {
+      "viewType": "COMPOUND_TEXT",
+      "primaryText": "লেনদেনের সারসংক্ষেপ",
+      "primaryTextColor": "#FFFFFF",
+      "fontSize": 16.0,
+      "maxLines": 1,
+      "primaryTextFontWeight": "BOLD"
+    },
+    "content": [
+      {
+        "viewType": "COLUMN",
+        "padding": "16",
+        "backgroundColor": "primaryColor",
+        "children": [
+          {
+            "viewType": "COMPOUND_TEXT",
+            "primaryText": "Stock Name: ",
+            "primaryTextColor": "#FFFFFF",
+            "primaryTextFontWeight": "BOLD",
+            "secondaryText": "@{commodityName}",
+            "secondaryTextColor": "#FFFFFF"
+          },
+          {
+            "viewType": "COMPOUND_TEXT",
+            "primaryText": "Stock Status: ",
+            "primaryTextColor": "#FFFFFF",
+            "primaryTextFontWeight": "BOLD",
+            "secondaryText": "@{stockStatus}",
+            "secondaryTextColor": "@{stockStatusColour}",
+            "secondaryTextBackgroundColor" : "#FFFFFF"
+          },
+          {
+            "viewType": "COMPOUND_TEXT",
+            "primaryText": "Available: ",
+            "primaryTextColor": "#FFFFFF",
+            "primaryTextFontWeight": "BOLD",
+            "secondaryText": "@{runningBalance} @{unitsOfMeasure}",
+            "secondaryTextColor": "#FFFFFF"
+          }
+        ]
+      }
+    ],
+    "collapsible": false
+  },
+  "rules": [
+    {
+      "name": "commodityName",
+      "condition": "true",
+      "actions": [
+        "data.put('commodityName', fhirPath.extractValue(Group, 'Group.name'))"
+      ]
+    },
+    {
+      "name": "commodityId",
+      "condition": "true",
+      "actions": [
+        "data.put('commodityId', fhirPath.extractValue(Group, 'Group.id'))"
+      ]
+    },
+    {
+      "name": "unitsOfMeasure",
+      "condition": "true",
+      "actions": [
+        "data.put('unitsOfMeasure', fhirPath.extractValue(Group, 'Group.characteristic[0].value.text'))"
+      ]
+    },
+    {
+      "name": "latestObservation",
+      "priority": 1,
+      "condition": "true",
+      "actions": [
+        "data.put('latestObservation', service.filterResources(Observation, 'Observation.status = \"preliminary\"').get(0))"
+      ]
+    },
+    {
+      "name": "consumeObservations",
+      "priority": 1,
+      "condition": "true",
+      "actions": [
+        "data.put('consumeObservations', service.filterResources(Observation, 'Observation.code.coding.code = \"consume-stock-balance\"'))"
+      ]
+    },
+    {
+      "name": "consumedBalance",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('consumedBalance', size(data.get('consumeObservations')) > 0 ? service.computeTotalValue(data.get('consumeObservations'), 'Observation.value.value') : '0' )"
+      ]
+    },
+    {
+      "name": "addedObservations",
+      "priority": 1,
+      "condition": "true",
+      "actions": [
+        "data.put('addedObservations', service.filterResources(Observation, 'Observation.code.coding.code = \"added-stock-balance\"'))"
+      ]
+    },
+    {
+      "name": "addedBalance",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('addedBalance', size(data.get('addedObservations')) > 0 ? service.computeTotalValue(data.get('addedObservations'), 'Observation.value.value') : '0' )"
+      ]
+    },
+    {
+      "name": "monthlyObservation",
+      "priority": 1,
+      "condition": "true",
+      "actions": [
+        "data.put('monthlyObservation', service.filterResources(Observation, 'Observation.code.coding.code = \"monthly-stock-balance\"').get(0))"
+      ]
+    },
+    {
+      "name": "initialStockBalance",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('initialStockBalance', data.get('monthlyObservation') != null ? fhirPath.extractValue(data.get('monthlyObservation'), 'Observation.component.where(code.coding.code = \"initial-stock-balance\").value.value') : '0' )"
+      ]
+    },
+    {
+      "name": "addedStockBalance",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('addedStockBalance', data.get('monthlyObservation') != null ? fhirPath.extractValue(data.get('monthlyObservation'), 'Observation.component.where(code.coding.code = \"added-stock-balance\").value.value') : '0' )"
+      ]
+    },
+    {
+      "name": "consumeStockBalance",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('consumeStockBalance', data.get('monthlyObservation') != null ? fhirPath.extractValue(data.get('monthlyObservation'), 'Observation.component.where(code.coding.code = \"consume-stock-balance\").value.value') : '0' )"
+      ]
+    },
+    {
+      "name": "finalStockBalance",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('finalStockBalance', data.get('monthlyObservation') != null ? fhirPath.extractValue(data.get('monthlyObservation'), 'Observation.component.where(code.coding.code = \"final-stock-balance\").value.value') : '0' )"
+      ]
+    },
+    {
+      "name": "runningBalance",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('runningBalance', data.get('latestObservation') != null ? fhirPath.extractValue(data.get('latestObservation'), 'Observation.component.value.value') : '0' )"
+      ]
+    },
+    {
+      "name": "monthStartBalance",
+      "priority": 3,
+      "condition": "true",
+      "actions": [
+        "data.put('monthStartBalance', data.get('initialStockBalance') != null ? data.get('initialStockBalance') : '0' )"
+      ]
+    },
+    {
+      "name": "monthEndBalance",
+      "priority": 3,
+      "condition": "true",
+      "actions": [
+        "data.put('monthEndBalance', data.get('finalStockBalance') != null and data.get('finalStockBalance') > 0 ? data.get('finalStockBalance') : data.get('runningBalance') )"
+      ]
+    },
+    {
+      "name": "monthConsumeBalance",
+      "priority": 3,
+      "condition": "true",
+      "actions": [
+        "data.put('monthConsumeBalance', data.get('consumeStockBalance') != null and data.get('consumeStockBalance') > 0 ? data.get('consumeStockBalance') : data.get('consumedBalance') )"
+      ]
+    },
+    {
+      "name": "monthAddedBalance",
+      "priority": 3,
+      "condition": "true",
+      "actions": [
+        "data.put('monthAddedBalance', data.get('addedStockBalance') != null and data.get('addedStockBalance') > 0 ? data.get('addedStockBalance') : data.get('addedBalance') )"
+      ]
+    },
+    {
+      "name": "lastUpdated",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('lastUpdated', fhirPath.extractValue(data.get('latestObservation'), 'Observation.effective'))"
+      ]
+    },
+    {
+      "name": "lastUpdatedDate",
+      "priority": 3,
+      "condition": "true",
+      "actions": [
+        "data.put('lastUpdatedDate', data.get('lastUpdated') != '' ? service.prettifyDate(data.get('lastUpdated')) : '')"
+      ]
+    },
+    {
+      "name": "latestObservationId",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('latestObservationId', fhirPath.extractValue( data.get('latestObservation'), 'Observation.id.replace(\"Observation/\",\"\")').split(\"/\").get(0) )"
+      ]
+    },
+    {
+      "name": "activeStockOutFlag",
+      "priority": 1,
+      "condition": "true",
+      "actions": [
+        "data.put('activeStockOutFlag', service.filterResources(stockOutFlags, 'Flag.status = \"active\"').get(0))"
+      ]
+    },
+    {
+      "name": "stockoutFlagId",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('stockoutFlagId', fhirPath.extractValue(data.get('activeStockOutFlag'), 'Flag.id.replace(\"Flag/\",\"\")').split(\"/\").get(0))"
+      ]
+    },
+    {
+      "name": "stockoutStartDate",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('stockoutStartDate', fhirPath.extractValue(data.get('activeStockOutFlag'), 'Flag.period.start'))"
+      ]
+    },
+    {
+      "name": "amcMeasureReport",
+      "priority": 1,
+      "condition": "true",
+      "actions": [
+        "data.put('amcMeasureReport', service.filterResources(measureReports, 'MeasureReport.measure = \"https://fhir.labs.smartregister.org/fhir/Measure/STOCKIND02\"').get(0))"
+      ]
+    },
+    {
+      "name": "amc",
+      "priority": 2,
+      "condition": "true",
+      "actions": [
+        "data.put('amc', fhirPath.extractValue(data.get('amcMeasureReport'), 'MeasureReport.contained[0].value.coding.code'))"
+      ]
+    },
+    {
+      "name": "amcNotNull",
+      "priority": 3,
+      "condition": "true",
+      "actions": [
+        "data.put('amcNotNull', data.get('amc') != '' ? data.get('amc') : '0')"
+      ]
+    },
+    {
+      "name": "stockStatus",
+      "priority": 4,
+      "condition": "true",
+      "actions": [
+        "var monthOnStock = (bal, amc) -> { var mos = bal; if(amc != null && amc != 0){ mos = bal/amc; } return mos; } ; var stockStatus = (bal, amc) -> { var mos = monthOnStock(bal, amc); var status = 'default'; if(mos >= 0 && mos <= 0.5){ status = 'Stockout'; } if(mos > 0.5 && mos < 1.0){ status = 'Understock'; } if(mos >= 1.0 && mos < 3.0){ status = 'Satisfactory'; } if(mos >= 3.0){ status = 'Overstock'; } return status; } ; data.put('stockStatus', stockStatus(new('java.lang.Double', data.get('runningBalance')), new('java.lang.Double', data.get('amcNotNull'))))"
+      ]
+    },
+    {
+      "name": "stockStatusColour",
+      "priority": 5,
+      "condition": "true",
+      "actions": [
+        "data.put('stockStatusColour', data.get('stockStatus') == 'Stockout' ? '#DD0000' : data.get('stockStatus') == 'Understock' ? '#FFA500' : data.get('stockStatus') == 'Satisfactory' ? '#38B500' : data.get('stockStatus') == 'Overstock' ? '#006EB8' : '#d3d3d3')"
+      ]
+    }
+  ],
+  "views": [
+    {
+      "viewType": "COLUMN",
+      "backgroundColor": "#FFFFFF",
+      "fillMaxWidth": true,
+      "fillMaxHeight": true,
+      "children": [
+        {
+          "viewType": "SPACER",
+          "height": 15
+        },
+        {
+          "viewType": "CARD",
+          "padding": 16,
+          "cardColor": "#FF69B4",
+          "content": [
+            {
+              "viewType": "ROW",
+              "fillMaxWidth": true,
+              "arrangement": "SPACE_BETWEEN",
+              "children": [
+                {
+                  "viewType": "COMPOUND_TEXT",
+                  "primaryTextColor": "#FFFFFF",
+                  "weight": 1,
+                  "primaryText": "মাস শুরুর ব্যালেন্স"
+                },
+                {
+                  "viewType": "COMPOUND_TEXT",
+                  "primaryTextColor": "#FFFFFF",
+                  "primaryText": "@{monthStartBalance}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "viewType": "SPACER",
+          "height": 10
+        },
+        {
+          "viewType": "CARD",
+          "padding": 16,
+          "cardColor": "#FF69B4",
+          "content": [
+            {
+              "viewType": "ROW",
+              "fillMaxWidth": true,
+              "arrangement": "SPACE_BETWEEN",
+              "children": [
+                {
+                  "viewType": "COMPOUND_TEXT",
+                  "primaryTextColor": "#FFFFFF",
+                  "weight": 1,
+                  "primaryText": "নতুন প্যাকেজ"
+                },
+                {
+                  "viewType": "COMPOUND_TEXT",
+                  "primaryTextColor": "#FFFFFF",
+                  "primaryText": "@{monthAddedBalance}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "viewType": "SPACER",
+          "height": 10
+        },
+        {
+          "viewType": "CARD",
+          "padding": 16,
+          "cardColor": "#FF69B4",
+          "content": [
+            {
+              "viewType": "ROW",
+              "fillMaxWidth": true,
+              "arrangement": "SPACE_BETWEEN",
+              "children": [
+                {
+                  "viewType": "COMPOUND_TEXT",
+                  "primaryTextColor": "#FFFFFF",
+                  "weight": 1,
+                  "primaryText": "বিক্রয়"
+                },
+                {
+                  "viewType": "COMPOUND_TEXT",
+                  "primaryTextColor": "#FFFFFF",
+                  "primaryText": "@{monthConsumeBalance}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "viewType": "SPACER",
+          "height": 10
+        },
+        {
+          "viewType": "CARD",
+          "padding": 16,
+          "cardColor": "#FF69B4",
+          "content": [
+            {
+              "viewType": "ROW",
+              "fillMaxWidth": true,
+              "arrangement": "SPACE_BETWEEN",
+              "children": [
+                {
+                  "viewType": "COMPOUND_TEXT",
+                  "primaryTextColor": "#FFFFFF",
+                  "weight": 1,
+                  "primaryText": "শেষ ব্যালেন্স"
+                },
+                {
+                  "viewType": "COMPOUND_TEXT",
+                  "primaryTextColor": "#FFFFFF",
+                  "primaryText": "@{monthEndBalance}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "monthWiseFilterStartDate": "2023-01-01"
+}

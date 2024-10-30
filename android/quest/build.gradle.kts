@@ -208,6 +208,15 @@ android {
       manifestPlaceholders["appLabel"] = "fhir HA"
     }
 
+    create("mpower-smart-health-bd") {
+      dimension = "apps"
+      applicationIdSuffix = ".unicef.mis"
+      versionNameSuffix = "-unicef-mis"
+      versionCode = 1
+      versionName = "1.0.0"
+      manifestPlaceholders["appLabel"] = "fhir Smart Health BD"
+    }
+
     create("mpower-mcgovern") {
       dimension = "apps"
       applicationIdSuffix = ".mpower.mcgovern"

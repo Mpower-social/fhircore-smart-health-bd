@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "218475644469",
+    "project_id": "fhir-smarthealth",
+    "storage_bucket": "fhir-smarthealth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218475644469:android:65893138d052f5bc63d37c",
+        "android_client_info": {
+          "package_name": "org.smartregister.opensrp.unicef.mis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdKisDRuV-gl8kPFyCGgX00Fqx9rhLVlg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

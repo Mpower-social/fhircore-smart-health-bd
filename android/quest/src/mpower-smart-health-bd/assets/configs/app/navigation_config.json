@@ -1,0 +1,237 @@
+{
+  "appId": "app",
+  "configType": "navigation",
+  "clientRegisters": [
+    {
+      "id": "householdRegister",
+      "display": "{{nav.menu.all.family}}",
+      "showCount": true,
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_households"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_REGISTER",
+          "id": "householdRegister"
+        },
+        {
+          "trigger": "ON_COUNT",
+          "id": "householdRegister"
+        }
+      ]
+    },
+    {
+      "id": "patientRegister",
+      "display": "{{nav.menu.all.patient}}",
+      "showCount": true,
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_profile"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_REGISTER",
+          "id": "patientRegister"
+        },
+        {
+          "trigger": "ON_COUNT",
+          "id": "patientRegister"
+        }
+      ]
+    },
+    {
+      "id": "childRegister",
+      "display": "{{nav.menu.children}}",
+      "showCount": true,
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_kids"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_REGISTER",
+          "id": "childRegister"
+        },
+        {
+          "trigger": "ON_COUNT",
+          "id": "childRegister"
+        }
+      ]
+    },
+    {
+      "id": "sickChildRegister",
+      "display": "{{nav.menu.sick.child}}",
+      "showCount": true,
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_needle"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_REGISTER",
+          "id": "sickChildRegister"
+        },
+        {
+          "trigger": "ON_COUNT",
+          "id": "sickChildRegister"
+        }
+      ]
+    },
+    {
+      "id": "ancRegister",
+      "display": "{{nav.menu.anc}}",
+      "showCount": true,
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_pregnant"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_REGISTER",
+          "id": "ancRegister"
+        },
+        {
+          "trigger": "ON_COUNT",
+          "id": "ancRegister"
+        }
+      ],
+      "subRegisters": [
+        {
+          "id": "riskyAncRegister",
+          "display": "{{nav.menu.risky}}",
+          "showCount": true,
+          "actions": [
+            {
+              "trigger": "ON_CLICK",
+              "workflow": "LAUNCH_REGISTER",
+              "id": "riskyAncRegister"
+            },
+            {
+              "trigger": "ON_COUNT",
+              "id": "riskyAncRegister"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pncRegister",
+      "display": "{{nav.menu.pnc}}",
+      "showCount": true,
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_baby_mother"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_REGISTER",
+          "id": "pncRegister"
+        },
+        {
+          "trigger": "ON_COUNT",
+          "id": "pncRegister"
+        }
+      ],
+      "subRegisters": [
+        {
+          "id": "riskyPncRegister",
+          "display": "{{nav.menu.risky}}",
+          "showCount": true,
+          "actions": [
+            {
+              "trigger": "ON_CLICK",
+              "workflow": "LAUNCH_REGISTER",
+              "id": "riskyPncRegister"
+            },
+            {
+              "trigger": "ON_COUNT",
+              "id": "riskyPncRegister"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "taskRegister",
+      "display": "{{nav.menu.priority}}",
+      "showCount": true,
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_tasks_priority"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_REGISTER",
+          "id": "taskRegister"
+        },
+        {
+          "trigger": "ON_COUNT",
+          "id": "taskRegister"
+        }
+      ]
+    }
+  ],
+  "staticMenu": [
+    {
+      "id": "inventoryRegister",
+      "display": "{{nav.menu.stock.inventory}}",
+      "icon": "",
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_inventory"
+      },
+      "showCount": true,
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_REGISTER",
+          "id": "inventoryRegister"
+        },
+        {
+          "trigger": "ON_COUNT",
+          "id": "inventoryRegister"
+        }
+      ]
+    },
+    {
+      "id": "dashboardReports",
+      "visible": true,
+      "display": "{{nav.menu.dashboard.reports}}",
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_reports"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_OTHER_REPORT",
+          "id": "dashboardReport"
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "visible": true,
+      "display": "{{nav.menu.settings}}",
+      "menuIconConfig": {
+        "type": "local",
+        "reference": "ic_settings"
+      },
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_SETTINGS",
+          "id": "navigateToSettingsScreen"
+        }
+      ]
+    }
+  ]
+}
