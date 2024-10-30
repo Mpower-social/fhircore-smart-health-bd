@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package org.smartregister.fhircore.quest.event
+package org.smartregister.fhircore.geowidget.screens
 
-import org.smartregister.fhircore.quest.ui.shared.models.QuestionnaireSubmission
+import org.smartregister.fhircore.geowidget.model.GeoJsonFeature
 
-sealed class AppEvent {
-  data class OnSubmitQuestionnaire(val questionnaireSubmission: QuestionnaireSubmission) :
-    AppEvent()
-
-  data object RefreshData : AppEvent()
+interface GeoJsonDataRequester {
+  fun requestData(onReceiveData: (List<GeoJsonFeature>) -> Unit)
 }

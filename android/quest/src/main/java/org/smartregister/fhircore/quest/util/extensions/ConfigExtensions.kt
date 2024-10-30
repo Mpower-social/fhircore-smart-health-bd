@@ -184,7 +184,7 @@ fun ActionConfig.handleClickEvent(
           args = args,
           navOptions =
             navController.currentDestination?.id?.let {
-              navOptions(resId = it, inclusive = actionConfig.popNavigationBackStack == true)
+              navOptions(resId = it, inclusive = actionConfig.popNavigationBackStack != false)
             },
         )
       }
@@ -239,7 +239,7 @@ fun ActionConfig.handleClickEvent(
           args = args,
           navOptions =
             navController.currentDestination?.id?.let {
-              navOptions(resId = it, inclusive = actionConfig.popNavigationBackStack == true)
+              navOptions(resId = it, inclusive = actionConfig.popNavigationBackStack != false)
             },
         )
       }

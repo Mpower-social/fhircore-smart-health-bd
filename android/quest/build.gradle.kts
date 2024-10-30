@@ -480,7 +480,7 @@ dependencies {
   implementation(libs.firebase.messaging.ktx)
   implementation(libs.mlkit.barcode.scanning)
   implementation(libs.material3)
-
+  implementation(libs.androidx.fragment.compose)
   implementation(libs.bundles.cameraX)
 
   // Annotation processors
