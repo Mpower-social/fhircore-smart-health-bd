@@ -582,7 +582,7 @@ constructor(
           if (bundleEntryComponent.resource != null) {
             addOrUpdate(bundleEntryComponent.resource)
             Timber.d(
-              "Fetched and processed resources ${bundleEntryComponent.resource.resourceType}/${bundleEntryComponent.resource.id}",
+              "Fetched and processed resources ${bundleEntryComponent.resource.resourceType}/${bundleEntryComponent.resource.idPart}",
             )
           }
         }
