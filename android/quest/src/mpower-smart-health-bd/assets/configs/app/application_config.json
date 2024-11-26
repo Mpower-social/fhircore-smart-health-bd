@@ -2,8 +2,8 @@
   "appId": "app",
   "configType": "application",
   "theme": "DEFAULT",
-  "appTitle": "mHealth",
-  "registerDate": "2020-10-27",
+  "appTitle": "Smart Health BD",
+  "registerDate": "2024-10-30",
   "reportRepeatTime": "23:22",
   "remoteSyncPageSize": 100,
   "languages": [
@@ -19,7 +19,21 @@
   ],
   "loginConfig": {
     "showLogo": true,
-    "enablePin": false
+    "enablePin": false,
+    "donorImages": [
+      {
+        "type": "local",
+        "reference": "ic_logo_dghs"
+      },
+      {
+        "type": "local",
+        "reference": "ic_logo_mis"
+      },
+      {
+        "type": "local",
+        "reference": "ic_logo_unicef"
+      }
+    ]
   },
   "deviceToDeviceSync": {
     "resourcesToSync": [

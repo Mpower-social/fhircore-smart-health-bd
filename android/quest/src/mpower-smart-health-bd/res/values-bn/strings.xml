@@ -16,7 +16,7 @@
     <string name="application_alert_back_pressed_message">আপনি কি অ্যাপটি থেকে বেরিয়ে আসতে চান?</string>
     <string name="application_alert_confirm_button_title">হ্যাঁ</string>
 
-    <string name="app_version">অ্যাপ ভার্সন %1$d(%2$s)</string>
+    <string name="app_version">অ্যাপ ভার্সন \n%1$d(%2$s)</string>
     <string name="powered_by">পাওয়ার্ড বাই</string>
 
     <string name="integer_format_validation_error_msg">সংখ্যা অবশ্যই 0-এর বেশি হতে হবে এবং কোনো দশমিক স্থান অনুমোদিত নয়</string>

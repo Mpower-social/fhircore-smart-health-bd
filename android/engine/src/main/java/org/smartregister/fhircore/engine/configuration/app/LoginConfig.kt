@@ -17,6 +17,7 @@
 package org.smartregister.fhircore.engine.configuration.app
 
 import kotlinx.serialization.Serializable
+import org.smartregister.fhircore.engine.configuration.navigation.ImageConfig
 
 @Serializable
 data class LoginConfig(
@@ -27,4 +28,5 @@ data class LoginConfig(
   val logoHeight: Int = 120,
   val logoWidth: Int = 140,
   val showAppTitle: Boolean = true,
+  val donorImages: List<ImageConfig> = emptyList(),
 )
