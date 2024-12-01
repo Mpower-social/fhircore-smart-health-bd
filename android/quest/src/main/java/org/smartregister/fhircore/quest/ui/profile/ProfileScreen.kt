@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -240,15 +241,6 @@ fun ProfileScreen(
 
         LazyColumn(
           state = lazyListState,
-          modifier =
-            Modifier.padding(
-              bottom =
-                if (!fabActions.isNullOrEmpty() && fabActions.first().visible) {
-                  PADDING_BOTTOM_WITH_FAB.dp
-              } else {
-                PADDING_BOTTOM_WITHOUT_FAB.dp
-              },
-            ),
         ) {
           if (profileUiState.profileConfiguration?.monthWiseFilterStartDate != null) {
             item {
@@ -285,6 +277,18 @@ fun ProfileScreen(
                 profileUiState.resourceData ?: ResourceData("", ResourceType.Patient, emptyMap()),
               navController = navController,
             decodeImage = decodeImage,
+          )
+        }
+        item {
+          Spacer(
+            modifier =
+              Modifier.height(
+                if (!fabActions.isNullOrEmpty() && fabActions.first().visible) {
+                  PADDING_BOTTOM_WITH_FAB.dp
+                } else {
+                  PADDING_BOTTOM_WITHOUT_FAB.dp
+                },
+              ),
             )
           }
         }
