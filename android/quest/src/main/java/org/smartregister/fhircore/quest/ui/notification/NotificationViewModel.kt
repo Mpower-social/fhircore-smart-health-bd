@@ -45,7 +45,7 @@ import org.smartregister.fhircore.engine.configuration.register.RegisterConfigur
 import org.smartregister.fhircore.engine.data.local.register.RegisterRepository
 import org.smartregister.fhircore.engine.domain.model.ActionParameter
 import org.smartregister.fhircore.engine.domain.model.ResourceData
-import org.smartregister.fhircore.engine.rulesengine.ResourceDataRulesExecutor
+import org.smartregister.fhircore.engine.rulesengine.RulesExecutor
 import org.smartregister.fhircore.engine.util.DispatcherProvider
 import org.smartregister.fhircore.engine.util.SharedPreferencesHelper
 import org.smartregister.fhircore.quest.data.register.RegisterPagingSource
@@ -61,7 +61,7 @@ constructor(
   val configurationRegistry: ConfigurationRegistry,
   val sharedPreferencesHelper: SharedPreferencesHelper,
   val dispatcherProvider: DispatcherProvider,
-  val resourceDataRulesExecutor: ResourceDataRulesExecutor,
+  val rulesExecutor: RulesExecutor,
 ) : ViewModel() {
   val notificationDialogData = MutableLiveData<Map<String, Any>>(mapOf())
 
@@ -100,28 +100,25 @@ constructor(
   private fun getPager(registerId: String, loadAll: Boolean = false): Pager<Int, ResourceData> {
     val currentRegisterConfigs = retrieveRegisterConfiguration(registerId)
     val fhirResourceConfig = currentRegisterConfigs.fhirResource
-    val ruleConfigs = currentRegisterConfigs.registerCard.rules
-    val pageSize = currentRegisterConfigs.pageSize // Default 10
+    val pageSize = currentRegisterConfigs.pageSize
+    val rules = rulesExecutor.rulesFactory.generateRules(currentRegisterConfigs.registerCard.rules)
 
     return Pager(
       config = PagingConfig(pageSize = pageSize, enablePlaceholders = false),
       pagingSourceFactory = {
         RegisterPagingSource(
             registerRepository = registerRepository,
-            resourceDataRulesExecutor = resourceDataRulesExecutor,
-            ruleConfigs = ruleConfigs,
+            rulesExecutor = rulesExecutor,
+            actionParameters = registerUiState.value.params.toTypedArray().toParamDataMap(),
+            registerPagingSourceState =
+            RegisterPagingSourceState(
+              registerId = currentRegisterConfigs.id,
+              loadAll = loadAll,
+              currentPage = if (loadAll) 0 else currentPage.value,
+              rules = rules,
+            ),
             fhirResourceConfig = fhirResourceConfig,
-            actionParameters = registerUiState.value.params,
           )
-          .apply {
-            setPatientPagingSourceState(
-              RegisterPagingSourceState(
-                registerId = registerId,
-                loadAll = loadAll,
-                currentPage = if (loadAll) 0 else currentPage.value,
-              ),
-            )
-          }
       },
     )
   }
@@ -228,7 +225,7 @@ constructor(
                     .div(currentRegisterConfiguration.pageSize.toLong()),
                 )
                 .toInt(),
-            params = paramsMap,
+            params = params?.toList() ?: emptyList(),
           )
       }
     }

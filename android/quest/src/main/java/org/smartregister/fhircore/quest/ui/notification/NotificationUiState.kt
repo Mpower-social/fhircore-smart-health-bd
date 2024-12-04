@@ -17,11 +17,12 @@
 package org.smartregister.fhircore.quest.ui.notification
 
 import org.smartregister.fhircore.engine.configuration.register.RegisterConfiguration
+import org.smartregister.fhircore.engine.domain.model.ActionParameter
 
 data class NotificationUiState(
   val registerConfiguration: RegisterConfiguration? = null,
   val registerId: String = "",
   val totalRecordsCount: Long = 0,
   val pagesCount: Int = 1,
-  val params: Map<String, String> = emptyMap(),
+  val params: List<ActionParameter> = emptyList(),
 )

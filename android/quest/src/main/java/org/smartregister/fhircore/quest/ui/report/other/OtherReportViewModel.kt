@@ -36,7 +36,7 @@ import org.smartregister.fhircore.engine.configuration.report.other.OtherReportC
 import org.smartregister.fhircore.engine.data.local.DefaultRepository
 import org.smartregister.fhircore.engine.data.local.register.RegisterRepository
 import org.smartregister.fhircore.engine.domain.model.ResourceData
-import org.smartregister.fhircore.engine.rulesengine.ResourceDataRulesExecutor
+import org.smartregister.fhircore.engine.rulesengine.RulesExecutor
 import org.smartregister.fhircore.engine.util.DefaultDispatcherProvider
 import org.smartregister.fhircore.engine.util.SharedPreferencesHelper
 import org.smartregister.fhircore.engine.util.extension.SDF_YYYY_MM_DD
@@ -54,7 +54,7 @@ constructor(
   val configurationRegistry: ConfigurationRegistry,
   val registerRepository: RegisterRepository,
   val defaultRepository: DefaultRepository,
-  val resourceDataRulesExecutor: ResourceDataRulesExecutor,
+  val rulesExecutor: RulesExecutor,
 ) : ViewModel() {
   val dateRange: MutableState<androidx.core.util.Pair<Long?, Long?>> =
     mutableStateOf(defaultDateRangeState())
@@ -80,7 +80,7 @@ constructor(
         resourceConfigs = otherReportConfiguration.resources,
       )
     val computedValuesMap =
-      resourceDataRulesExecutor.computeResourceDataRules(
+      rulesExecutor.computeResourceDataRules(
         otherReportConfiguration.rules,
         repositoryResourceData,
       )

@@ -390,7 +390,9 @@ open class AppMainActivity :
                   listener = { dialog -> dialog.dismiss() },
                 ),
             )
-          } else navHostFragment.navController.navigateUp()
+          } else {
+            navHostFragment.navController.navigateUp()
+          }
         }
       },
     )
