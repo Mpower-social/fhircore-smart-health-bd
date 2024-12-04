@@ -29,4 +29,5 @@ object NavigationArg {
   const val NOTIFICATION_ID = "notificationId"
   const val PARAMS = "params"
   const val TOOL_BAR_HOME_NAVIGATION = "toolBarHomeNavigation"
+  const val QUESTIONNAIRE_CONFIG = "questionnaireConfig"
 }
