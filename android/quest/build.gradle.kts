@@ -205,7 +205,10 @@ android {
 
   testCoverage { jacocoVersion = BuildConfigs.jacocoVersion }
 
-  lint { abortOnError = false }
+  lint {
+    checkReleaseBuilds = true
+    abortOnError = false
+  }
 
   flavorDimensions += "apps"
 
