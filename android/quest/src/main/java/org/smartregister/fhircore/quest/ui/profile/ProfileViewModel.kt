@@ -199,7 +199,7 @@ constructor(
         }
       }
 
-      profileConfigs.tabBar?.tabContents?.retrieveListProperties()?.forEach { listProperties ->
+      profileConfigs.tabBar?.tabContents?.map { it.contents }?.flatten()?.retrieveListProperties()?.forEach { listProperties ->
         resourceDataRulesExecutor.processListResourceData(
           listProperties = listProperties,
           relatedResourcesMap = repositoryResourceData.relatedResourcesMap,

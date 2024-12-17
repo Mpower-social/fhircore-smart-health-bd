@@ -16,7 +16,12 @@
 
 package org.smartregister.fhircore.engine.configuration.view
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import org.smartregister.fhircore.engine.configuration.navigation.ContentScaleType
+import org.smartregister.fhircore.engine.configuration.navigation.ICON_TYPE_LOCAL
+import org.smartregister.fhircore.engine.configuration.navigation.ImageType
 import org.smartregister.fhircore.engine.domain.model.ViewType
 import org.smartregister.fhircore.engine.util.extension.interpolate
 
@@ -32,8 +37,7 @@ data class TabViewProperties(
   override val fillMaxHeight: Boolean = false,
   override val clickable: String = "true",
   override val visible: String = "true",
-  val tabs: List<String> = emptyList(),
-  val tabContents: List<ViewProperties> = emptyList(),
+  val tabContents: List<TabViewContent> = emptyList(),
   val contentScrollable: Boolean = false,
   val tabBackgroundColor: String = "#F2F4F7",
   val tabIndicatorColor: String = "#FFFFFF",
@@ -43,6 +47,22 @@ data class TabViewProperties(
     return this.copy(
       backgroundColor = backgroundColor?.interpolate(computedValuesMap),
       visible = visible.interpolate(computedValuesMap),
+      tabContents = tabContents.map { it.interpolate(computedValuesMap) }
+    )
+  }
+}
+
+@Serializable
+@Parcelize
+data class TabViewContent(
+  val visible: String = "true",
+  val title: String = "",
+  val contents: List<ViewProperties> = emptyList(),
+) : Parcelable, java.io.Serializable {
+  fun interpolate(computedValuesMap: Map<String, Any>): TabViewContent {
+    return this.copy(
+      title = this.title.interpolate(computedValuesMap),
+      visible = this.visible.interpolate(computedValuesMap),
     )
   }
 }

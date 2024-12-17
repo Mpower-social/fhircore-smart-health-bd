@@ -14,7 +14,7 @@
       "name": "humanReadableId",
       "condition": "true",
       "actions": [
-        "data.put('humanReadableId', service.generateRandomVariableDigitInt(10000, 99999))"
+        "data.put('humanReadableId', service.generateCurrentSystemTimeInMillis())"
       ]
     }
   ],
@@ -313,7 +313,7 @@
           "trigger": "ON_CLICK",
           "workflow": "LAUNCH_QUESTIONNAIRE",
           "questionnaire": {
-            "id": "3",
+            "id": "2870",
             "title": "{{add.family}}",
             "setPractitionerDetails": true,
             "setOrganizationDetails": true,
@@ -327,7 +327,7 @@
             {
               "paramType": "PREPOPULATE",
               "linkId": "0eb238ad-e009-434b-c56f-88e7dc860daa",
-              "dataType": "INTEGER",
+              "dataType": "STRING",
               "key": "humanReadableId",
               "value": "@{humanReadableId}"
             },

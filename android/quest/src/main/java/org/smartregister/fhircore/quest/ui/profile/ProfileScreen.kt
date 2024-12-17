@@ -221,9 +221,13 @@ fun ProfileScreen(
         }
 
         if (profileUiState.profileConfiguration?.tabBar != null) {
+          val resourceData = profileUiState.resourceData ?: ResourceData("", ResourceType.Patient, emptyMap())
+          val tabViewProperties = profileUiState.profileConfiguration.tabBar
+          val interpolatedProperties = tabViewProperties?.interpolate(resourceData.computedValuesMap)
+
           TabView(
             modifier = modifier,
-            viewProperties = profileUiState.profileConfiguration.tabBar as TabViewProperties,
+            viewProperties = interpolatedProperties as TabViewProperties,
             resourceData =
               profileUiState.resourceData ?: ResourceData("", ResourceType.Patient, emptyMap()),
             navController = navController,

@@ -58,7 +58,7 @@ fun List<ViewProperties>.retrieveListProperties(): List<ListProperties> {
       ViewType.ROW -> viewPropertiesLinkedList.addAll((properties as RowProperties).children)
       ViewType.CARD -> viewPropertiesLinkedList.addAll((properties as CardViewProperties).content)
       ViewType.TABS ->
-        viewPropertiesLinkedList.addAll((properties as TabViewProperties).tabContents)
+        viewPropertiesLinkedList.addAll((properties as TabViewProperties).tabContents.map { it.contents }.flatten())
       ViewType.LIST ->
         viewPropertiesLinkedList.addAll((properties as ListProperties).registerCard.views)
       else -> {}

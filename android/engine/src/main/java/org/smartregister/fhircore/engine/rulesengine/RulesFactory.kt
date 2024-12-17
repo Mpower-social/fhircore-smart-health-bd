@@ -448,6 +448,13 @@ constructor(
       (minimum..maximum).random()
 
     /**
+     * This function returned current system time in millis.
+     *
+     * @return An Long.
+     */
+    fun generateCurrentSystemTimeInMillis(): Long = DateTime.now().millis
+
+    /**
      * This function filters resources provided the condition extracted from the
      * [conditionalFhirPathExpression] is met
      */

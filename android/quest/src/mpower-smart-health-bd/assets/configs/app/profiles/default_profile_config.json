@@ -1092,793 +1092,156 @@
     "viewType": "TABS",
     "contentScrollable": "true",
     "contentPadding": 0,
-    "tabs": [
-      "{{patient.due}}",
-      "{{patient.other}}",
-      "{{patient.history}}"
-    ],
     "tabIndicatorColor": "#FFFF00",
     "tabContents": [
       {
-        "viewType": "COLUMN",
-        "padding": 16,
-        "children": [
+        "title": "{{patient.due}}",
+        "contents": [
           {
-            "viewType": "CARD",
-            "content": [
+            "viewType": "COLUMN",
+            "padding": 16,
+            "children": [
               {
-                "viewType": "BUTTON",
-                "smallSized": "true",
-                "text": "{{hh.due.referral}}",
-                "status": "DUE",
-                "visible": "@{isChild}",
-                "enabled": "@{patientActive}",
-                "startIcon": {
-                  "reference": "ic_kids"
-                },
-                "actions": [
-                  {
-                    "trigger": "ON_CLICK",
-                    "workflow": "LAUNCH_QUESTIONNAIRE",
-                    "questionnaire": {
-                      "id": "10",
-                      "title": "{{hh.due.referral}}",
-                      "resourceType": "Patient",
-                      "resourceIdentifier": "@{patientId}"
-                    }
-                  }
-                ]
-              },
-              {
-                "viewType": "BUTTON",
-                "smallSized": "true",
-                "text": "{{hh.due.referral}}",
-                "status": "DUE",
-                "visible": "@{applicableForWomenReferral}",
-                "enabled": "@{patientActive}",
-                "startIcon": {
-                  "reference": "ic_women"
-                },
-                "actions": [
-                  {
-                    "trigger": "ON_CLICK",
-                    "workflow": "LAUNCH_QUESTIONNAIRE",
-                    "questionnaire": {
-                      "id": "11",
-                      "title": "{{hh.due.referral}}",
-                      "resourceType": "Patient",
-                      "resourceIdentifier": "@{patientId}"
-                    }
-                  }
-                ]
-              },
-              {
-                "viewType": "BUTTON",
-                "smallSized": "true",
-                "text": "{{hh.due.referral}}",
-                "status": "DUE",
-                "visible": "@{applicableForMemberReferral}",
-                "enabled": "@{patientActive}",
-                "startIcon": {
-                  "reference": "ic_profile"
-                },
-                "actions": [
-                  {
-                    "trigger": "ON_CLICK",
-                    "workflow": "LAUNCH_QUESTIONNAIRE",
-                    "questionnaire": {
-                      "id": "12",
-                      "title": "{{hh.due.referral}}",
-                      "resourceType": "Patient",
-                      "resourceIdentifier": "@{patientId}"
-                    }
-                  }
-                ]
-              },
-              {
-                "viewType": "BUTTON",
-                "smallSized": "true",
-                "text": "@{pncFollowupTaskName}",
-                "status": "DUE",
-                "visible": "@{applicableForPncFollowup}",
-                "enabled": "@{patientActive}",
-                "startIcon": {
-                  "reference": "ic_baby_mother"
-                },
-                "actions": [
-                  {
-                    "trigger": "ON_CLICK",
-                    "workflow": "LAUNCH_QUESTIONNAIRE",
-                    "questionnaire": {
-                      "id": "20",
-                      "title": "@{pncFollowupTaskName}",
-                      "resourceType": "Patient",
-                      "resourceIdentifier": "@{patientId}"
-                    },
-                    "params": [
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "54777657-5ff3-44d6-fe0d-317cce261588",
-                        "dataType": "STRING",
-                        "key": "pncFollowupTaskName",
-                        "value": "@{pncFollowupTaskName}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "bd4dba60-545c-4946-88c2-29c85f9bdf7e",
-                        "dataType": "DATETIME",
-                        "key": "activeDeliveryDate",
-                        "value": "@{activeDeliveryDate}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "6d331134-5e5d-47eb-c828-22d5927c67ba",
-                        "dataType": "INTEGER",
-                        "key": "noOfBracPncVisit",
-                        "value": "@{noOfBracPncVisit}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "9e5b72da-8e7c-4646-8e12-f3bacb5ac50a",
-                        "dataType": "INTEGER",
-                        "key": "pncPreviousBalance",
-                        "value": "@{pncPreviousBalance}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "d9fc1aaf-00d8-429f-d5ba-3b1831921b1d",
-                        "dataType": "STRING",
-                        "key": "pncObservationId",
-                        "value": "@{pncObservationId}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "9fc038a4-1526-4e2b-826a-1833b654a045",
-                        "dataType": "STRING",
-                        "key": "pncStockOutFlagId",
-                        "value": "@{pncStockOutFlagId}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "a1f75d6a-7be8-42c6-9dbf-7ef293b49227",
-                        "dataType": "STRING",
-                        "key": "riskyPncConditionId",
-                        "value": "@{riskyPncConditionId}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
-                        "dataType": "STRING",
-                        "key": "patientIdentifier",
-                        "value": "@{patientIdentifier}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "f095de5f-c913-4e86-88af-c6fcdd93da1f",
-                        "dataType": "STRING",
-                        "key": "patientNid",
-                        "value": "@{patientNid}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "8d25e0f0-ce4c-42de-89d4-98f70e0b7619",
-                        "dataType": "STRING",
-                        "key": "patientBrid",
-                        "value": "@{patientBrid}"
-                      },
-                      {
-                        "paramType": "PREPOPULATE",
-                        "linkId": "b441b988-2d56-408e-8564-c8702579058d",
-                        "dataType": "STRING",
-                        "key": "patientMobile",
-                        "value": "@{patientMobile}"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "viewType": "BUTTON",
-                "smallSized": "true",
-                "text": "{{hh.due.elco}}",
-                "status": "DUE",
-                "visible": "@{canRegisterPregnancy}",
-                "enabled": "@{patientActive}",
-                "startIcon": {
-                  "reference": "ic_family_planning"
-                },
-                "actions": [
-                  {
-                    "trigger": "ON_CLICK",
-                    "workflow": "LAUNCH_QUESTIONNAIRE",
-                    "questionnaire": {
-                      "id": "16",
-                      "title": "Eligible Couple Visit",
-                      "resourceType": "Patient",
-                      "resourceIdentifier": "@{patientId}"
-                    }
-                  }
-                ]
-              },
-              {
-                "viewType": "LIST",
-                "id": "readyTasksList",
-                "resources": [
-                  {
-                    "id": "availableReadyTasks",
-                    "relatedResourceId": "availableTasks",
-                    "resourceType": "Task",
-                    "conditionalFhirPathExpression": "((Task.status = 'ready' or Task.status = 'failed') and (Task.code.empty()))"
-                  }
-                ],
-                "registerCard": {
-                  "rules": [
-                    {
-                      "name": "taskStatus",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskStatus', fhirPath.extractValue(Task, 'Task.status'))"
-                      ]
-                    },
-                    {
-                      "name": "taskStatusColorCode",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskStatusColorCode', data.get('taskStatus').equals('ready') ? 'DUE' : data.get('taskStatus').equals('failed') || data.get('taskStatus').equals('cancelled') ? 'OVERDUE' : data.get('taskStatus').equals('requested') ? 'UPCOMING' : data.get('taskStatus').equals('completed') ? 'COMPLETED' : 'UPCOMING')"
-                      ]
-                    },
-                    {
-                      "name": "taskExecutionStartDate",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskExecutionStartDate', fhirPath.extractValue(Task, 'Task.executionPeriod.start'))"
-                      ]
-                    },
-                    {
-                      "name": "taskScheduleDate",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskScheduleDate', service.formatDate(data.get('taskExecutionStartDate'), \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\", \"yyyy-MM-dd\"))"
-                      ]
-                    },
-                    {
-                      "name": "taskPeriodDueDate",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskPeriodDueDate', service.formatDate(data.get('taskExecutionStartDate'), \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\", \"dd MMM yyyy\"))"
-                      ]
-                    },
-                    {
-                      "name": "taskDescription",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskDescription', fhirPath.extractValue(Task, 'Task.description'))"
-                      ]
-                    },
-                    {
-                      "name": "taskReasonCode",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskReasonCode', fhirPath.extractValue(Task, 'Task.input[0].value.coding.code'))"
-                      ]
-                    },
-                    {
-                      "name": "taskReasonDisplay",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskReasonDisplay', fhirPath.extractValue(Task, 'Task.input[0].value.coding.display'))"
-                      ]
-                    },
-                    {
-                      "name": "taskDescriptionWithReason",
-                      "condition": "true",
-                      "priority": 2,
-                      "actions": [
-                        "data.put('taskDescriptionWithReason', data.get('taskDescription') + ((data.get('taskReasonDisplay') != null && data.get('taskReasonDisplay') != '') ? ('(' + data.get('taskReasonDisplay') + ')') : ''))"
-                      ]
-                    },
-                    {
-                      "name": "taskDescriptionWithStartDate",
-                      "condition": "true",
-                      "priority": 3,
-                      "actions": [
-                        "data.put('taskDescriptionWithStartDate', data.get('taskDescriptionWithReason') + ' ' + 'due on' + ' ' + data.get('taskPeriodDueDate'))"
-                      ]
-                    },
-                    {
-                      "name": "taskId",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskId', fhirPath.extractValue(Task, 'Task.id'))"
-                      ]
-                    },
-                    {
-                      "name": "taskFor",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskFor', fhirPath.extractValue(Task, 'Task.for.reference'))"
-                      ]
-                    },
-                    {
-                      "name": "taskQuestionnaireId",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskQuestionnaireId', fhirPath.extractValue(Task, 'Task.reasonReference.reference'))"
-                      ]
-                    }
-                  ],
-                  "views": [
-                    {
-                      "viewType": "BUTTON",
-                      "smallSized": "true",
-                      "text": "@{taskDescriptionWithStartDate}",
-                      "status": "@{taskStatusColorCode}",
-                      "visible": "true",
-                      "enabled": "@{patientActive}",
-                      "actions": [
-                        {
-                          "trigger": "ON_CLICK",
-                          "workflow": "LAUNCH_QUESTIONNAIRE",
-                          "questionnaire": {
-                            "id": "@{taskQuestionnaireId}",
-                            "title": "@{taskDescription}",
-                            "taskId": "@{taskId}",
-                            "resourceIdentifier": "@{taskFor}"
-                          },
-                          "params": [
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "ae2f17cb-deff-48a6-8ece-27e6bd475f30",
-                              "dataType": "DATE",
-                              "key": "taskScheduleDate",
-                              "value": "@{taskScheduleDate}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "d5962592-08d5-447b-d6a2-62a077e6bb05",
-                              "dataType": "STRING",
-                              "key": "taskReasonCode",
-                              "value": "@{taskReasonCode}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "c706016d-b8e9-44c7-9acb-155bb4e6092c",
-                              "dataType": "STRING",
-                              "key": "taskReasonDisplay",
-                              "value": "@{taskReasonDisplay}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "bb2b5f1d-3aee-4d19-883a-f5a65b349f5f",
-                              "dataType": "DATE",
-                              "key": "lmpDate",
-                              "value": "@{lmpDate}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "93ff6669-bbee-47fd-e54d-8c9e9cda1f94",
-                              "dataType": "INTEGER",
-                              "key": "noOfBracAncVisit",
-                              "value": "@{noOfBracAncVisit}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "5d8ac884-da47-4ec3-f077-1dd9812d0d43",
-                              "dataType": "INTEGER",
-                              "key": "patientHeight",
-                              "value": "@{patientHeight}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "4e7336a4-4dd1-4efc-89a1-0eb0748a828c",
-                              "dataType": "INTEGER",
-                              "key": "patientWeight",
-                              "value": "@{patientWeight}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "2fd89181-2d0f-405b-8d15-f312427dd7c6",
-                              "dataType": "DATE",
-                              "key": "patientWeightDate",
-                              "value": "@{patientWeightDate}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "d91c5e51-ac81-41f6-8f09-87805b87a98d",
-                              "dataType": "INTEGER",
-                              "key": "ancPreviousBalance",
-                              "value": "@{ancPreviousBalance}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "77001671-c07b-4afb-81ae-2220d4f38157",
-                              "dataType": "STRING",
-                              "key": "ancObservationId",
-                              "value": "@{ancObservationId}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "351ca898-582a-4585-8bd9-30aafc7a6174",
-                              "dataType": "STRING",
-                              "key": "riskyAncConditionId",
-                              "value": "@{riskyAncConditionId}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "e6b390ca-699d-4f4f-b388-d3abfb097e26",
-                              "dataType": "STRING",
-                              "key": "ancStockOutFlagId",
-                              "value": "@{ancStockOutFlagId}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
-                              "dataType": "STRING",
-                              "key": "patientIdentifier",
-                              "value": "@{patientIdentifier}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "f095de5f-c913-4e86-88af-c6fcdd93da1f",
-                              "dataType": "STRING",
-                              "key": "patientNid",
-                              "value": "@{patientNid}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "8d25e0f0-ce4c-42de-89d4-98f70e0b7619",
-                              "dataType": "STRING",
-                              "key": "patientBrid",
-                              "value": "@{patientBrid}"
-                            },
-                            {
-                              "paramType": "PREPOPULATE",
-                              "linkId": "b441b988-2d56-408e-8564-c8702579058d",
-                              "dataType": "STRING",
-                              "key": "patientMobile",
-                              "value": "@{patientMobile}"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "otherServices",
-        "viewType": "COLUMN",
-        "padding": 16,
-        "children": [
-          {
-            "viewType": "CARD",
-            "content": [
-              {
-                "viewType": "COLUMN",
-                "id": "otherServices",
-                "children": [
+                "viewType": "CARD",
+                "content": [
                   {
                     "viewType": "BUTTON",
                     "smallSized": "true",
-                    "text": "{{hh.service.eye}}",
+                    "text": "{{hh.due.referral}}",
                     "status": "DUE",
-                    "visible": "true",
+                    "visible": "@{isChild}",
                     "enabled": "@{patientActive}",
                     "startIcon": {
-                      "reference": "ic_eye"
+                      "reference": "ic_kids"
                     },
                     "actions": [
                       {
                         "trigger": "ON_CLICK",
                         "workflow": "LAUNCH_QUESTIONNAIRE",
                         "questionnaire": {
-                          "id": "14",
-                          "title": "{{hh.service.eye}}",
+                          "id": "4236",
+                          "title": "{{hh.due.referral}}",
                           "resourceType": "Patient",
                           "resourceIdentifier": "@{patientId}"
-                        },
-                        "params": [
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "49eca2ad-6524-403d-b1b3-7456485f87e3",
-                            "dataType": "INTEGER",
-                            "key": "glassesPreviousBalance",
-                            "value": "@{glassesPreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "ca0fbdf6-974e-4869-bed6-75f34e1f2c2f",
-                            "dataType": "STRING",
-                            "key": "glassesObservationId",
-                            "value": "@{glassesObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "0e0e7a86-40a6-45c3-ba73-b19330192d19",
-                            "dataType": "STRING",
-                            "key": "glassesStockOutFlagId",
-                            "value": "@{glassesStockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "e6145f08-a682-4e8c-ae28-850aa73251c2",
-                            "dataType": "INTEGER",
-                            "key": "sunGlassesPreviousBalance",
-                            "value": "@{sunGlassesPreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "d0b5c58a-bfdc-49f6-96c0-c5b37af964f2",
-                            "dataType": "STRING",
-                            "key": "sunGlassesObservationId",
-                            "value": "@{sunGlassesObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "aac22321-582c-43d7-f382-85bd5c4e5346",
-                            "dataType": "STRING",
-                            "key": "sunGlassesStockOutFlagId",
-                            "value": "@{sunGlassesStockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "e9befdd0-f56d-494e-8899-767dbcc7fa8e",
-                            "dataType": "INTEGER",
-                            "key": "bf100PreviousBalance",
-                            "value": "@{bf100PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "6ef5319f-13d4-499f-8c16-9e9ebf3a0f55",
-                            "dataType": "STRING",
-                            "key": "bf100ObservationId",
-                            "value": "@{bf100ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "4fef01af-29c8-4459-951e-b917c4ba9b12",
-                            "dataType": "STRING",
-                            "key": "bf100StockOutFlagId",
-                            "value": "@{bf100StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "764dd849-21a1-410b-b98f-29fe145bdb87",
-                            "dataType": "INTEGER",
-                            "key": "bf150PreviousBalance",
-                            "value": "@{bf150PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "44873d86-80b1-45ab-860b-4b64d57862b8",
-                            "dataType": "STRING",
-                            "key": "bf150ObservationId",
-                            "value": "@{bf150ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "bc92a5eb-8d25-4866-ca1b-d638d3eb991d",
-                            "dataType": "STRING",
-                            "key": "bf150StockOutFlagId",
-                            "value": "@{bf150StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "96dd8383-7d3e-4756-8ea2-9a720d2ebdb7",
-                            "dataType": "INTEGER",
-                            "key": "bf200PreviousBalance",
-                            "value": "@{bf200PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "a9d74f31-56ca-4750-8d69-893a004698f9",
-                            "dataType": "STRING",
-                            "key": "bf200ObservationId",
-                            "value": "@{bf200ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "7faf7f8b-c401-49a2-e6b5-ebc38d7c8952",
-                            "dataType": "STRING",
-                            "key": "bf200StockOutFlagId",
-                            "value": "@{bf200StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "2147e6cc-f4c2-40f4-8f95-c8e12f5a3906",
-                            "dataType": "INTEGER",
-                            "key": "bf250PreviousBalance",
-                            "value": "@{bf250PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "5e0e940e-d26f-4890-af22-818c32166bce",
-                            "dataType": "STRING",
-                            "key": "bf250ObservationId",
-                            "value": "@{bf250ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "06c74605-d3c2-414e-b8a1-d715cdeb8da8",
-                            "dataType": "STRING",
-                            "key": "bf250StockOutFlagId",
-                            "value": "@{bf250StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "70095888-1aac-4e94-c4f2-a0c1b615cc25",
-                            "dataType": "INTEGER",
-                            "key": "bf300PreviousBalance",
-                            "value": "@{bf300PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "bf372250-a924-4370-d3c2-7028a744c48e",
-                            "dataType": "STRING",
-                            "key": "bf300ObservationId",
-                            "value": "@{bf300ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "13935d7e-57a1-4ade-f91d-8f7cccfdb0fa",
-                            "dataType": "STRING",
-                            "key": "bf300StockOutFlagId",
-                            "value": "@{bf300StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "52e56dfa-aab3-4de1-a7b3-1872ad4b5d05",
-                            "dataType": "INTEGER",
-                            "key": "sv100PreviousBalance",
-                            "value": "@{sv100PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "82260d3e-1d12-4a56-8917-26fa39d29a35",
-                            "dataType": "STRING",
-                            "key": "sv100ObservationId",
-                            "value": "@{sv100ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "9c6affa9-6d22-4673-8664-c5d386e476fa",
-                            "dataType": "STRING",
-                            "key": "sv100StockOutFlagId",
-                            "value": "@{sv100StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "68e5a011-edde-4257-8a37-52a50f26cc0f",
-                            "dataType": "INTEGER",
-                            "key": "sv150PreviousBalance",
-                            "value": "@{sv150PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "81ec6b3e-57e0-4c36-9830-213baabb0e38",
-                            "dataType": "STRING",
-                            "key": "sv150ObservationId",
-                            "value": "@{sv150ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "0a71df31-64e1-46e5-a498-ef777f0cedaf",
-                            "dataType": "STRING",
-                            "key": "sv150StockOutFlagId",
-                            "value": "@{sv150StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "80722325-12ca-40c8-f24a-5955410c9afa",
-                            "dataType": "INTEGER",
-                            "key": "sv200PreviousBalance",
-                            "value": "@{sv200PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "14b0ddd8-cdb9-4439-81ed-56073741d06e",
-                            "dataType": "STRING",
-                            "key": "sv200ObservationId",
-                            "value": "@{sv200ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "a6785696-af28-4466-c289-6f83e3153dff",
-                            "dataType": "STRING",
-                            "key": "sv200StockOutFlagId",
-                            "value": "@{sv200StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "4620c135-06b5-46c7-bce4-13ea3cebd562",
-                            "dataType": "INTEGER",
-                            "key": "sv250PreviousBalance",
-                            "value": "@{sv250PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "06e1a33b-2476-4fab-88ad-f371c9b28e48",
-                            "dataType": "STRING",
-                            "key": "sv250ObservationId",
-                            "value": "@{sv250ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "098c7312-33c4-4598-8050-5b3b193db5e9",
-                            "dataType": "STRING",
-                            "key": "sv250StockOutFlagId",
-                            "value": "@{sv250StockOutFlagId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "db715612-cb19-4e19-8e95-265559eb9d2d",
-                            "dataType": "INTEGER",
-                            "key": "sv300PreviousBalance",
-                            "value": "@{sv300PreviousBalance}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "45979eef-d80a-44b1-c512-c70568baea2a",
-                            "dataType": "STRING",
-                            "key": "sv300ObservationId",
-                            "value": "@{sv300ObservationId}"
-                          },
-                          {
-                            "paramType": "PREPOPULATE",
-                            "linkId": "6655f7d1-a0fc-43fe-820a-6ec0c8c2a60c",
-                            "dataType": "STRING",
-                            "key": "sv300StockOutFlagId",
-                            "value": "@{sv300StockOutFlagId}"
-                          }
-                        ]
+                        }
                       }
                     ]
                   },
                   {
                     "viewType": "BUTTON",
                     "smallSized": "true",
-                    "text": "{{hh.service.ncd}}",
+                    "text": "{{hh.due.referral}}",
                     "status": "DUE",
-                    "visible": "@{applicableForNCDPackage}",
+                    "visible": "@{applicableForWomenReferral}",
                     "enabled": "@{patientActive}",
                     "startIcon": {
-                      "reference": "ic_non_communicable_disease"
+                      "reference": "ic_women"
                     },
                     "actions": [
                       {
                         "trigger": "ON_CLICK",
                         "workflow": "LAUNCH_QUESTIONNAIRE",
                         "questionnaire": {
-                          "id": "15",
-                          "title": "{{hh.service.ncd}}",
+                          "id": "4237",
+                          "title": "{{hh.due.referral}}",
+                          "resourceType": "Patient",
+                          "resourceIdentifier": "@{patientId}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "BUTTON",
+                    "smallSized": "true",
+                    "text": "{{hh.due.referral}}",
+                    "status": "DUE",
+                    "visible": "@{applicableForMemberReferral}",
+                    "enabled": "@{patientActive}",
+                    "startIcon": {
+                      "reference": "ic_profile"
+                    },
+                    "actions": [
+                      {
+                        "trigger": "ON_CLICK",
+                        "workflow": "LAUNCH_QUESTIONNAIRE",
+                        "questionnaire": {
+                          "id": "4238",
+                          "title": "{{hh.due.referral}}",
+                          "resourceType": "Patient",
+                          "resourceIdentifier": "@{patientId}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "BUTTON",
+                    "smallSized": "true",
+                    "text": "@{pncFollowupTaskName}",
+                    "status": "DUE",
+                    "visible": "@{applicableForPncFollowup}",
+                    "enabled": "@{patientActive}",
+                    "startIcon": {
+                      "reference": "ic_baby_mother"
+                    },
+                    "actions": [
+                      {
+                        "trigger": "ON_CLICK",
+                        "workflow": "LAUNCH_QUESTIONNAIRE",
+                        "questionnaire": {
+                          "id": "6058",
+                          "title": "@{pncFollowupTaskName}",
                           "resourceType": "Patient",
                           "resourceIdentifier": "@{patientId}"
                         },
                         "params": [
                           {
                             "paramType": "PREPOPULATE",
-                            "linkId": "d453652f-2d89-47d5-dd62-5a6bf1f695c9",
+                            "linkId": "54777657-5ff3-44d6-fe0d-317cce261588",
+                            "dataType": "STRING",
+                            "key": "pncFollowupTaskName",
+                            "value": "@{pncFollowupTaskName}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "bd4dba60-545c-4946-88c2-29c85f9bdf7e",
+                            "dataType": "DATETIME",
+                            "key": "activeDeliveryDate",
+                            "value": "@{activeDeliveryDate}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "6d331134-5e5d-47eb-c828-22d5927c67ba",
                             "dataType": "INTEGER",
-                            "key": "ncdPreviousBalance",
-                            "value": "@{ncdPreviousBalance}"
+                            "key": "noOfBracPncVisit",
+                            "value": "@{noOfBracPncVisit}"
                           },
                           {
                             "paramType": "PREPOPULATE",
-                            "linkId": "ea04ab78-4fc1-4d1e-ebdb-d1cb336a2ea2",
-                            "dataType": "STRING",
-                            "key": "ncdObservationId",
-                            "value": "@{ncdObservationId}"
+                            "linkId": "9e5b72da-8e7c-4646-8e12-f3bacb5ac50a",
+                            "dataType": "INTEGER",
+                            "key": "pncPreviousBalance",
+                            "value": "@{pncPreviousBalance}"
                           },
                           {
                             "paramType": "PREPOPULATE",
-                            "linkId": "f8f3bc72-bd58-4d0a-8c1a-a065b5b3e370",
+                            "linkId": "d9fc1aaf-00d8-429f-d5ba-3b1831921b1d",
                             "dataType": "STRING",
-                            "key": "ncdStockOutFlagId",
-                            "value": "@{ncdStockOutFlagId}"
+                            "key": "pncObservationId",
+                            "value": "@{pncObservationId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "9fc038a4-1526-4e2b-826a-1833b654a045",
+                            "dataType": "STRING",
+                            "key": "pncStockOutFlagId",
+                            "value": "@{pncStockOutFlagId}"
+                          },
+                          {
+                            "paramType": "PREPOPULATE",
+                            "linkId": "a1f75d6a-7be8-42c6-9dbf-7ef293b49227",
+                            "dataType": "STRING",
+                            "key": "riskyPncConditionId",
+                            "value": "@{riskyPncConditionId}"
                           },
                           {
                             "paramType": "PREPOPULATE",
@@ -1911,6 +1274,274 @@
                         ]
                       }
                     ]
+                  },
+                  {
+                    "viewType": "BUTTON",
+                    "smallSized": "true",
+                    "text": "{{hh.due.elco}}",
+                    "status": "DUE",
+                    "visible": "@{canRegisterPregnancy}",
+                    "enabled": "@{patientActive}",
+                    "startIcon": {
+                      "reference": "ic_family_planning"
+                    },
+                    "actions": [
+                      {
+                        "trigger": "ON_CLICK",
+                        "workflow": "LAUNCH_QUESTIONNAIRE",
+                        "questionnaire": {
+                          "id": "6483",
+                          "title": "Eligible Couple Visit",
+                          "resourceType": "Patient",
+                          "resourceIdentifier": "@{patientId}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "LIST",
+                    "id": "readyTasksList",
+                    "resources": [
+                      {
+                        "id": "availableReadyTasks",
+                        "relatedResourceId": "availableTasks",
+                        "resourceType": "Task",
+                        "conditionalFhirPathExpression": "((Task.status = 'ready' or Task.status = 'failed') and (Task.code.empty()))"
+                      }
+                    ],
+                    "registerCard": {
+                      "rules": [
+                        {
+                          "name": "taskStatus",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskStatus', fhirPath.extractValue(Task, 'Task.status'))"
+                          ]
+                        },
+                        {
+                          "name": "taskStatusColorCode",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskStatusColorCode', data.get('taskStatus').equals('ready') ? 'DUE' : data.get('taskStatus').equals('failed') || data.get('taskStatus').equals('cancelled') ? 'OVERDUE' : data.get('taskStatus').equals('requested') ? 'UPCOMING' : data.get('taskStatus').equals('completed') ? 'COMPLETED' : 'UPCOMING')"
+                          ]
+                        },
+                        {
+                          "name": "taskExecutionStartDate",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskExecutionStartDate', fhirPath.extractValue(Task, 'Task.executionPeriod.start'))"
+                          ]
+                        },
+                        {
+                          "name": "taskScheduleDate",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskScheduleDate', service.formatDate(data.get('taskExecutionStartDate'), \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\", \"yyyy-MM-dd\"))"
+                          ]
+                        },
+                        {
+                          "name": "taskPeriodDueDate",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskPeriodDueDate', service.formatDate(data.get('taskExecutionStartDate'), \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\", \"dd MMM yyyy\"))"
+                          ]
+                        },
+                        {
+                          "name": "taskDescription",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskDescription', fhirPath.extractValue(Task, 'Task.description'))"
+                          ]
+                        },
+                        {
+                          "name": "taskReasonCode",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskReasonCode', fhirPath.extractValue(Task, 'Task.input[0].value.coding.code'))"
+                          ]
+                        },
+                        {
+                          "name": "taskReasonDisplay",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskReasonDisplay', fhirPath.extractValue(Task, 'Task.input[0].value.coding.display'))"
+                          ]
+                        },
+                        {
+                          "name": "taskDescriptionWithReason",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('taskDescriptionWithReason', data.get('taskDescription') + ((data.get('taskReasonDisplay') != null && data.get('taskReasonDisplay') != '') ? ('(' + data.get('taskReasonDisplay') + ')') : ''))"
+                          ]
+                        },
+                        {
+                          "name": "taskDescriptionWithStartDate",
+                          "condition": "true",
+                          "priority": 3,
+                          "actions": [
+                            "data.put('taskDescriptionWithStartDate', data.get('taskDescriptionWithReason') + ' ' + 'due on' + ' ' + data.get('taskPeriodDueDate'))"
+                          ]
+                        },
+                        {
+                          "name": "taskId",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskId', fhirPath.extractValue(Task, 'Task.id'))"
+                          ]
+                        },
+                        {
+                          "name": "taskFor",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskFor', fhirPath.extractValue(Task, 'Task.for.reference'))"
+                          ]
+                        },
+                        {
+                          "name": "taskQuestionnaireId",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskQuestionnaireId', fhirPath.extractValue(Task, 'Task.reasonReference.reference'))"
+                          ]
+                        }
+                      ],
+                      "views": [
+                        {
+                          "viewType": "BUTTON",
+                          "smallSized": "true",
+                          "text": "@{taskDescriptionWithStartDate}",
+                          "status": "@{taskStatusColorCode}",
+                          "visible": "true",
+                          "enabled": "@{patientActive}",
+                          "actions": [
+                            {
+                              "trigger": "ON_CLICK",
+                              "workflow": "LAUNCH_QUESTIONNAIRE",
+                              "questionnaire": {
+                                "id": "@{taskQuestionnaireId}",
+                                "title": "@{taskDescription}",
+                                "taskId": "@{taskId}",
+                                "resourceIdentifier": "@{taskFor}"
+                              },
+                              "params": [
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "ae2f17cb-deff-48a6-8ece-27e6bd475f30",
+                                  "dataType": "DATE",
+                                  "key": "taskScheduleDate",
+                                  "value": "@{taskScheduleDate}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "d5962592-08d5-447b-d6a2-62a077e6bb05",
+                                  "dataType": "STRING",
+                                  "key": "taskReasonCode",
+                                  "value": "@{taskReasonCode}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "c706016d-b8e9-44c7-9acb-155bb4e6092c",
+                                  "dataType": "STRING",
+                                  "key": "taskReasonDisplay",
+                                  "value": "@{taskReasonDisplay}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "bb2b5f1d-3aee-4d19-883a-f5a65b349f5f",
+                                  "dataType": "DATE",
+                                  "key": "lmpDate",
+                                  "value": "@{lmpDate}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "93ff6669-bbee-47fd-e54d-8c9e9cda1f94",
+                                  "dataType": "INTEGER",
+                                  "key": "noOfBracAncVisit",
+                                  "value": "@{noOfBracAncVisit}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "5d8ac884-da47-4ec3-f077-1dd9812d0d43",
+                                  "dataType": "INTEGER",
+                                  "key": "patientHeight",
+                                  "value": "@{patientHeight}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "4e7336a4-4dd1-4efc-89a1-0eb0748a828c",
+                                  "dataType": "INTEGER",
+                                  "key": "patientWeight",
+                                  "value": "@{patientWeight}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "2fd89181-2d0f-405b-8d15-f312427dd7c6",
+                                  "dataType": "DATE",
+                                  "key": "patientWeightDate",
+                                  "value": "@{patientWeightDate}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "d91c5e51-ac81-41f6-8f09-87805b87a98d",
+                                  "dataType": "INTEGER",
+                                  "key": "ancPreviousBalance",
+                                  "value": "@{ancPreviousBalance}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "77001671-c07b-4afb-81ae-2220d4f38157",
+                                  "dataType": "STRING",
+                                  "key": "ancObservationId",
+                                  "value": "@{ancObservationId}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "351ca898-582a-4585-8bd9-30aafc7a6174",
+                                  "dataType": "STRING",
+                                  "key": "riskyAncConditionId",
+                                  "value": "@{riskyAncConditionId}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "e6b390ca-699d-4f4f-b388-d3abfb097e26",
+                                  "dataType": "STRING",
+                                  "key": "ancStockOutFlagId",
+                                  "value": "@{ancStockOutFlagId}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+                                  "dataType": "STRING",
+                                  "key": "patientIdentifier",
+                                  "value": "@{patientIdentifier}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "f095de5f-c913-4e86-88af-c6fcdd93da1f",
+                                  "dataType": "STRING",
+                                  "key": "patientNid",
+                                  "value": "@{patientNid}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "8d25e0f0-ce4c-42de-89d4-98f70e0b7619",
+                                  "dataType": "STRING",
+                                  "key": "patientBrid",
+                                  "value": "@{patientBrid}"
+                                },
+                                {
+                                  "paramType": "PREPOPULATE",
+                                  "linkId": "b441b988-2d56-408e-8564-c8702579058d",
+                                  "dataType": "STRING",
+                                  "key": "patientMobile",
+                                  "value": "@{patientMobile}"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
                   }
                 ]
               }
@@ -1919,139 +1550,1337 @@
         ]
       },
       {
-        "id": "completedHistory",
-        "viewType": "COLUMN",
-        "padding": 16,
-        "children": [
+        "title": "{{patient.growth}}",
+        "visible": "@{isChild}",
+        "contents": [
           {
-            "viewType": "CARD",
-            "content": [
+            "viewType": "COLUMN",
+            "padding": 16,
+            "children": [
               {
-                "viewType": "LIST",
-                "id": "completedTasksList",
-                "resources": [
+                "viewType": "CARD",
+                "content": [
                   {
-                    "id": "completedTasks",
-                    "relatedResourceId": "availableTasks",
-                    "resourceType": "Task",
-                    "conditionalFhirPathExpression": "((Task.status = 'completed') and (Task.code.empty()))"
-                  }
-                ],
-                "emptyList": {
-                  "message": "No completed tasks available for this patient at the moment"
-                },
-                "registerCard": {
-                  "rules": [
-                    {
-                      "name": "taskStatus",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskStatus', fhirPath.extractValue(Task, 'Task.status'))"
-                      ]
-                    },
-                    {
-                      "name": "taskReasonCode",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskReasonCode', fhirPath.extractValue(Task, 'Task.input[0].value.coding.code'))"
-                      ]
-                    },
-                    {
-                      "name": "taskReasonDisplay",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskReasonDisplay', fhirPath.extractValue(Task, 'Task.input[0].value.coding.display'))"
-                      ]
-                    },
-                    {
-                      "name": "taskStatusColorCode",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskStatusColorCode', data.get('taskStatus').equals('ready') ? 'DUE' : data.get('taskStatus').equals('failed') || data.get('taskStatus').equals('cancelled') ? 'OVERDUE' : data.get('taskStatus').equals('requested') ? 'UPCOMING' : data.get('taskStatus').equals('completed') ? 'COMPLETED' : 'UPCOMING')"
-                      ]
-                    },
-                    {
-                      "name": "taskEndDate",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskEndDate', fhirPath.extractValue(Task, 'Task.lastModified'))"
-                      ]
-                    },
-                    {
-                      "name": "taskPeriodEndDate",
-                      "condition": "true",
-                      "priority": 2,
-                      "actions": [
-                        "data.put('taskPeriodEndDate', service.formatDate(data.get('taskEndDate'), (data.get('taskEndDate').toString().endsWith('Z') ? \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\" : \"yyyy-MM-dd'T'HH:mm:ssZ\"), \"dd MMM yyyy\"))"
-                      ]
-                    },
-                    {
-                      "name": "taskDescription",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskDescription', fhirPath.extractValue(Task, 'Task.description'))"
-                      ]
-                    },
-                    {
-                      "name": "taskDescriptionWithReason",
-                      "condition": "true",
-                      "priority": 2,
-                      "actions": [
-                        "data.put('taskDescriptionWithReason', data.get('taskDescription') + ((data.get('taskReasonDisplay') != null && data.get('taskReasonDisplay') != '') ? ('(' + data.get('taskReasonDisplay') + ')') : ''))"
-                      ]
-                    },
-                    {
-                      "name": "taskDescriptionWithEndDate",
-                      "condition": "true",
-                      "priority": 3,
-                      "actions": [
-                        "data.put('taskDescriptionWithEndDate', data.get('taskDescriptionWithReason') + ' ' + 'completed on' + ' ' + data.get('taskPeriodEndDate'))"
-                      ]
-                    },
-                    {
-                      "name": "taskId",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskId', fhirPath.extractValue(Task, 'Task.id'))"
-                      ]
-                    },
-                    {
-                      "name": "taskFor",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskFor', fhirPath.extractValue(Task, 'Task.for.reference'))"
-                      ]
-                    },
-                    {
-                      "name": "taskQuestionnaireId",
-                      "condition": "true",
-                      "actions": [
-                        "data.put('taskQuestionnaireId', fhirPath.extractValue(Task, 'Task.reasonReference.reference'))"
-                      ]
-                    }
-                  ],
-                  "views": [
-                    {
-                      "viewType": "BUTTON",
-                      "text": "@{taskDescriptionWithEndDate}",
-                      "status": "@{taskStatusColorCode}",
-                      "visible": "true",
-                      "enabled": "@{patientActive}",
-                      "actions": [
-                        {
-                          "trigger": "ON_CLICK",
-                          "workflow": "LAUNCH_QUESTIONNAIRE",
-                          "questionnaire": {
-                            "id": "@{taskQuestionnaireId}",
-                            "title": "@{taskDescription}",
-                            "taskId": "@{taskId}",
-                            "resourceIdentifier": "@{taskFor}"
+                    "viewType": "BUTTON",
+                    "text": "{{hh.growth.session}}",
+                    "status": "DUE",
+                    "enabled": "@{patientActive}",
+                    "actions": [
+                      {
+                        "trigger": "ON_CLICK",
+                        "workflow": "LAUNCH_QUESTIONNAIRE",
+                        "questionnaire": {
+                          "id": "4236",
+                          "title": "{{hh.due.referral}}",
+                          "resourceType": "Patient",
+                          "resourceIdentifier": "@{patientId}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "ROW",
+                    "fillMaxWidth": true,
+                    "arrangement": "SPACE_BETWEEN",
+                    "children": [
+                      {
+                        "viewType": "BUTTON",
+                        "weight": "1.0f",
+                        "text": "{{hh.growth.weight}}",
+                        "status": "DUE",
+                        "enabled": "@{patientActive}",
+                        "startIcon": {
+                          "reference": "ic_growth_weight"
+                        },
+                        "actions": [
+                          {
+                            "trigger": "ON_CLICK",
+                            "workflow": "LAUNCH_QUESTIONNAIRE",
+                            "questionnaire": {
+                              "id": "5434231",
+                              "title": "{{hh.growth.weight}}",
+                              "resourceType": "Patient",
+                              "resourceIdentifier": "@{patientId}"
+                            },
+                            "params": [
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "ae2f17cb-deff-48a6-8ece-27e6bd475f30",
+                                "dataType": "STRING",
+                                "key": "patientGender",
+                                "value": "@{patientGender}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "bb2b5f1d-3aee-4d19-883a-f5a65b349f5f",
+                                "dataType": "DATE",
+                                "key": "patientBirthDate",
+                                "value": "@{patientBirthDate}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+                                "dataType": "STRING",
+                                "key": "patientIdentifier",
+                                "value": "@{patientIdentifier}"
+                              }
+                            ]
                           }
+                        ]
+                      },
+                      {
+                        "viewType": "IMAGE",
+                        "clickable": "true",
+                        "weight": "0.3f",
+                        "imageConfig": {
+                          "reference": "ic_growth_chart"
+                        },
+                        "shape": "RECTANGLE",
+                        "actions": [
+                          {
+                            "trigger": "ON_CLICK",
+                            "workflow": "LAUNCH_QUESTIONNAIRE",
+                            "questionnaire": {
+                              "id": "4236",
+                              "title": "{{hh.due.referral}}",
+                              "resourceType": "Patient",
+                              "resourceIdentifier": "@{patientId}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "ROW",
+                    "fillMaxWidth": true,
+                    "arrangement": "SPACE_BETWEEN",
+                    "children": [
+                      {
+                        "viewType": "BUTTON",
+                        "weight": "1.0f",
+                        "text": "{{hh.growth.height}}",
+                        "status": "DUE",
+                        "enabled": "@{patientActive}",
+                        "startIcon": {
+                          "reference": "ic_growth_height"
+                        },
+                        "actions": [
+                          {
+                            "trigger": "ON_CLICK",
+                            "workflow": "LAUNCH_QUESTIONNAIRE",
+                            "questionnaire": {
+                              "id": "5434247",
+                              "title": "{{hh.growth.height}}",
+                              "resourceType": "Patient",
+                              "resourceIdentifier": "@{patientId}"
+                            },
+                            "params": [
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "ae2f17cb-deff-48a6-8ece-27e6bd475f30",
+                                "dataType": "STRING",
+                                "key": "patientGender",
+                                "value": "@{patientGender}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "bb2b5f1d-3aee-4d19-883a-f5a65b349f5f",
+                                "dataType": "DATE",
+                                "key": "patientBirthDate",
+                                "value": "@{patientBirthDate}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+                                "dataType": "STRING",
+                                "key": "patientIdentifier",
+                                "value": "@{patientIdentifier}"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "viewType": "IMAGE",
+                        "clickable": "true",
+                        "weight": "0.3f",
+                        "imageConfig": {
+                          "reference": "ic_growth_chart"
+                        },
+                        "shape": "RECTANGLE",
+                        "actions": [
+                          {
+                            "trigger": "ON_CLICK",
+                            "workflow": "LAUNCH_QUESTIONNAIRE",
+                            "questionnaire": {
+                              "id": "4236",
+                              "title": "{{hh.due.referral}}",
+                              "resourceType": "Patient",
+                              "resourceIdentifier": "@{patientId}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "ROW",
+                    "fillMaxWidth": true,
+                    "arrangement": "SPACE_BETWEEN",
+                    "children": [
+                      {
+                        "viewType": "BUTTON",
+                        "weight": "1.0f",
+                        "text": "{{hh.growth.muac}}",
+                        "status": "DUE",
+                        "enabled": "@{patientActive}",
+                        "startIcon": {
+                          "reference": "ic_growth_muac"
+                        },
+                        "actions": [
+                          {
+                            "trigger": "ON_CLICK",
+                            "workflow": "LAUNCH_QUESTIONNAIRE",
+                            "questionnaire": {
+                              "id": "5434267",
+                              "title": "{{hh.growth.muac}}",
+                              "resourceType": "Patient",
+                              "resourceIdentifier": "@{patientId}"
+                            },
+                            "params": [
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "ae2f17cb-deff-48a6-8ece-27e6bd475f30",
+                                "dataType": "STRING",
+                                "key": "patientGender",
+                                "value": "@{patientGender}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "bb2b5f1d-3aee-4d19-883a-f5a65b349f5f",
+                                "dataType": "DATE",
+                                "key": "patientBirthDate",
+                                "value": "@{patientBirthDate}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+                                "dataType": "STRING",
+                                "key": "patientIdentifier",
+                                "value": "@{patientIdentifier}"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "viewType": "IMAGE",
+                        "clickable": "true",
+                        "weight": "0.3f",
+                        "imageConfig": {
+                          "reference": "ic_growth_chart"
+                        },
+                        "shape": "RECTANGLE",
+                        "actions": [
+                          {
+                            "trigger": "ON_CLICK",
+                            "workflow": "LAUNCH_QUESTIONNAIRE",
+                            "questionnaire": {
+                              "id": "4236",
+                              "title": "{{hh.due.referral}}",
+                              "resourceType": "Patient",
+                              "resourceIdentifier": "@{patientId}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "BUTTON",
+                    "text": "{{hh.growth.gmp}}",
+                    "status": "DUE",
+                    "enabled": "@{patientActive}",
+                    "startIcon": {
+                      "reference": "ic_kids"
+                    },
+                    "actions": [
+                      {
+                        "trigger": "ON_CLICK",
+                        "workflow": "LAUNCH_QUESTIONNAIRE",
+                        "questionnaire": {
+                          "id": "4236",
+                          "title": "{{hh.due.referral}}",
+                          "resourceType": "Patient",
+                          "resourceIdentifier": "@{patientId}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "BUTTON",
+                    "smallSized": "true",
+                    "text": "{{hh.due.referral}}",
+                    "status": "DUE",
+                    "enabled": "@{patientActive}",
+                    "startIcon": {
+                      "reference": "ic_kids"
+                    },
+                    "actions": [
+                      {
+                        "trigger": "ON_CLICK",
+                        "workflow": "LAUNCH_QUESTIONNAIRE",
+                        "questionnaire": {
+                          "id": "4236",
+                          "title": "{{hh.due.referral}}",
+                          "resourceType": "Patient",
+                          "resourceIdentifier": "@{patientId}"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "viewType": "SPACER",
+                "height": 10
+              },
+              {
+                "viewType": "COMPOUND_TEXT",
+                "primaryText": "পূর্বের ওজন",
+                "padding": 10,
+                "fontSize": 16.0,
+                "maxLines": 1
+              },
+              {
+                "viewType": "SPACER",
+                "height": 10
+              },
+              {
+                "viewType": "CARD",
+                "content": [
+                  {
+                    "viewType": "ROW",
+                    "fillMaxWidth": true,
+                    "arrangement": "SPACE_BETWEEN",
+                    "children": [
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "বয়স",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "ওজন",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "Z-score",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "পুষ্টির অবস্থা",
+                        "weight": "1.5f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "SPACER",
+                    "height": 5
+                  },
+                  {
+                    "viewType": "BORDER",
+                    "backgroundColor": "#000000",
+                    "padding": 10
+                  },
+                  {
+                    "viewType": "LIST",
+                    "id": "gmpWeightZscore",
+                    "resources": [
+                      {
+                        "id": "gmpWeightObservations",
+                        "relatedResourceId": "totalObservations",
+                        "resourceType": "Observation",
+                        "conditionalFhirPathExpression": "((Observation.status = 'final') and (Observation.code.coding.code = '8336-0'))"
+                      }
+                    ],
+                    "registerCard": {
+                      "rules": [
+                        {
+                          "name": "weightValue",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('weightValue', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='27113001').value.value\"))"
+                          ]
+                        },
+                        {
+                          "name": "weightUnit",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('weightUnit', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='27113001').value.code\"))"
+                          ]
+                        },
+                        {
+                          "name": "ageValue",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('ageValue', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='age').value.value\"))"
+                          ]
+                        },
+                        {
+                          "name": "ageUnit",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('ageUnit', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='age').value.code\"))"
+                          ]
+                        },
+                        {
+                          "name": "zScoreValue",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('zScoreValue', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='LP164005-3').value.value.toDecimal().round(1)\"))"
+                          ]
+                        },
+                        {
+                          "name": "zScoreColor",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('zScoreColor', data.get('zScoreValue') <= -3.0 ? '#F44336' : (data.get('zScoreValue') > -3.0 && data.get('zScoreValue') <= -2.0) ? '#FF9800' : (data.get('zScoreValue') > -2.0 && data.get('zScoreValue') <= -1.0) ? '#FFEB3B' : (data.get('zScoreValue') > -1.0 && data.get('zScoreValue') <= 2.0) ? '#227532' : '#aa66cc')"
+                          ]
+                        },
+                        {
+                          "name": "zScoreStatus",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('zScoreStatus', data.get('zScoreValue') <= -3.0 ? 'মারাত্মক অপুষ্টি' : (data.get('zScoreValue') > -3.0 && data.get('zScoreValue') <= -2.0) ? 'স্বল্প অপুষ্টি' : (data.get('zScoreValue') > -2.0 && data.get('zScoreValue') <= -1.0) ? 'মাঝারি অপুষ্টি' : (data.get('zScoreValue') > -1.0 && data.get('zScoreValue') <= 2.0) ? 'স্বাভাবিক' : 'বেশি ওজন')"
+                          ]
+                        }
+                      ],
+                      "views": [
+                        {
+                          "viewType": "ROW",
+                          "fillMaxWidth": true,
+                          "arrangement": "SPACE_BETWEEN",
+                          "children": [
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{ageValue} @{ageUnit}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{weightValue} @{weightUnit}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{zScoreValue}",
+                              "primaryTextColor": "@{zScoreColor}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{zScoreStatus}",
+                              "primaryTextColor": "@{zScoreColor}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.5f"
+                            }
+                          ]
                         }
                       ]
                     }
-                  ]
-                }
+                  }
+                ]
+              },
+              {
+                "viewType": "SPACER",
+                "height": 10
+              },
+              {
+                "viewType": "COMPOUND_TEXT",
+                "primaryText": "পূর্বের উচ্চতা",
+                "padding": 10,
+                "fontSize": 16.0,
+                "maxLines": 1
+              },
+              {
+                "viewType": "SPACER",
+                "height": 10
+              },
+              {
+                "viewType": "CARD",
+                "content": [
+                  {
+                    "viewType": "ROW",
+                    "fillMaxWidth": true,
+                    "arrangement": "SPACE_BETWEEN",
+                    "children": [
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "বয়স",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "উচ্চতা",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "Z-score",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "উচ্চতার অবস্থা",
+                        "weight": "1.5f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "SPACER",
+                    "height": 5
+                  },
+                  {
+                    "viewType": "BORDER",
+                    "backgroundColor": "#000000",
+                    "padding": 10
+                  },
+                  {
+                    "viewType": "LIST",
+                    "id": "gmpHeightZscore",
+                    "resources": [
+                      {
+                        "id": "gmpHeightObservations",
+                        "relatedResourceId": "totalObservations",
+                        "resourceType": "Observation",
+                        "conditionalFhirPathExpression": "((Observation.status = 'final') and (Observation.code.coding.code = '8303-0'))"
+                      }
+                    ],
+                    "registerCard": {
+                      "rules": [
+                        {
+                          "name": "heightValue",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('heightValue', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='1153637007').value.value\"))"
+                          ]
+                        },
+                        {
+                          "name": "heightUnit",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('heightUnit', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='1153637007').value.code\"))"
+                          ]
+                        },
+                        {
+                          "name": "ageValue",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('ageValue', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='age').value.value\"))"
+                          ]
+                        },
+                        {
+                          "name": "ageUnit",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('ageUnit', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='age').value.code\"))"
+                          ]
+                        },
+                        {
+                          "name": "zScoreValue",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('zScoreValue', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='LP164005-3').value.value.toDecimal().round(1)\"))"
+                          ]
+                        },
+                        {
+                          "name": "zScoreColor",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('zScoreColor', data.get('zScoreValue') <= -3.0 ? '#F44336' : (data.get('zScoreValue') > -3.0 && data.get('zScoreValue') <= -2.0) ? '#FF9800' : (data.get('zScoreValue') > -2.0 && data.get('zScoreValue') <= -1.0) ? '#FFEB3B' : (data.get('zScoreValue') > -1.0 && data.get('zScoreValue') <= 2.0) ? '#227532' : '#aa66cc')"
+                          ]
+                        },
+                        {
+                          "name": "zScoreStatus",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('zScoreStatus', data.get('zScoreValue') <= -3.0 ? 'মারাত্মক খর্ব' : (data.get('zScoreValue') > -3.0 && data.get('zScoreValue') <= -2.0) ? 'স্বল্প খর্ব' : (data.get('zScoreValue') > -2.0 && data.get('zScoreValue') <= -1.0) ? 'মাঝারি খর্ব' : (data.get('zScoreValue') > -1.0 && data.get('zScoreValue') <= 2.0) ? 'স্বাভাবিক' : 'স্বাভাবিক')"
+                          ]
+                        }
+                      ],
+                      "views": [
+                        {
+                          "viewType": "ROW",
+                          "fillMaxWidth": true,
+                          "arrangement": "SPACE_BETWEEN",
+                          "children": [
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{ageValue} @{ageUnit}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{heightValue} @{heightUnit}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{zScoreValue}",
+                              "primaryTextColor": "@{zScoreColor}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{zScoreStatus}",
+                              "primaryTextColor": "@{zScoreColor}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.5f"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "viewType": "SPACER",
+                "height": 10
+              },
+              {
+                "viewType": "COMPOUND_TEXT",
+                "primaryText": "পূর্বের MUAC",
+                "padding": 10,
+                "fontSize": 16.0,
+                "maxLines": 1
+              },
+              {
+                "viewType": "SPACER",
+                "height": 10
+              },
+              {
+                "viewType": "CARD",
+                "content": [
+                  {
+                    "viewType": "ROW",
+                    "fillMaxWidth": true,
+                    "arrangement": "SPACE_BETWEEN",
+                    "children": [
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "বয়স",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "MUAC",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "ইডিমা",
+                        "weight": "1.0f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      },
+                      {
+                        "viewType": "COMPOUND_TEXT",
+                        "primaryText": "পুষ্টির অবস্থা",
+                        "weight": "1.5f",
+                        "alignment": "CENTER",
+                        "maxLines": 1,
+                        "primaryTextFontWeight": "BOLD"
+                      }
+                    ]
+                  },
+                  {
+                    "viewType": "SPACER",
+                    "height": 5
+                  },
+                  {
+                    "viewType": "BORDER",
+                    "backgroundColor": "#000000",
+                    "padding": 10
+                  },
+                  {
+                    "viewType": "LIST",
+                    "id": "gmpMUACScore",
+                    "resources": [
+                      {
+                        "id": "gmpMUACObservations",
+                        "relatedResourceId": "totalObservations",
+                        "resourceType": "Observation",
+                        "conditionalFhirPathExpression": "((Observation.status = 'final') and (Observation.code.coding.code = '56072-2'))"
+                      }
+                    ],
+                    "registerCard": {
+                      "rules": [
+                        {
+                          "name": "muacValue",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('muacValue', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='284473002').value.value\"))"
+                          ]
+                        },
+                        {
+                          "name": "muacUnit",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('muacUnit', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='284473002').value.code\"))"
+                          ]
+                        },
+                        {
+                          "name": "ageValue",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('ageValue', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='age').value.value\"))"
+                          ]
+                        },
+                        {
+                          "name": "ageUnit",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('ageUnit', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='age').value.code\"))"
+                          ]
+                        },
+                        {
+                          "name": "muacColor",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('muacColor', data.get('muacValue') < 11.5 ? '#F44336' : (data.get('muacValue') >= 11.5 && data.get('muacValue') < 12.5) ? '#FFC107' : '#227532')"
+                          ]
+                        },
+                        {
+                          "name": "muacStatus",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('muacStatus', data.get('muacValue') < 11.5 ? 'মারাত্মক অপুষ্টি' : (data.get('muacValue') >= 11.5 && data.get('muacValue') < 12.5) ? 'স্বল্প অপুষ্টি' : 'স্বাভাবিক')"
+                          ]
+                        },
+                        {
+                          "name": "oedemaStatus",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('oedemaStatus', fhirPath.extractValue(Observation, \"Observation.component.where(code.coding.code='267038008').value.coding.display\"))"
+                          ]
+                        }
+                      ],
+                      "views": [
+                        {
+                          "viewType": "ROW",
+                          "fillMaxWidth": true,
+                          "arrangement": "SPACE_BETWEEN",
+                          "children": [
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{ageValue} @{ageUnit}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{muacValue} @{muacUnit}",
+                              "primaryTextColor": "@{muacColor}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{oedemaStatus}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.0f"
+                            },
+                            {
+                              "viewType": "COMPOUND_TEXT",
+                              "primaryText": "@{muacStatus}",
+                              "primaryTextColor": "@{muacColor}",
+                              "alignment": "CENTER",
+                              "maxLines": 1,
+                              "weight": "1.5f"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "{{patient.other}}",
+        "contents": [
+          {
+            "id": "otherServices",
+            "viewType": "COLUMN",
+            "padding": 16,
+            "children": [
+              {
+                "viewType": "CARD",
+                "content": [
+                  {
+                    "viewType": "COLUMN",
+                    "id": "otherServices",
+                    "children": [
+                      {
+                        "viewType": "BUTTON",
+                        "smallSized": "true",
+                        "text": "{{hh.service.eye}}",
+                        "status": "DUE",
+                        "visible": "true",
+                        "enabled": "@{patientActive}",
+                        "startIcon": {
+                          "reference": "ic_eye"
+                        },
+                        "actions": [
+                          {
+                            "trigger": "ON_CLICK",
+                            "workflow": "LAUNCH_QUESTIONNAIRE",
+                            "questionnaire": {
+                              "id": "4966",
+                              "title": "{{hh.service.eye}}",
+                              "resourceType": "Patient",
+                              "resourceIdentifier": "@{patientId}"
+                            },
+                            "params": [
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "49eca2ad-6524-403d-b1b3-7456485f87e3",
+                                "dataType": "INTEGER",
+                                "key": "glassesPreviousBalance",
+                                "value": "@{glassesPreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "ca0fbdf6-974e-4869-bed6-75f34e1f2c2f",
+                                "dataType": "STRING",
+                                "key": "glassesObservationId",
+                                "value": "@{glassesObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "0e0e7a86-40a6-45c3-ba73-b19330192d19",
+                                "dataType": "STRING",
+                                "key": "glassesStockOutFlagId",
+                                "value": "@{glassesStockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "e6145f08-a682-4e8c-ae28-850aa73251c2",
+                                "dataType": "INTEGER",
+                                "key": "sunGlassesPreviousBalance",
+                                "value": "@{sunGlassesPreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "d0b5c58a-bfdc-49f6-96c0-c5b37af964f2",
+                                "dataType": "STRING",
+                                "key": "sunGlassesObservationId",
+                                "value": "@{sunGlassesObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "aac22321-582c-43d7-f382-85bd5c4e5346",
+                                "dataType": "STRING",
+                                "key": "sunGlassesStockOutFlagId",
+                                "value": "@{sunGlassesStockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "e9befdd0-f56d-494e-8899-767dbcc7fa8e",
+                                "dataType": "INTEGER",
+                                "key": "bf100PreviousBalance",
+                                "value": "@{bf100PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "6ef5319f-13d4-499f-8c16-9e9ebf3a0f55",
+                                "dataType": "STRING",
+                                "key": "bf100ObservationId",
+                                "value": "@{bf100ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "4fef01af-29c8-4459-951e-b917c4ba9b12",
+                                "dataType": "STRING",
+                                "key": "bf100StockOutFlagId",
+                                "value": "@{bf100StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "764dd849-21a1-410b-b98f-29fe145bdb87",
+                                "dataType": "INTEGER",
+                                "key": "bf150PreviousBalance",
+                                "value": "@{bf150PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "44873d86-80b1-45ab-860b-4b64d57862b8",
+                                "dataType": "STRING",
+                                "key": "bf150ObservationId",
+                                "value": "@{bf150ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "bc92a5eb-8d25-4866-ca1b-d638d3eb991d",
+                                "dataType": "STRING",
+                                "key": "bf150StockOutFlagId",
+                                "value": "@{bf150StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "96dd8383-7d3e-4756-8ea2-9a720d2ebdb7",
+                                "dataType": "INTEGER",
+                                "key": "bf200PreviousBalance",
+                                "value": "@{bf200PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "a9d74f31-56ca-4750-8d69-893a004698f9",
+                                "dataType": "STRING",
+                                "key": "bf200ObservationId",
+                                "value": "@{bf200ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "7faf7f8b-c401-49a2-e6b5-ebc38d7c8952",
+                                "dataType": "STRING",
+                                "key": "bf200StockOutFlagId",
+                                "value": "@{bf200StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "2147e6cc-f4c2-40f4-8f95-c8e12f5a3906",
+                                "dataType": "INTEGER",
+                                "key": "bf250PreviousBalance",
+                                "value": "@{bf250PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "5e0e940e-d26f-4890-af22-818c32166bce",
+                                "dataType": "STRING",
+                                "key": "bf250ObservationId",
+                                "value": "@{bf250ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "06c74605-d3c2-414e-b8a1-d715cdeb8da8",
+                                "dataType": "STRING",
+                                "key": "bf250StockOutFlagId",
+                                "value": "@{bf250StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "70095888-1aac-4e94-c4f2-a0c1b615cc25",
+                                "dataType": "INTEGER",
+                                "key": "bf300PreviousBalance",
+                                "value": "@{bf300PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "bf372250-a924-4370-d3c2-7028a744c48e",
+                                "dataType": "STRING",
+                                "key": "bf300ObservationId",
+                                "value": "@{bf300ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "13935d7e-57a1-4ade-f91d-8f7cccfdb0fa",
+                                "dataType": "STRING",
+                                "key": "bf300StockOutFlagId",
+                                "value": "@{bf300StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "52e56dfa-aab3-4de1-a7b3-1872ad4b5d05",
+                                "dataType": "INTEGER",
+                                "key": "sv100PreviousBalance",
+                                "value": "@{sv100PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "82260d3e-1d12-4a56-8917-26fa39d29a35",
+                                "dataType": "STRING",
+                                "key": "sv100ObservationId",
+                                "value": "@{sv100ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "9c6affa9-6d22-4673-8664-c5d386e476fa",
+                                "dataType": "STRING",
+                                "key": "sv100StockOutFlagId",
+                                "value": "@{sv100StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "68e5a011-edde-4257-8a37-52a50f26cc0f",
+                                "dataType": "INTEGER",
+                                "key": "sv150PreviousBalance",
+                                "value": "@{sv150PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "81ec6b3e-57e0-4c36-9830-213baabb0e38",
+                                "dataType": "STRING",
+                                "key": "sv150ObservationId",
+                                "value": "@{sv150ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "0a71df31-64e1-46e5-a498-ef777f0cedaf",
+                                "dataType": "STRING",
+                                "key": "sv150StockOutFlagId",
+                                "value": "@{sv150StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "80722325-12ca-40c8-f24a-5955410c9afa",
+                                "dataType": "INTEGER",
+                                "key": "sv200PreviousBalance",
+                                "value": "@{sv200PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "14b0ddd8-cdb9-4439-81ed-56073741d06e",
+                                "dataType": "STRING",
+                                "key": "sv200ObservationId",
+                                "value": "@{sv200ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "a6785696-af28-4466-c289-6f83e3153dff",
+                                "dataType": "STRING",
+                                "key": "sv200StockOutFlagId",
+                                "value": "@{sv200StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "4620c135-06b5-46c7-bce4-13ea3cebd562",
+                                "dataType": "INTEGER",
+                                "key": "sv250PreviousBalance",
+                                "value": "@{sv250PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "06e1a33b-2476-4fab-88ad-f371c9b28e48",
+                                "dataType": "STRING",
+                                "key": "sv250ObservationId",
+                                "value": "@{sv250ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "098c7312-33c4-4598-8050-5b3b193db5e9",
+                                "dataType": "STRING",
+                                "key": "sv250StockOutFlagId",
+                                "value": "@{sv250StockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "db715612-cb19-4e19-8e95-265559eb9d2d",
+                                "dataType": "INTEGER",
+                                "key": "sv300PreviousBalance",
+                                "value": "@{sv300PreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "45979eef-d80a-44b1-c512-c70568baea2a",
+                                "dataType": "STRING",
+                                "key": "sv300ObservationId",
+                                "value": "@{sv300ObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "6655f7d1-a0fc-43fe-820a-6ec0c8c2a60c",
+                                "dataType": "STRING",
+                                "key": "sv300StockOutFlagId",
+                                "value": "@{sv300StockOutFlagId}"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "viewType": "BUTTON",
+                        "smallSized": "true",
+                        "text": "{{hh.service.ncd}}",
+                        "status": "DUE",
+                        "visible": "@{applicableForNCDPackage}",
+                        "enabled": "@{patientActive}",
+                        "startIcon": {
+                          "reference": "ic_non_communicable_disease"
+                        },
+                        "actions": [
+                          {
+                            "trigger": "ON_CLICK",
+                            "workflow": "LAUNCH_QUESTIONNAIRE",
+                            "questionnaire": {
+                              "id": "4968",
+                              "title": "{{hh.service.ncd}}",
+                              "resourceType": "Patient",
+                              "resourceIdentifier": "@{patientId}"
+                            },
+                            "params": [
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "d453652f-2d89-47d5-dd62-5a6bf1f695c9",
+                                "dataType": "INTEGER",
+                                "key": "ncdPreviousBalance",
+                                "value": "@{ncdPreviousBalance}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "ea04ab78-4fc1-4d1e-ebdb-d1cb336a2ea2",
+                                "dataType": "STRING",
+                                "key": "ncdObservationId",
+                                "value": "@{ncdObservationId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "f8f3bc72-bd58-4d0a-8c1a-a065b5b3e370",
+                                "dataType": "STRING",
+                                "key": "ncdStockOutFlagId",
+                                "value": "@{ncdStockOutFlagId}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "6f5d14d9-9e6e-47c9-9c62-00e76a3f767c",
+                                "dataType": "STRING",
+                                "key": "patientIdentifier",
+                                "value": "@{patientIdentifier}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "f095de5f-c913-4e86-88af-c6fcdd93da1f",
+                                "dataType": "STRING",
+                                "key": "patientNid",
+                                "value": "@{patientNid}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "8d25e0f0-ce4c-42de-89d4-98f70e0b7619",
+                                "dataType": "STRING",
+                                "key": "patientBrid",
+                                "value": "@{patientBrid}"
+                              },
+                              {
+                                "paramType": "PREPOPULATE",
+                                "linkId": "b441b988-2d56-408e-8564-c8702579058d",
+                                "dataType": "STRING",
+                                "key": "patientMobile",
+                                "value": "@{patientMobile}"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "{{patient.history}}",
+        "contents": [
+          {
+            "id": "completedHistory",
+            "viewType": "COLUMN",
+            "padding": 16,
+            "children": [
+              {
+                "viewType": "CARD",
+                "content": [
+                  {
+                    "viewType": "LIST",
+                    "id": "completedTasksList",
+                    "resources": [
+                      {
+                        "id": "completedTasks",
+                        "relatedResourceId": "availableTasks",
+                        "resourceType": "Task",
+                        "conditionalFhirPathExpression": "((Task.status = 'completed') and (Task.code.empty()))"
+                      }
+                    ],
+                    "emptyList": {
+                      "message": "No completed tasks available for this patient at the moment"
+                    },
+                    "registerCard": {
+                      "rules": [
+                        {
+                          "name": "taskStatus",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskStatus', fhirPath.extractValue(Task, 'Task.status'))"
+                          ]
+                        },
+                        {
+                          "name": "taskReasonCode",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskReasonCode', fhirPath.extractValue(Task, 'Task.input[0].value.coding.code'))"
+                          ]
+                        },
+                        {
+                          "name": "taskReasonDisplay",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskReasonDisplay', fhirPath.extractValue(Task, 'Task.input[0].value.coding.display'))"
+                          ]
+                        },
+                        {
+                          "name": "taskStatusColorCode",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskStatusColorCode', data.get('taskStatus').equals('ready') ? 'DUE' : data.get('taskStatus').equals('failed') || data.get('taskStatus').equals('cancelled') ? 'OVERDUE' : data.get('taskStatus').equals('requested') ? 'UPCOMING' : data.get('taskStatus').equals('completed') ? 'COMPLETED' : 'UPCOMING')"
+                          ]
+                        },
+                        {
+                          "name": "taskEndDate",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskEndDate', fhirPath.extractValue(Task, 'Task.lastModified'))"
+                          ]
+                        },
+                        {
+                          "name": "taskPeriodEndDate",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('taskPeriodEndDate', service.formatDate(data.get('taskEndDate'), (data.get('taskEndDate').toString().endsWith('Z') ? \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\" : \"yyyy-MM-dd'T'HH:mm:ssZ\"), \"dd MMM yyyy\"))"
+                          ]
+                        },
+                        {
+                          "name": "taskDescription",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskDescription', fhirPath.extractValue(Task, 'Task.description'))"
+                          ]
+                        },
+                        {
+                          "name": "taskDescriptionWithReason",
+                          "condition": "true",
+                          "priority": 2,
+                          "actions": [
+                            "data.put('taskDescriptionWithReason', data.get('taskDescription') + ((data.get('taskReasonDisplay') != null && data.get('taskReasonDisplay') != '') ? ('(' + data.get('taskReasonDisplay') + ')') : ''))"
+                          ]
+                        },
+                        {
+                          "name": "taskDescriptionWithEndDate",
+                          "condition": "true",
+                          "priority": 3,
+                          "actions": [
+                            "data.put('taskDescriptionWithEndDate', data.get('taskDescriptionWithReason') + ' ' + 'completed on' + ' ' + data.get('taskPeriodEndDate'))"
+                          ]
+                        },
+                        {
+                          "name": "taskId",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskId', fhirPath.extractValue(Task, 'Task.id'))"
+                          ]
+                        },
+                        {
+                          "name": "taskFor",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskFor', fhirPath.extractValue(Task, 'Task.for.reference'))"
+                          ]
+                        },
+                        {
+                          "name": "taskQuestionnaireId",
+                          "condition": "true",
+                          "actions": [
+                            "data.put('taskQuestionnaireId', fhirPath.extractValue(Task, 'Task.reasonReference.reference'))"
+                          ]
+                        }
+                      ],
+                      "views": [
+                        {
+                          "viewType": "BUTTON",
+                          "text": "@{taskDescriptionWithEndDate}",
+                          "status": "@{taskStatusColorCode}",
+                          "visible": "true",
+                          "enabled": "@{patientActive}",
+                          "actions": [
+                            {
+                              "trigger": "ON_CLICK",
+                              "workflow": "LAUNCH_QUESTIONNAIRE",
+                              "questionnaire": {
+                                "id": "@{taskQuestionnaireId}",
+                                "title": "@{taskDescription}",
+                                "taskId": "@{taskId}",
+                                "resourceIdentifier": "@{taskFor}"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -2070,7 +2899,7 @@
           "trigger": "ON_CLICK",
           "workflow": "LAUNCH_QUESTIONNAIRE",
           "questionnaire": {
-            "id": "4",
+            "id": "4234",
             "title": "Member registration info",
             "saveButtonText": "Update registration",
             "setPractitionerDetails": true,
@@ -2105,11 +2934,11 @@
           "trigger": "ON_CLICK",
           "workflow": "LAUNCH_QUESTIONNAIRE",
           "questionnaire": {
-            "id": "17",
+            "id": "5589",
             "title": "{{patient.menu.register.pregnancy}}",
             "resourceIdentifier": "@{patientId}",
             "planDefinitions": [
-              "82"
+              "5593"
             ]
           },
           "params": [
@@ -2223,7 +3052,7 @@
           "trigger": "ON_CLICK",
           "workflow": "LAUNCH_QUESTIONNAIRE",
           "questionnaire": {
-            "id": "19",
+            "id": "6056",
             "title": "{{patient.menu.pregnancy.outcome}}",
             "resourceIdentifier": "@{patientId}",
             "groupResource": {
@@ -2269,7 +3098,7 @@
                         "filterCriteria": [
                           {
                             "dataType": "REFERENCE",
-                            "value": "PlanDefinition/82"
+                            "value": "PlanDefinition/5593"
                           }
                         ]
                       },
@@ -2335,6 +3164,13 @@
               "paramType": "UPDATE_DATE_ON_EDIT",
               "key": "familyLogicalId",
               "value": "@{familyLogicalId}"
+            },
+            {
+              "paramType": "PREPOPULATE",
+              "linkId": "bb2b5f1d-3aee-4d19-883a-f5a65b349f5f",
+              "dataType": "DATE",
+              "key": "lmpDate",
+              "value": "@{lmpDate}"
             },
             {
               "paramType": "PREPOPULATE",

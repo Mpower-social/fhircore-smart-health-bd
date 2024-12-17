@@ -51,6 +51,7 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.ResourceType
 import org.smartregister.fhircore.engine.configuration.view.CompoundTextProperties
+import org.smartregister.fhircore.engine.configuration.view.TabViewContent
 import org.smartregister.fhircore.engine.configuration.view.TabViewProperties
 import org.smartregister.fhircore.engine.domain.model.ResourceData
 import org.smartregister.fhircore.engine.domain.model.ViewType
@@ -102,8 +103,9 @@ fun Tabs(
   viewProperties: TabViewProperties,
 ) {
   val scope = rememberCoroutineScope()
+  val tabs = viewProperties.tabContents.filter { it.visible == "true" }.map { it.title }
 
-  if (viewProperties.tabs.size > 3) {
+  if (tabs.size > 3) {
     ScrollableTabRow(
       selectedTabIndex = pagerState.currentPage,
       edgePadding = 10.dp,
@@ -115,13 +117,13 @@ fun Tabs(
         )
       },
     ) {
-      viewProperties.tabs.forEachIndexed { index, _ ->
+      tabs.forEachIndexed { index, _ ->
         Tab(
           selected = pagerState.currentPage == index,
           onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
           text = {
             Text(
-              viewProperties.tabs[index],
+              tabs[index],
               color = if (pagerState.currentPage == index) Color.White else Color.LightGray,
               fontWeight =
                 if (pagerState.currentPage == index) FontWeight.Bold else FontWeight.Normal,
@@ -141,13 +143,13 @@ fun Tabs(
         )
       },
     ) {
-      viewProperties.tabs.forEachIndexed { index, _ ->
+      tabs.forEachIndexed { index, _ ->
         Tab(
           selected = pagerState.currentPage == index,
           onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
           text = {
             Text(
-              viewProperties.tabs[index],
+              tabs[index],
               color = if (pagerState.currentPage == index) Color.White else Color.LightGray,
               fontWeight =
                 if (pagerState.currentPage == index) FontWeight.Bold else FontWeight.Normal,
@@ -168,9 +170,11 @@ fun TabContents(
   navController: NavController,
   decodedImageMap: SnapshotStateMap<String, Bitmap>,
 ) {
+  val tabContents = viewProperties.tabContents.filter { it.visible == "true" }.map { it.contents }
+
   HorizontalPager(
     verticalAlignment = Alignment.Top,
-    count = viewProperties.tabs.size,
+    count = tabContents.size,
     state = pagerState,
     userScrollEnabled = false,
   ) { pageIndex ->
@@ -181,7 +185,7 @@ fun TabContents(
       ) {
         item(key = resourceData.baseResourceId) {
           ViewRenderer(
-            viewProperties = listOf(viewProperties.tabContents[pageIndex]),
+            viewProperties = tabContents[pageIndex],
             resourceData = resourceData,
             navController = navController,
             decodedImageMap = decodedImageMap
@@ -190,7 +194,7 @@ fun TabContents(
       }
     } else {
       ViewRenderer(
-        viewProperties = listOf(viewProperties.tabContents[pageIndex]),
+        viewProperties = tabContents[pageIndex],
         resourceData = resourceData,
         navController = navController,
         decodedImageMap = decodedImageMap,
@@ -211,20 +215,34 @@ private fun TabViewPreview() {
   val viewProperties =
     TabViewProperties(
       viewType = ViewType.TABS,
-      tabs = listOf("Tab1", "Tab2", "Tab3"),
       tabContents =
         listOf(
-          CompoundTextProperties(
-            primaryText = "Tab1",
-            primaryTextColor = "#000000",
+          TabViewContent(
+            title = "Tab1",
+            contents = listOf(
+              CompoundTextProperties(
+                primaryText = "Tab1",
+                primaryTextColor = "#000000",
+              )
+            )
           ),
-          CompoundTextProperties(
-            primaryText = "Tab2",
-            primaryTextColor = "#000000",
+          TabViewContent(
+            title = "Tab2",
+            contents = listOf(
+              CompoundTextProperties(
+                primaryText = "Tab2",
+                primaryTextColor = "#000000",
+              )
+            )
           ),
-          CompoundTextProperties(
-            primaryText = "Tab3",
-            primaryTextColor = "#000000",
+          TabViewContent(
+            title = "Tab3",
+            contents = listOf(
+              CompoundTextProperties(
+                primaryText = "Tab3",
+                primaryTextColor = "#000000",
+              )
+            )
           ),
         ),
     )
