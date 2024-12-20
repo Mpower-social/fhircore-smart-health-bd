@@ -151,7 +151,7 @@ fun TopScreenSection(
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-      Row(verticalAlignment = Alignment.CenterVertically) {
+      Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(4f)) {
         Icon(
           when (toolBarHomeNavigation) {
             ToolBarHomeNavigation.OPEN_DRAWER -> Icons.Filled.Menu
@@ -174,7 +174,7 @@ fun TopScreenSection(
 
       Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 8.dp),
+        modifier = Modifier.padding(start = 8.dp).weight(1f),
       ) {
         SetupToolbarIcons(
           menuIcons = topScreenSection?.menuIcons,
@@ -447,7 +447,7 @@ private fun RenderMenuIcon(
 @Composable
 fun TopScreenSectionWithFilterItemOverNinetyNinePreview() {
   TopScreenSection(
-    title = "All Clients",
+    title = "All Clients All Clients All Clients All Clients All Clients",
     searchQuery = SearchQuery("Eddy"),
     filteredRecordsCount = 120,
     onSearchTextChanged = { _, _ -> },
