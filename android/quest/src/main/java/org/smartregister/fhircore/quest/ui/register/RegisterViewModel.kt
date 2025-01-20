@@ -643,6 +643,25 @@ constructor(
     if (registerId.isNotEmpty()) {
       val paramsMap: Map<String, String> = params.toParamDataMap()
       val currentRegisterConfiguration = retrieveRegisterConfiguration(registerId, paramsMap)
+
+      val resourceData =
+        currentRegisterConfiguration.configRules?.
+        let {
+          val rules = rulesExecutor.rulesFactory.generateRules(it)
+          val computedValuesMap =
+            rulesExecutor.computeResourceDataRules(
+              rules = rules,
+              repositoryResourceData = null,
+              params = paramsMap,
+            )
+
+          ResourceData(
+            baseResourceId = "",
+            baseResourceType = ResourceType.Location,
+            computedValuesMap = computedValuesMap,
+          )
+        }
+
       if (currentRegisterConfiguration.infiniteScroll) {
         registerData.value = getPagerFlow(currentRegisterConfiguration.id, clearCache)
       } else {
@@ -705,6 +724,7 @@ constructor(
           isFirstTimeSync = isFirstTimeSync(),
           registerConfiguration = currentRegisterConfiguration,
           registerId = registerId,
+          resourceData = resourceData,
           progressPercentage = _percentageProgress,
           isSyncUpload = _isUploadSync,
           currentSyncJobStatus = _currentSyncJobStatusFlow,

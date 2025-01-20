@@ -37,6 +37,7 @@ import io.mockk.slot
 import io.mockk.spyk
 import java.io.Serializable
 import java.time.OffsetDateTime
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.test.runTest
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.junit.Assert
